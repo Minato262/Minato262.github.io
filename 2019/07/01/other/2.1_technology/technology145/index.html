@@ -1,0 +1,657 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="java" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology145/">
+
+
+
+  <title>
+SpringBoot系列 - 集成MongoDB - 技术积累 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">SpringBoot系列 - 集成MongoDB
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:14">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:14+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="item" rel="index" title="分类于 技术积累"><span itemprop="name">技术积累</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology145/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="SpringBoot系列-集成MongoDB"><a href="#SpringBoot系列-集成MongoDB" class="headerlink" title="SpringBoot系列 - 集成MongoDB"></a>SpringBoot系列 - 集成MongoDB</h2><p>MongoDB是一个高性能、开源、无模式的文档型数据库，是当前NoSql数据库中比较热门的一种。 适合对大量或者无固定格式的数据进行存储，比如：日志、缓存等。对事物支持较弱，不适用复杂的多文档（多表）的级联查询。</p>
+<p>MongoDB的适用场景：</p>
+<ol>
+<li>在应用服务器的日志记录</li>
+<li>存储一些监控数据</li>
+<li>应用不需要事务及复杂 join 支持</li>
+<li>应用需要2000-3000以上的读写QPS</li>
+<li>应用需要TB甚至 PB 级别数据存储</li>
+<li>应用发展迅速，需要能快速水平扩展</li>
+<li>应用要求存储的数据不丢失</li>
+<li>应用需要99.999%高可用</li>
+<li>应用需要大量的地理位置查询、文本查询</li>
+</ol>
+<p>本篇将介绍如何在SpringBoot中使用MongoDB数据库。</p>
+<h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><p>只需要添加：</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-mongodb&lt;/artifactId&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="安装MongoDB"><a href="#安装MongoDB" class="headerlink" title="安装MongoDB"></a>安装MongoDB</h3><p>MongoDB的安装教程请参考 官网安装</p>
+<p>我是在centos7上面安装的MongoDB 4.0，并且修改配置文件&#x2F;etc&#x2F;mongod.conf，将绑定端口设置成0.0.0.0，让其他主机也能访问。</p>
+<p>启动mongodb后，添加一个用户，步骤如下：</p>
+<pre><code>mongo --port 27017
+use test
+db.createUser(
+   &#123;
+     user: &quot;xiongneng&quot;,
+     pwd: &quot;123456&quot;,
+     roles: [ &#123; role: &quot;readWrite&quot;, db: &quot;test&quot; &#125; ]
+   &#125;
+ )
+</code></pre>
+<h3 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h3><p>修改application.yml配置，增加mongodb的配置项：</p>
+<pre><code>spring:
+  data:
+    mongodb:
+      uri: mongodb://xiongneng:123456@localhost:27017/test
+</code></pre>
+<h3 id="定义实体类"><a href="#定义实体类" class="headerlink" title="定义实体类"></a>定义实体类</h3><p>这里只是为了测试，我就定义一个简单的客户类：</p>
+<pre><code>(collection = &quot;customer&quot;)
+public class Customer &#123;
+    
+    private String id;
+    private String firstName;
+    private String lastName;
+
+    public Customer() &#123;
+    &#125;
+
+    public Customer(String firstName, String lastName) &#123;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    &#125;
+
+    // 省略get、set方法
+
+    
+    public String toString() &#123;
+        return String.format(
+                &quot;Customer[id=%s, firstName=&#39;%s&#39;, lastName=&#39;%s&#39;]&quot;,
+                id, firstName, lastName);
+    &#125;
+&#125;
+</code></pre>
+<p>其中的id属性是MongoDB用来唯一识别客户的主键，其实这里可以不用注解，因为默认就叫id。</p>
+<p>另外MongoDB里面的数据会存储到集合中，Spring Data MongoDB会将Customer类的数据映射到名字叫customer的集合中。</p>
+<h3 id="定义DAO类"><a href="#定义DAO类" class="headerlink" title="定义DAO类"></a>定义DAO类</h3><p>这里可继承MongoRepository，这样一些通用操作的方法，比如增删改查你就不用写了，只需要添加你自己自定义的其他方法：</p>
+<pre><code>public interface CustomerRepository extends MongoRepository&lt;Customer, String&gt; &#123;
+
+    Customer findByFirstName(String firstName);
+
+    List&lt;Customer&gt; findByLastName(String lastName);
+
+&#125;
+</code></pre>
+<p>这里我定义了两个简单查询方法，一个是根据名称查找单个客户，一个是根据姓来查找客户列表。 你无需去写实现类，运行时SpringBoot会自动帮你生成实现，这也是它的强大之处，将你从代码樊笼中解脱出来。</p>
+<h3 id="编写服务类"><a href="#编写服务类" class="headerlink" title="编写服务类"></a>编写服务类</h3><p>接下来编写核心的业务服务类 CustomerService</p>
+<pre><code>public class CustomerService &#123;
+    
+    private CustomerRepository repository;
+
+    /**
+     * 删除所有的客户
+     */
+    public void deleteAll() &#123;
+        repository.deleteAll();
+    &#125;
+
+    /**
+     * 保存客户
+     * @param customer 客户
+     */
+    public void save(Customer customer) &#123;
+        repository.save(customer);
+    &#125;
+
+    /**
+     * 查询所有客户列表
+     * @return 客户列表
+     */
+    public Iterable&lt;Customer&gt; findAll() &#123;
+        return repository.findAll();
+    &#125;
+
+    /**
+     * 通过名查找某个客户
+     * @param firstName
+     * @return
+     */
+    public Customer findByFirstName(String firstName) &#123;
+        return repository.findByFirstName(firstName);
+    &#125;
+
+    /**
+     * 通过姓查找客户列表
+     * @param lastName
+     * @return
+     */
+    public List&lt;Customer&gt; findByLastName(String lastName) &#123;
+        return repository.findByLastName(lastName);
+    &#125;
+&#125;
+</code></pre>
+<h3 id="编写测试用例"><a href="#编写测试用例" class="headerlink" title="编写测试用例"></a>编写测试用例</h3><p>OK，一切准备妥当之后，我们来编写测试用例：</p>
+<pre><code>(SpringRunner.class)
+@SpringBootTest
+public class ApplicationTests &#123;
+    private static final Logger log = LoggerFactory.getLogger(ApplicationTests.class);
+
+    private CustomerService service;
+
+    /**
+     * 测试增删改查
+     */
+    public void test() &#123;
+
+        service.deleteAll();
+
+        // save a couple of customers
+        service.save(new Customer(&quot;Alice&quot;, &quot;Smith&quot;));
+        service.save(new Customer(&quot;Bob&quot;, &quot;Smith&quot;));
+
+        // fetch all customers
+        System.out.println(&quot;Customers found with findAll():&quot;);
+        System.out.println(&quot;-------------------------------&quot;);
+        int count = 0;
+        for (Customer customer : service.findAll()) &#123;
+            System.out.println(customer);
+            count++;
+        &#125;
+        assertThat(count, is(2));
+
+        // fetch an individual customer
+        System.out.println(&quot;Customer found with findByFirstName(&#39;Alice&#39;):&quot;);
+        System.out.println(&quot;--------------------------------&quot;);
+        Customer c = service.findByFirstName(&quot;Alice&quot;);
+        assertThat(c, notNullValue());
+        assertThat(c.getFirstName(), is(&quot;Alice&quot;));
+
+        System.out.println(&quot;Customers found with findByLastName(&#39;Smith&#39;):&quot;);
+        System.out.println(&quot;--------------------------------&quot;);
+
+        List&lt;Customer&gt; list = service.findByLastName(&quot;Smith&quot;);
+        assertThat(list, notNullValue());
+        assertThat(list.size(), greaterThan(1));
+        assertThat(list.size(), is(2));
+    &#125;
+&#125;
+</code></pre>
+<p>在上面的测试中，我先删掉数据库中所有客户数据，然后新增两条数据，查询所有的数据，根据姓或名查询。</p>
+<h2 id="运行测试结果为green-bar，同时输出：-96-96-96-Customers-found-with-findAll"><a href="#运行测试结果为green-bar，同时输出：-96-96-96-Customers-found-with-findAll" class="headerlink" title="运行测试结果为green bar，同时输出：&#96;&#96;&#96;Customers found with findAll():"></a>运行测试结果为green bar，同时输出：<br>&#96;&#96;&#96;<br>Customers found with findAll():</h2><h2 id="Customer-id-x3D-5a9a30e616afd63f48afeea6-firstName-x3D-’Alice’-lastName-x3D-’Smith’-Customer-id-x3D-5a9a30e616afd63f48afeea7-firstName-x3D-’Bob’-lastName-x3D-’Smith’-Customer-found-with-findByFirstName-‘Alice’"><a href="#Customer-id-x3D-5a9a30e616afd63f48afeea6-firstName-x3D-’Alice’-lastName-x3D-’Smith’-Customer-id-x3D-5a9a30e616afd63f48afeea7-firstName-x3D-’Bob’-lastName-x3D-’Smith’-Customer-found-with-findByFirstName-‘Alice’" class="headerlink" title="Customer[id&#x3D;5a9a30e616afd63f48afeea6, firstName&#x3D;’Alice’, lastName&#x3D;’Smith’]Customer[id&#x3D;5a9a30e616afd63f48afeea7, firstName&#x3D;’Bob’, lastName&#x3D;’Smith’]Customer found with findByFirstName(‘Alice’):"></a>Customer[id&#x3D;5a9a30e616afd63f48afeea6, firstName&#x3D;’Alice’, lastName&#x3D;’Smith’]<br>Customer[id&#x3D;5a9a30e616afd63f48afeea7, firstName&#x3D;’Bob’, lastName&#x3D;’Smith’]<br>Customer found with findByFirstName(‘Alice’):</h2><p>Customers found with findByLastName(‘Smith’):</p>
+<p>&#96;&#96;&#96;<br>更多关于MongoDB的使用，请移步 官网</p>
+<h3 id="GitHub源码"><a href="#GitHub源码" class="headerlink" title="GitHub源码"></a>GitHub源码</h3><p>springboot-mongodb</p>
+
+      <div class="tags">
+          <a href="/tags/java/" rel="tag"><i class="ic i-tag"></i> java</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2020-08-30 16:05:57" itemprop="dateModified" datetime="2020-08-30T16:05:57+08:00">2020-08-30</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology145/" title="SpringBoot系列 - 集成MongoDB">http://kaywu.cn/2019/07/01/other/2.1_technology/technology145/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/2.1_technology/technology111/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="Lambda and Anonymous Classes(I)">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术积累</span>
+  <h3>Lambda and Anonymous Classes(I)</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/2.1_technology/technology142/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="Mybatis系列 - mybatis-plus">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术积累</span>
+  <h3>Mybatis系列 - mybatis-plus</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringBoot%E7%B3%BB%E5%88%97-%E9%9B%86%E6%88%90MongoDB"><span class="toc-number">1.</span> <span class="toc-text">SpringBoot系列 - 集成MongoDB</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#maven%E4%BE%9D%E8%B5%96"><span class="toc-number">1.1.</span> <span class="toc-text">maven依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%89%E8%A3%85MongoDB"><span class="toc-number">1.2.</span> <span class="toc-text">安装MongoDB</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">修改配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89%E5%AE%9E%E4%BD%93%E7%B1%BB"><span class="toc-number">1.4.</span> <span class="toc-text">定义实体类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89DAO%E7%B1%BB"><span class="toc-number">1.5.</span> <span class="toc-text">定义DAO类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E6%9C%8D%E5%8A%A1%E7%B1%BB"><span class="toc-number">1.6.</span> <span class="toc-text">编写服务类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B"><span class="toc-number">1.7.</span> <span class="toc-text">编写测试用例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C%E4%B8%BAgreen-bar%EF%BC%8C%E5%90%8C%E6%97%B6%E8%BE%93%E5%87%BA%EF%BC%9A-96-96-96-Customers-found-with-findAll"><span class="toc-number">2.</span> <span class="toc-text">运行测试结果为green bar，同时输出：&#96;&#96;&#96;Customers found with findAll():</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Customer-id-x3D-5a9a30e616afd63f48afeea6-firstName-x3D-%E2%80%99Alice%E2%80%99-lastName-x3D-%E2%80%99Smith%E2%80%99-Customer-id-x3D-5a9a30e616afd63f48afeea7-firstName-x3D-%E2%80%99Bob%E2%80%99-lastName-x3D-%E2%80%99Smith%E2%80%99-Customer-found-with-findByFirstName-%E2%80%98Alice%E2%80%99"><span class="toc-number">3.</span> <span class="toc-text">Customer[id&#x3D;5a9a30e616afd63f48afeea6, firstName&#x3D;’Alice’, lastName&#x3D;’Smith’]Customer[id&#x3D;5a9a30e616afd63f48afeea7, firstName&#x3D;’Bob’, lastName&#x3D;’Smith’]Customer found with findByFirstName(‘Alice’):</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#GitHub%E6%BA%90%E7%A0%81"><span class="toc-number">3.1.</span> <span class="toc-text">GitHub源码</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/2.1_technology/technology/" rel="bookmark" title="技术积累">技术积累</a></li><li><a href="/2019/07/01/other/2.2_standard/standard/" rel="bookmark" title="阿里巴巴开发手册解析">阿里巴巴开发手册解析</a></li><li><a href="/2019/07/01/other/2.1_technology/technology100/" rel="bookmark" title="Java 中的那些锁事（转载）">Java 中的那些锁事（转载）</a></li><li><a href="/2019/07/01/other/2.1_technology/technology111/" rel="bookmark" title="Lambda and Anonymous Classes(I)">Lambda and Anonymous Classes(I)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology112/" rel="bookmark" title="Lambda and Anonymous Classes(II)">Lambda and Anonymous Classes(II)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology113/" rel="bookmark" title="Lambda and Collections">Lambda and Collections</a></li><li><a href="/2019/07/01/other/2.1_technology/technology114/" rel="bookmark" title="Streams API(I)">Streams API(I)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology115/" rel="bookmark" title="Streams API(II)">Streams API(II)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology116/" rel="bookmark" title="Stream Pipelines">Stream Pipelines</a></li><li><a href="/2019/07/01/other/2.1_technology/technology117/" rel="bookmark" title="ParallelStream 介绍">ParallelStream 介绍</a></li><li><a href="/2019/07/01/other/2.1_technology/technology118/" rel="bookmark" title="Stream Performance">Stream Performance</a></li><li><a href="/2019/07/01/other/2.1_technology/technology101/" rel="bookmark" title="JMH 简介">JMH 简介</a></li><li><a href="/2019/07/01/other/2.1_technology/technology140/" rel="bookmark" title="SpringBoot系列 - 使用RestTemplate">SpringBoot系列 - 使用RestTemplate</a></li><li><a href="/2019/07/01/other/2.1_technology/technology141/" rel="bookmark" title="SpringBoot系列 - RestTemplate实践（及遇到的问题）">SpringBoot系列 - RestTemplate实践（及遇到的问题）</a></li><li><a href="/2019/07/01/other/2.1_technology/technology142/" rel="bookmark" title="Mybatis系列 - mybatis-plus">Mybatis系列 - mybatis-plus</a></li><li class="active"><a href="/2019/07/01/other/2.1_technology/technology145/" rel="bookmark" title="SpringBoot系列 - 集成MongoDB">SpringBoot系列 - 集成MongoDB</a></li><li><a href="/2019/07/01/other/2.1_technology/technology200/" rel="bookmark" title="Linux 搭建 socks 服务器（翻墙）">Linux 搭建 socks 服务器（翻墙）</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/2.1_technology/technology111/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/2.1_technology/technology142/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/06/02/" title="31丨应用性能管理：用户的使用体验应该如何监控？">31丨应用性能管理：用户的使用体验应该如何监控？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" title="04丨系统设计目标 2：系统怎样做到高可用？">04丨系统设计目标 2：系统怎样做到高可用？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch19/" title="第 19 章 软件发展趋势">第 19 章 软件发展趋势</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E9%9A%8F%E7%AC%94/" title="分类于 随笔">随笔</a>
+</div>
+
+    <span><a href="/2019/07/01/other/3.1_note/notes2/" title="随笔——追求简约的设计">随笔——追求简约的设计</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" title="二分图基础知识">二分图基础知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" title="Prim 算法">Prim 算法</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" title="贪心算法题目">贪心算法题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" title="后缀数组题目">后缀数组题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" title="数组基础题目">数组基础题目</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/2.1_technology/technology145/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

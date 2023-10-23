@@ -1,0 +1,571 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="高并发系统设计 40 问" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/07/02/">
+
+
+
+  <title>
+38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？ - 课程 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:02">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:02+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E8%AF%BE%E7%A8%8B/" itemprop="item" rel="index" title="分类于 课程"><span itemprop="name">课程</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/07/02/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="38丨计数系统设计-2：50-万-QPS-下如何设计未读数系统？"><a href="#38丨计数系统设计-2：50-万-QPS-下如何设计未读数系统？" class="headerlink" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？"></a>38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</h1><p>在上一节课中我带你了解了如何设计一套支撑高并发访问和存储大数据量的通用计数系统，我们通过缓存技术、消息队列技术以及对于 Redis 的深度改造，就能够支撑万亿级计数数据存储以及每秒百万级别读取请求了。然而有一类特殊的计数并不能完全使用我们提到的方案，那就是未读数。</p>
+<p>未读数也是系统中一个常见的模块，以微博系统为例，你可看到有多个未读计数的场景，比如：</p>
+<ul>
+<li><p>当有人 <code>@你</code>、评论你、给你的博文点赞或者给你发送私信的时候，你会收到相应的未读提醒；</p>
+</li>
+<li><p>在早期的微博版本中有系统通知的功能，也就是系统会给全部用户发送消息，通知用户有新的版本或者有一些好玩的运营活动，如果用户没有看，系统就会给他展示有多少条未读的提醒。</p>
+</li>
+<li><p>我们在浏览信息流的时候，如果长时间没有刷新页面，那么信息流上方就会提示你在这段时间有多少条信息没有看。</p>
+</li>
+</ul>
+<p>那当你遇到第一个需求时，要如何记录未读数呢？其实，这个需求可以用上节课提到的通用计数系统来实现，因为二者的场景非常相似。</p>
+<p>你可以在计数系统中增加一块儿内存区域，以用户 ID 为 Key 存储多个未读数，当有人 <code>@</code> 你时，增加你的未读 @的计数；当有人评论你时，增加你的未读评论的计数，以此类推。当你点击了未读数字进入通知页面，查看 <code>@</code> 你或者评论你的消息时，重置这些未读计数为零。相信通过上一节课的学习，你已经非常熟悉这一类系统的设计了，所以我不再赘述。</p>
+<p>那么系统通知的未读数是如何实现的呢？我们能用通用计数系统实现吗？答案是不能的，因为会出现一些问题。</p>
+<h2 id="系统通知的未读数要如何设计"><a href="#系统通知的未读数要如何设计" class="headerlink" title="系统通知的未读数要如何设计"></a>系统通知的未读数要如何设计</h2><p>来看具体的例子。假如你的系统中只有 A、B、C 三个用户，那么你可以在通用计数系统中增加一块儿内存区域，并且以用户 ID 为 Key 来存储这三个用户的未读通知数据，当系统发送一个新的通知时，我们会循环给每一个用户的未读数加 1，这个处理逻辑的伪代码就像下面这样：</p>
+<pre><code class="java">List&lt;Long&gt; userIds = getAllUserIds();
+for(Long id : userIds) &#123;
+  incrUnreadCount(id);
+&#125;
+</code></pre>
+<p>这样看来，似乎简单可行，但随着系统中的用户越来越多，这个方案存在两个致命的问题。</p>
+<p>首先，获取全量用户就是一个比较耗时的操作，相当于对用户库做一次全表的扫描，这不仅会对数据库造成很大的压力，而且查询全量用户数据的响应时间是很长的，对于在线业务来说是难以接受的。如果你的用户库已经做了分库分表，那么就要扫描所有的库表，响应时间就更长了。<strong>不过有一个折中的方法，</strong>  那就是在发送系统通知之前，先从线下的数据仓库中获取全量的用户 ID，并且存储在一个本地的文件中，然后再轮询所有的用户 ID，给这些用户增加未读计数。</p>
+<p>这似乎是一个可行的技术方案，然而它给所有人增加未读计数，会消耗非常长的时间。你计算一下，假如你的系统中有一个亿的用户，给一个用户增加未读数需要消耗 1ms，那么给所有人都增加未读计数就需要 100000000 * 1 &#x2F;1000 &#x3D; 100000 秒，也就是超过一天的时间；即使你启动 100 个线程并发的设置，也需要十几分钟的时间才能完成，而用户很难接受这么长的延迟时间。</p>
+<p>另外，使用这种方式需要给系统中的每一个用户都记一个未读数的值，而在系统中，活跃用户只是很少的一部分，大部分的用户是不活跃的，甚至从来没有打开过系统通知，为这些用户记录未读数显然是一种浪费。</p>
+<p>通过上面的内容，你可以知道为什么我们不能用通用计数系统实现系统通知未读数了吧？那正确的做法是什么呢？</p>
+<p>要知道，系统通知实际上是存储在一个大的列表中的，这个列表对所有用户共享，也就是所有人看到的都是同一份系统通知的数据。不过不同的人最近看到的消息不同，所以每个人会有不同的未读数。因此，你可以记录一下在这个列表中每个人看过最后一条消息的 ID，然后统计这个 ID 之后有多少条消息，这就是未读数了。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/a5f0b6776246dc6b4c7e96c72d74a210.jpg" alt="img"></p>
+<p>这个方案在实现时有这样几个关键点：</p>
+<ul>
+<li><p>用户访问系统通知页面需要设置未读数为 0，我们需要将用户最近看过的通知 ID 设置为最新的一条系统通知 ID；</p>
+</li>
+<li><p>如果最近看过的通知 ID 为空，则认为是一个新的用户，返回未读数为 0；</p>
+</li>
+<li><p>对于非活跃用户，比如最近一个月都没有登录和使用过系统的用户，可以把用户最近看过的通知 ID 清空，节省内存空间。</p>
+</li>
+</ul>
+<p><strong>这是一种比较通用的方案，即节省内存，又能尽量减少获取未读数的延迟。</strong> 这个方案适用的另一个业务场景是全量用户打点的场景，比如像下面这张微博截图中的红点。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/ae6a5e9e04be08d18c493729458d543f.jpg" alt="img"></p>
+<p>这个红点和系统通知类似，也是一种通知全量用户的手段，如果逐个通知用户，延迟也是无法接受的。 <strong>因此你可以采用和系统通知类似的方案。</strong></p>
+<p>首先，我们为每一个用户存储一个时间戳，代表最近点过这个红点的时间，用户点了红点，就把这个时间戳设置为当前时间；然后，我们也记录一个全局的时间戳，这个时间戳标识最新的一次打点时间，如果你在后台操作给全体用户打点，就更新这个时间戳为当前时间。而我们在判断是否需要展示红点时，只需要判断用户的时间戳和全局时间戳的大小，如果用户时间戳小于全局时间戳，代表在用户最后一次点击红点之后又有新的红点推送，那么就要展示红点，反之，就不展示红点了。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/553e7da158a7eca56369e23c9b672898.jpg" alt="img"></p>
+<p>这两个场景的共性是 <strong>全部用户共享一份有限的存储数据</strong>，每个人只记录自己在这份存储中的偏移量，就可以得到未读数了。</p>
+<p>你可以看到，系统消息未读的实现方案不是很复杂，它通过设计避免了操作全量数据未读数，如果你的系统中有这种打红点的需求，那我建议你可以结合实际工作灵活使用上述方案。</p>
+<p>最后一个需求关注的是微博信息流的未读数，在现在的社交系统中，关注关系已经成为标配的功能，而基于关注关系的信息流也是一种非常重要的信息聚合方式，因此，如何设计信息流的未读数系统就成了你必须面对的一个问题。</p>
+<h2 id="如何为信息流的未读数设计方案"><a href="#如何为信息流的未读数设计方案" class="headerlink" title="如何为信息流的未读数设计方案"></a>如何为信息流的未读数设计方案</h2><p>信息流的未读数之所以复杂主要有这样几点原因。</p>
+<ul>
+<li><p>首先，微博的信息流是基于关注关系的，未读数也是基于关注关系的</p>
+<p>就是说，你关注的人发布了新的微博，那么你作为粉丝未读数就要增加 1。如果微博用户都是像我这样只有几百粉丝的 「小透明」 就简单了，你发微博的时候系统给你粉丝的未读数增加 1 不是什么难事儿。但是对于一些动辄几千万甚至上亿粉丝的微博大 V 就麻烦了，增加未读数可能需要几个小时。假设你是杨幂的粉丝，想了解她实时发布的博文，那么如果当她发布博文几个小时之后，你才收到提醒，这显然是不能接受的。所以未读数的延迟是你在设计方案时首先要考虑的内容。</p>
+</li>
+<li><p>其次，信息流未读数请求量极大、并发极高，这是因为接口是客户端轮询请求的，不是用户触发的。也就是说，用户即使打开微博客户端什么都不做，这个接口也会被请求到。在几年前，请求未读数接口的量级就已经接近每秒 50 万次，这几年随着微博量级的增长，请求量也变得更高。而作为微博的非核心接口，我们不太可能使用大量的机器来抗未读数请求，因此，如何使用有限的资源来支撑如此高的流量是这个方案的难点。</p>
+</li>
+<li><p>最后，它不像系统通知那样有共享的存储，因为每个人关注的人不同，信息流的列表也就不同，所以也就没办法采用系统通知未读数的方案。</p>
+</li>
+</ul>
+<p>那要如何设计能够承接每秒几十万次请求的信息流未读数系统呢？你可以这样做：</p>
+<ul>
+<li><p>首先，在通用计数器中记录每一个用户发布的博文数；</p>
+</li>
+<li><p>然后在 Redis 或者 Memcached 中记录一个人所有关注人的博文数快照，当用户点击未读消息重置未读数为 0 时，将他关注所有人的博文数刷新到快照中；</p>
+</li>
+<li><p>这样，他关注所有人的博文总数减去快照中的博文总数就是他的信息流未读数。</p>
+</li>
+</ul>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/a563b121ae1147a2d877a7bb14c9658a.jpg" alt="img"></p>
+<p>假如用户 A，像上图这样关注了用户 B、C、D，其中 B 发布的博文数是 10，C 发布的博文数是 8，D 发布的博文数是 14，而在用户 A 最近一次查看未读消息时，记录在快照中的这三个用户的博文数分别是 6、7、12，因此用户 A 的未读数就是（10-6）+（8-7）+（14-12）&#x3D;7。</p>
+<p>这个方案设计简单，并且是全内存操作，性能足够好，能够支撑比较高的并发，事实上微博团队仅仅用 16 台普通的服务器就支撑了每秒接近 50 万次的请求，这就足以证明这个方案的性能有多出色，因此，它完全能够满足信息流未读数的需求。</p>
+<p>当然了这个方案也有一些缺陷，比如说快照中需要存储关注关系，如果关注关系变更的时候更新不及时，那么就会造成未读数不准确；快照采用的是全缓存存储，如果缓存满了就会剔除一些数据，那么被剔除用户的未读数就变为 0 了。但是好在用户对于未读数的准确度要求不高（未读 10 条还是 11 条，其实用户有时候看不出来），因此，这些缺陷也是可以接受的。</p>
+<p>通过分享未读数系统设计这个案例，我想给你一些建议：</p>
+<ol>
+<li><p>缓存是提升系统性能和抵抗大并发量的神器，像是微博信息流未读数这么大的量级我们仅仅使用十几台服务器就可以支撑，这全都是缓存的功劳；</p>
+</li>
+<li><p>要围绕系统设计的关键困难点想解决办法，就像我们解决系统通知未读数的延迟问题一样；</p>
+</li>
+<li><p>合理分析业务场景，明确哪些是可以权衡的，哪些是不行的，会对你的系统设计增益良多，比如对于长久不登录用户，我们就会记录未读数为 0，通过这样的权衡，可以极大地减少内存的占用，减少成本。</p>
+</li>
+</ol>
+<h2 id="课程小结"><a href="#课程小结" class="headerlink" title="课程小结"></a>课程小结</h2><p>以上就是本节课的全部内容了，本节课我带你了解了未读数系统的设计，这里你需要了解的重点是：</p>
+<ul>
+<li><p>评论未读、@未读、赞未读等一对一关系的未读数可以使用上节课讲到的通用计数方案来解决；</p>
+<p>通用计数器：一个用户一类的计数用一个字段存储就可以了，相对简单，就是存储量很大</p>
+</li>
+<li><p>在系统通知未读、全量用户打点等存在有限的共享存储的场景下，可以通过记录用户上次操作的时间或者偏移量，来实现未读方案；</p>
+<p>内容共享，通过最后一次读时间或则 id 的偏移量来计算，要注意的是：这种未读不是指你有 10 篇没有读的文章，读取一篇就减少 1 这种未读统计，而是你总共有多少未读消息数量，点击后就重置为 0 了</p>
+</li>
+<li><p>最后，信息流未读方案最为复杂，采用的是记录用户博文数快照的方式。</p>
+<p>这里和系统全量打点的方式类似，也是点击未读后，计数器就重置为 0 了。但是它有关系计算这是和全量打点方式不一样的地方</p>
+</li>
+</ul>
+<p>这里你可以看到，这三类需求虽然都和未读数有关，但是需求场景不同、对于量级的要求不同，设计出来的方案也就不同。因此，就像我刚刚提到的样子，你在做方案设计的时候，要分析需求的场景，比如说数据的量级是怎样的，请求的量级是怎样的，有没有一些可以利用的特点（比如系统通知未读场景下的有限共享存储、信息流未读场景下关注人数是有限的等等），然后再制定针对性的方案，切忌盲目使用之前的经验套用不同的场景，否则就可能造成性能的下降，甚至危害系统的稳定性。</p>
+
+      <div class="tags">
+          <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-40-%E9%97%AE/" rel="tag"><i class="ic i-tag"></i> 高并发系统设计 40 问</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-20 00:49:23" itemprop="dateModified" datetime="2023-02-20T00:49:23+08:00">2023-02-20</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/07/02/" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？">http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/07/02/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit31ffoj20zk0m8naf.jpg" title="39丨信息流设计 1：通用信息流系统的推模式要如何做？">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>39丨信息流设计 1：通用信息流系统的推模式要如何做？</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="37丨计数系统设计 1：面对海量数据的计数器要如何做？">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>37丨计数系统设计 1：面对海量数据的计数器要如何做？</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#38%E4%B8%A8%E8%AE%A1%E6%95%B0%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-2%EF%BC%9A50-%E4%B8%87-QPS-%E4%B8%8B%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1%E6%9C%AA%E8%AF%BB%E6%95%B0%E7%B3%BB%E7%BB%9F%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E9%80%9A%E7%9F%A5%E7%9A%84%E6%9C%AA%E8%AF%BB%E6%95%B0%E8%A6%81%E5%A6%82%E4%BD%95%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.1.</span> <span class="toc-text">系统通知的未读数要如何设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%B8%BA%E4%BF%A1%E6%81%AF%E6%B5%81%E7%9A%84%E6%9C%AA%E8%AF%BB%E6%95%B0%E8%AE%BE%E8%AE%A1%E6%96%B9%E6%A1%88"><span class="toc-number">1.2.</span> <span class="toc-text">如何为信息流的未读数设计方案</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%B0%8F%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">课程小结</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/1.2_course/course/" rel="bookmark" title="课程">课程</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.1/README/" rel="bookmark" title="操作系统">操作系统</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.2/README/" rel="bookmark" title="领域驱动设计">领域驱动设计</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.4/README/" rel="bookmark" title="ElasticSearch知识体系详解">ElasticSearch知识体系详解</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.3/README/" rel="bookmark" title="分布式数据库详解">分布式数据库详解</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.1/README/" rel="bookmark" title="计算机基础实战课">计算机基础实战课</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/README/" rel="bookmark" title="高并发系统设计 40 问">高并发系统设计 40 问</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.2/README/" rel="bookmark" title="Java业务开发常见错误">Java业务开发常见错误</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.2/README/" rel="bookmark" title="消息队列理论课">消息队列理论课</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.1/README/" rel="bookmark" title="Java 并发编程">Java 并发编程</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.2/README/" rel="bookmark" title="Netty 核心原理剖析与 RPC 实践">Netty 核心原理剖析与 RPC 实践</a></li><li><a href="/2019/07/01/other/1.2_course/3.3.1/README/" rel="bookmark" title="性能测试">性能测试</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.5/README/" rel="bookmark" title="Redis 核心原理与实战">Redis 核心原理与实战</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.3/README/" rel="bookmark" title="深入理解 Sentinel">深入理解 Sentinel</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/00/README/" rel="bookmark" title="开篇-为什么你要学习高并发系统设计">开篇-为什么你要学习高并发系统设计</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" rel="bookmark" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" rel="bookmark" title="02丨架构分层：我们为什么一定要这么做？">02丨架构分层：我们为什么一定要这么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" rel="bookmark" title="03丨系统设计目标 1：如何提升系统性能？">03丨系统设计目标 1：如何提升系统性能？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" rel="bookmark" title="04丨系统设计目标 2：系统怎样做到高可用？">04丨系统设计目标 2：系统怎样做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" rel="bookmark" title="05丨系统设计目标 3：如何让系统易于扩展？">05丨系统设计目标 3：如何让系统易于扩展？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/06/" rel="bookmark" title="06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？">06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/README/" rel="bookmark" title="01丨基础篇">01丨基础篇</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/01/" rel="bookmark" title="17丨消息队列：秒杀时如何处理每秒上万次的下单请求？">17丨消息队列：秒杀时如何处理每秒上万次的下单请求？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/02/" rel="bookmark" title="18丨消息投递：如何保证消息仅仅被消费一次？">18丨消息投递：如何保证消息仅仅被消费一次？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/03/" rel="bookmark" title="19丨消息队列：如何降低消息队列系统中消息的延迟？">19丨消息队列：如何降低消息队列系统中消息的延迟？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/04/" rel="bookmark" title="20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？">20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/05/" rel="bookmark" title="期中测试丨10 道高并发系统设计题目自测">期中测试丨10 道高并发系统设计题目自测</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" rel="bookmark" title="04丨演进篇-消息队列">04丨演进篇-消息队列</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/01/" rel="bookmark" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" rel="bookmark" title="22丨微服务架构：微服务化后，系统架构要如何改造？">22丨微服务架构：微服务化后，系统架构要如何改造？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/03/" rel="bookmark" title="23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？">23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/04/" rel="bookmark" title="24丨注册中心：分布式系统如何寻址？">24丨注册中心：分布式系统如何寻址？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" rel="bookmark" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/06/" rel="bookmark" title="26丨负载均衡：怎样提升系统的横向扩展能力？">26丨负载均衡：怎样提升系统的横向扩展能力？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" rel="bookmark" title="27丨API 网关：系统的门面要如何做呢？">27丨API 网关：系统的门面要如何做呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/08/" rel="bookmark" title="28丨多机房部署：跨地域的分布式系统如何做？">28丨多机房部署：跨地域的分布式系统如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/09/" rel="bookmark" title="29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？">29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/README/" rel="bookmark" title="05丨演进篇-分布式服务">05丨演进篇-分布式服务</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/01/" rel="bookmark" title="12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？">12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/02/" rel="bookmark" title="13丨缓存的使用姿势 1：如何选择缓存的读写策略？">13丨缓存的使用姿势 1：如何选择缓存的读写策略？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/03/" rel="bookmark" title="14丨缓存的使用姿势 2：缓存如何做到高可用？">14丨缓存的使用姿势 2：缓存如何做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/04/" rel="bookmark" title="15丨缓存的使用姿势 3：缓存穿透了怎么办？">15丨缓存的使用姿势 3：缓存穿透了怎么办？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/05/" rel="bookmark" title="16丨CDN：静态资源如何加速？">16丨CDN：静态资源如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/06/" rel="bookmark" title="加餐丨数据的迁移应该如何做？">加餐丨数据的迁移应该如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/README/" rel="bookmark" title="03丨演进篇-缓存">03丨演进篇-缓存</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/01/" rel="bookmark" title="30丨给系统加上眼睛：服务端监控要怎么做？">30丨给系统加上眼睛：服务端监控要怎么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/02/" rel="bookmark" title="31丨应用性能管理：用户的使用体验应该如何监控？">31丨应用性能管理：用户的使用体验应该如何监控？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/03/" rel="bookmark" title="32丨压力测试：怎样设计全链路压力测试平台？">32丨压力测试：怎样设计全链路压力测试平台？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/04/" rel="bookmark" title="33丨配置管理：成千上万的配置项要如何管理？">33丨配置管理：成千上万的配置项要如何管理？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/05/" rel="bookmark" title="34丨降级熔断：如何屏蔽非核心系统故障的影响？">34丨降级熔断：如何屏蔽非核心系统故障的影响？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/06/" rel="bookmark" title="35丨流量控制：高并发系统中我们如何操纵流量？">35丨流量控制：高并发系统中我们如何操纵流量？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/07/" rel="bookmark" title="36丨面试现场第 3 期：你要如何准备一场技术面试呢？">36丨面试现场第 3 期：你要如何准备一场技术面试呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/README/" rel="bookmark" title="06丨演进篇-维护">06丨演进篇-维护</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/01/" rel="bookmark" title="07丨池化技术：如何减少频繁创建数据库连接的性能损耗？">07丨池化技术：如何减少频繁创建数据库连接的性能损耗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/03/" rel="bookmark" title="09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？">09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" rel="bookmark" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/04/" rel="bookmark" title="10丨发号器：如何保证分库分表后 ID 的全局唯一性？">10丨发号器：如何保证分库分表后 ID 的全局唯一性？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/05/" rel="bookmark" title="11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？">11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/README/" rel="bookmark" title="02丨演进篇-数据库">02丨演进篇-数据库</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" rel="bookmark" title="37丨计数系统设计 1：面对海量数据的计数器要如何做？">37丨计数系统设计 1：面对海量数据的计数器要如何做？</a></li><li class="active"><a href="/2019/07/01/other/1.2_course/3.1.1/07/02/" rel="bookmark" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" rel="bookmark" title="39丨信息流设计 1：通用信息流系统的推模式要如何做？">39丨信息流设计 1：通用信息流系统的推模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/04/" rel="bookmark" title="40丨信息流设计 2：通用信息流系统的拉模式要如何做？">40丨信息流设计 2：通用信息流系统的拉模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/README/" rel="bookmark" title="07丨实战篇">07丨实战篇</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" title="桶排序">桶排序</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch10/" title="第 10 章 通过定义规避错误">第 10 章 通过定义规避错误</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" title="背包问题题目">背包问题题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" title="分治算法知识">分治算法知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" title="回溯算法题目">回溯算法题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" title="概率 DP 题目">概率 DP 题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" title="差分约束系统知识">差分约束系统知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" title="单模式串匹配题目">单模式串匹配题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" title="27丨API 网关：系统的门面要如何做呢？">27丨API 网关：系统的门面要如何做呢？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" title="背包问题知识">背包问题知识</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/1.2_course/3.1.1/07/02/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

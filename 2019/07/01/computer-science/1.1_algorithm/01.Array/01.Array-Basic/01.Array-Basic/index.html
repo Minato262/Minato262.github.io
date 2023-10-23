@@ -1,0 +1,619 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="算法与数据结构" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/">
+
+
+
+  <title>
+数组基础知识 - 算法 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">数组基础知识
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 21:43:40">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T21:43:40+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="item" rel="index" title="分类于 算法"><span itemprop="name">算法</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="1-数组简介"><a href="#1-数组简介" class="headerlink" title="1. 数组简介"></a>1. 数组简介</h2><h3 id="1-1-数组定义"><a href="#1-1-数组定义" class="headerlink" title="1.1 数组定义"></a>1.1 数组定义</h3><blockquote>
+<p><strong>数组（Array）</strong>：一种线性表数据结构。它使用一组连续的内存空间，来存储一组具有相同类型的数据。</p>
+</blockquote>
+<p>简单来说，<strong>「数组」</strong> 是实现线性表的顺序结构存储的基础。</p>
+<p>以整数数组为例，数组的存储方式如下图所示。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210913163542.png" alt="数组"></p>
+<p>如上图所示，数组中的每一个数据元素都有自己的下标索引，下标索引从 <code>0</code> 开始，到 <code>数组元素个数 - 1</code> 结束。数组中的每一个「下标索引」，都有一个与之相对应的「数据元素」。</p>
+<p>从上图还可以看出，数组在计算机中的表示，就是一片连续的存储单元。数组中的每一个数据元素都占有一定的存储单元，每个存储单元都有自己的内存地址，并且元素之间是紧密排列的。</p>
+<p>我们还可以从两个方面来解释一下数组的定义。</p>
+<ul>
+<li>第一个方面是 <strong>「线性表」</strong>。</li>
+</ul>
+<p>线性表就是所有数据元素排成像一条线一样的结构，线性表上的数据元素都是相同类型，且每个数据元素最多只有前、后两个方向。数组就是一种线性表结构，此外，栈、队列、链表都是线性表结构。</p>
+<ul>
+<li>第二个方面是 <strong>「连续的内存空间」</strong>。</li>
+</ul>
+<p>线性表有两种存储结构：「顺序存储结构」和「链式存储结构」。其中，「顺序存储结构」是指占用的内存空间是连续的，相邻数据元素之间，物理内存上的存储位置也相邻。数组也是采用了顺序存储结构，并且存储的数据都是相同类型的。</p>
+<p>综合这两个角度，数组就可以看做是：使用了「顺序存储结构」的「线性表」的一种实现方式。</p>
+<h3 id="1-2-如何随机访问数据元素"><a href="#1-2-如何随机访问数据元素" class="headerlink" title="1.2 如何随机访问数据元素"></a>1.2 如何随机访问数据元素</h3><p>数组的一个最大特点是：<strong>可以进行随机访问</strong>。即数组可以根据下标，直接定位到某一个元素存放的位置。</p>
+<p>那么，计算机是如何实现根据下标随机访问数组元素的？</p>
+<p>计算机给一个数组分配了一组连续的存储空间，其中第一个元素开始的地址被称为 <strong>「首地址」</strong>。每个数据元素都有对应的下标索引和内存地址，计算机通过地址来访问数据元素。当计算机需要访问数组的某个元素时，会通过 <strong>「寻址公式」</strong> 计算出对应元素的内存地址，然后访问地址对应的数据元素。</p>
+<p>寻址公式如下：<code>下标 i 对应的数据元素地址 = 数据首地址 + i * 单个数据元素所占内存大小</code></p>
+<h3 id="1-3-多维数组"><a href="#1-3-多维数组" class="headerlink" title="1.3 多维数组"></a>1.3 多维数组</h3><p>上面介绍的数组只有一个维度，称为一维数组，其数据元素也是单下标变量。但是在实际问题中，很多信息是二维或者是多维的，一维数组已经满足不了我们的需求，所以就有了多维数组。</p>
+<p>以二维数组为例，数组的形式如下图所示。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210916222435.png" alt="二维数组"></p>
+<p>二维数组是一个由 <code>m</code> 行 <code>n</code> 列数据元素构成的特殊结构，其本质上是以数组作为数据元素的数组，即 <strong>「数组的数组」</strong>。二维数组的第一维度表示行，第二维度表示列。</p>
+<p>我们可以将二维数组看做是一个矩阵，并处理矩阵的相关问题，比如转置矩阵、矩阵相加、矩阵相乘等等。</p>
+<h3 id="1-4-不同编程语言中数组的实现"><a href="#1-4-不同编程语言中数组的实现" class="headerlink" title="1.4 不同编程语言中数组的实现"></a>1.4 不同编程语言中数组的实现</h3><p>在具体的编程语言中，数组这个数据结构的实现方式具有一定差别。</p>
+<p><code>C / C++</code> 中的数组最接近数组结构定义中的数组，使用的是一块存储相同类型数据的、连续的内存空间。不管是基本类型数据，还是结构体、对象，在数组中都是连续存储的。例如：</p>
+<pre><code class="C++">int arr[3][4] = &#123;&#123;0, 1, 2, 3&#125;, &#123;4, 5, 6, 7&#125;, &#123;8, 9, 10, 11&#125;&#125;;
+</code></pre>
+<p><code>Java</code> 中的数组跟数据结构定义中的数组不太一样。 <code>Java</code> 中的数组也是存储相同类型数据的，但所使用的内存空间却不一定是连续（多维数组中）。且如果是多维数组，其嵌套数组的长度也可以不同。例如：</p>
+<pre><code class="Java">int[][] arr = new int[3][]&#123; &#123;1,2,3&#125;, &#123;4,5&#125;, &#123;6,7,8,9&#125;&#125;;
+</code></pre>
+<p>原生 <code>Python</code> 中其实没有数组的概念，而是使用了类似 <code>Java</code> 中的 <code>ArrayList</code> 容器类数据结构，叫做列表。通常我们把列表来作为 <code>Python</code> 中的数组使用。<code>Python</code> 中列表存储的数据类型可以不一致，数组长度也可以不一致。例如：</p>
+<pre><code class="Python">arr = [&#39;python&#39;, &#39;java&#39;, [&#39;asp&#39;, &#39;php&#39;], &#39;c&#39;]
+</code></pre>
+<h2 id="2-数组的基本操作"><a href="#2-数组的基本操作" class="headerlink" title="2. 数组的基本操作"></a>2. 数组的基本操作</h2><p>数据结构的操作一般涉及到增、删、改、查 4 种情况，下面我们一起来看一下数组的基本操作。</p>
+<h3 id="2-1-访问元素"><a href="#2-1-访问元素" class="headerlink" title="2.1 访问元素"></a>2.1 访问元素</h3><p><strong>访问数组中第 <code>i</code> 个元素</strong>：只需要检查 <code>i</code> 的范围是否在合法的范围区间，即 <code>0 &lt;= i &lt;= len(nums) - 1</code>。超出范围的访问为非法访问。当位置合法时，由给定下标得到元素的值。访问操作不依赖于数组中元素个数，因此时间复杂度为 $O(1)$。</p>
+<p>示例代码如下：</p>
+<pre><code class="Python"># 从数组 nums 中读取下标为 i 的数据元素值
+def value(nums, i):
+    if 0 &lt;= i &lt;= len(nums) - 1:
+        print(nums[i])
+        
+arr = [0, 5, 2, 3, 7, 1, 6]
+value(arr, 3)
+</code></pre>
+<h3 id="2-2-查找元素"><a href="#2-2-查找元素" class="headerlink" title="2.2 查找元素"></a>2.2 查找元素</h3><p><strong>查找数组中元素值为 <code>val</code> 的位置</strong>：在数组无序的情况下，只能通过将 <code>val</code> 与数组中的数据元素逐一对比的方式进行检索，也称为线性查找。建立一个基于下标的循环，每次将<code>val</code> 与当前数据元素 <code>nums[i]</code> 进行比较。在找到元素的时候返回元素下标，找不到时可以返回一个特殊值（例如 <code>-1</code>）。线性查找操作依赖于数组中元素个数，因此时间复杂度为 $O(n)$。</p>
+<p>示例代码如下：</p>
+<pre><code class="Python"># 从数组 nums 中查找元素值为 val 的数据元素第一次出现的位置
+def find(nums, val):
+    for i in range(len(nums)):
+        if nums[i] == val:
+            return i
+    return -1
+
+arr = [0, 5, 2, 3, 7, 1, 6]
+print(find(arr, 5))
+</code></pre>
+<h3 id="2-3-插入元素"><a href="#2-3-插入元素" class="headerlink" title="2.3 插入元素"></a>2.3 插入元素</h3><p>插入元素操作分为两种：「在数组尾部插入值为 <code>val</code> 的元素」和「在数组第 <code>i</code> 个位置上插入值为 <code>val</code> 的元素」。</p>
+<p><strong>在数组尾部插入值为 <code>val</code> 的元素</strong>：如果数组尾部容量不满，则直接把 <code>val</code> 放在数组尾部的空闲位置，并更新数组的元素计数值。如果数组容量满了，则插入失败。不过，<code>Python</code> 中的 <code>list</code> 做了其他处理，当数组容量满了，则会开辟新的空间进行插入。在尾部插入元素的操作不依赖数组个数，其时间复杂度为 $O(1)$。</p>
+<p><code>Python</code> 中的 <code>list</code> 直接封装了尾部插入操作，直接调用 <code>append</code> 方法即可。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210916222517.png" alt="插入元素"></p>
+<p>示例代码如下：</p>
+<pre><code class="Python">arr = [0, 5, 2, 3, 7, 1, 6]
+val = 4
+arr.append(val)
+print(arr)
+</code></pre>
+<p><strong>在数组第 <code>i</code> 个位置上插入值为 <code>val</code> 的元素</strong>：先检查插入下标 <code>i</code> 是否合法，即 <code>0 &lt;= i &lt;= len(nums)</code>。确定合法位置后，通常情况下第 <code>i</code> 个位置上已经有数据了（除非 <code>i == len(nums)</code> ），要把第 <code>i</code> 个位置到第 <code>len(nums) - 1</code> 位置上的元素依次向后移动，然后再在第 <code>i</code> 个元素位置插入 <code>val</code> 值，并更新数组的元素计数值。因为移动元素的操作次数跟元素个数有关，最坏和平均时间复杂度都是 $O(n)$。</p>
+<p><code>Python</code> 中的 <code>list</code> 直接封装了中间插入操作，直接调用 <code>insert</code> 方法即可。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210916224032.png" alt="插入中间元素"></p>
+<p>示例代码如下：</p>
+<pre><code class="Python">arr = [0, 5, 2, 3, 7, 1, 6]
+i, val = 2, 4
+arr.insert(i, val)
+print(arr)
+</code></pre>
+<h3 id="2-4-改变元素"><a href="#2-4-改变元素" class="headerlink" title="2.4 改变元素"></a>2.4 改变元素</h3><p>**将数组中第 <code>i</code> 个元素值改为 <code>val</code>**：改变元素操作跟访问元素操作类似。需要先检查 <code>i</code> 的范围是否在合法的范围区间，即 <code>0 &lt;= i &lt;= len(nums) - 1</code>。然后将第 <code>i</code> 个元素值赋值为 <code>val</code>。访问操作不依赖于数组中元素个数，因此时间复杂度为 $O(1)$。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210916224722.png" alt="改变元素"></p>
+<p>示例代码如下：</p>
+<pre><code class="Python">def change(nums, i, val):
+    if 0 &lt;= i &lt;= len(nums) - 1:
+        nums[i] = val
+        
+arr = [0, 5, 2, 3, 7, 1, 6]
+i, val = 2, 4
+change(arr, i, val)
+print(arr)
+</code></pre>
+<h3 id="2-5-删除元素"><a href="#2-5-删除元素" class="headerlink" title="2.5 删除元素"></a>2.5 删除元素</h3><p>删除元素分为三种情况：「删除数组尾部元素」、「删除数组第 <code>i</code> 个位置上的元素」、「基于条件删除元素」。</p>
+<p><strong>删除数组尾部元素</strong>：只需将元素计数值减一即可。这样原来的数组尾部元素不再位于合法的数组下标范围，就相当于删除了。时间复杂度为 $O(1)$。</p>
+<p><code>Python</code> 中的 <code>list</code> 直接封装了删除数组尾部元素的操作，只需要调用 <code>pop</code> 方法即可。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210916233914.png" alt="删除尾部元素"></p>
+<p>示例代码如下：</p>
+<pre><code class="Python">arr = [0, 5, 2, 3, 7, 1, 6]
+arr.pop()
+print(arr)
+</code></pre>
+<p><strong>删除数组第 <code>i</code> 个位置上的元素</strong>：先检查下标 <code>i</code> 是否合法，即 <code>o &lt;= i &lt;= len(nums) - 1</code>。如果下标合法，则将第 <code>i + 1</code> 个位置到第 <code>len(nums) - 1</code> 位置上的元素依次向左移动。删除后修改数组的元素计数值。删除中间位置元素的操作同样涉及移动元素，而移动元素的操作次数跟元素个数有关，因此删除中间元素的最坏和平均时间复杂度都是 $O(n)$。</p>
+<p><code>Python</code> 中的 <code>list</code> 直接封装了删除数组中间元素的操作，只需要以下标作为参数调用 <code>pop</code> 方法即可。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20210916234013.png" alt="删除中间元素"></p>
+<p>示例代码如下：</p>
+<pre><code>arr = [0, 5, 2, 3, 7, 1, 6]
+i = 3
+arr.pop(i)
+print(arr)
+</code></pre>
+<p><strong>基于条件删除元素</strong>：这种操作一般不给定被删元素的位置，而是给出一个条件要求删除满足这个条件的（一个、多个或所有）元素。这类操作也是通过循环检查元素，查找到元素后将其删除。删除多个元素操作中涉及到的多次移动元素操作，可以通过算法改进，将多趟移动元素操作转变为一趟移动元素，从而将时间复杂度降低为 $O(n)$。一般而言，这类删除操作都是线性时间操作，时间复杂度为 $O(n)$。</p>
+<p>示例代码如下：</p>
+<pre><code class="Python">arr = [0, 5, 2, 3, 7, 1, 6]
+i = 3
+arr.remove(5)
+print(arr)
+</code></pre>
+<hr>
+<p>到这里，有关数组的基础知识就介绍完了。下面进行一下总结。</p>
+<h2 id="3-数组总结"><a href="#3-数组总结" class="headerlink" title="3. 数组总结"></a>3. 数组总结</h2><p>数组是最基础、最简单的数据结构。数组是实现线性表的顺序结构存储的基础。它使用一组连续的内存空间，来存储一组具有相同类型的数据。</p>
+<p>数组的最大特点的支持随机访问。其访问元素、改变元素的时间复杂度为 $O(1)$，在尾部插入、删除元素的时间复杂度也是 $O(1)$，普通情况下插入、删除元素的时间复杂度为 $O(n)$。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><p>【文章】<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzE0OTEzNTMzL2FydGljbGUvZGV0YWlscy8xMDI3NjM1NzM=">数据结构中的数组和不同语言中数组的区别 - CSDN 博客</span></p>
+</li>
+<li><p>【文章】<span class="exturl" data-url="aHR0cHM6Ly9wcm9ncmFtbWVyY2FybC5jb20vJUU2JTk1JUIwJUU3JUJCJTg0JUU3JTkwJTg2JUU4JUFFJUJBJUU1JTlGJUJBJUU3JUExJTgwLmh0bWwjJUU2JTk1JUIwJUU3JUJCJTg0JUU3JTkwJTg2JUU4JUFFJUJBJUU1JTlGJUJBJUU3JUExJTgw">数组理论基础 - 代码随想录</span></p>
+</li>
+<li><p>【文章】<span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8xMjAzMTI0Mzc=">Python 与 Java 中容器对比：List - 知乎</span></p>
+</li>
+<li><p>【文章】<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9sZWV0Ym9vay9yZWFkL2pvdXJuZXktb2YtYWxnb3JpdGhtLzVvemNocy8=">什么是数组 - 漫画算法 - 小灰的算法之旅 - 力扣</span></p>
+</li>
+<li><p>【文章】<span class="exturl" data-url="aHR0cHM6Ly90aW1lLmdlZWtiYW5nLm9yZy9jb2x1bW4vaW50cm8vMTAwMDE3MzAx">数组 - 数据结构与算法之美 - 极客时间</span></p>
+</li>
+<li><p>【书籍】数据结构教程 第 2 版 - 唐发根 著</p>
+</li>
+<li><p>【书籍】数据结构与算法 Python 语言描述 - 裘宗燕 著</p>
+</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="ic i-tag"></i> 算法与数据结构</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-19 22:49:54" itemprop="dateModified" datetime="2023-02-19T22:49:54+08:00">2023-02-19</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" title="数组基础知识">http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit31ffoj20zk0m8naf.jpg" title="数组基础题目">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>数组基础题目</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="哈希表题目">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>哈希表题目</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E6%95%B0%E7%BB%84%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 数组简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%95%B0%E7%BB%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 数组定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%A6%82%E4%BD%95%E9%9A%8F%E6%9C%BA%E8%AE%BF%E9%97%AE%E6%95%B0%E6%8D%AE%E5%85%83%E7%B4%A0"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 如何随机访问数据元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E5%A4%9A%E7%BB%B4%E6%95%B0%E7%BB%84"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 多维数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E4%B8%8D%E5%90%8C%E7%BC%96%E7%A8%8B%E8%AF%AD%E8%A8%80%E4%B8%AD%E6%95%B0%E7%BB%84%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 不同编程语言中数组的实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E6%95%B0%E7%BB%84%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">2.</span> <span class="toc-text">2. 数组的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%AE%BF%E9%97%AE%E5%85%83%E7%B4%A0"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 访问元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 查找元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%8F%92%E5%85%A5%E5%85%83%E7%B4%A0"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 插入元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E6%94%B9%E5%8F%98%E5%85%83%E7%B4%A0"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 改变元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%88%A0%E9%99%A4%E5%85%83%E7%B4%A0"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 删除元素</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%95%B0%E7%BB%84%E6%80%BB%E7%BB%93"><span class="toc-number">3.</span> <span class="toc-text">3. 数组总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">4.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" rel="bookmark" title="数据结构与算法">数据结构与算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/01.Data-Structures-Algorithms/" rel="bookmark" title="算法与数据结构">算法与数据结构</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" rel="bookmark" title="算法复杂度">算法复杂度</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" rel="bookmark" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/06.Interview-100-List/" rel="bookmark" title="LeetCode 面试最常考 100 题（按分类排序）">LeetCode 面试最常考 100 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" rel="bookmark" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/08.Algorithms-Overview/" rel="bookmark" title="算法">算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" rel="bookmark" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/01.Hash-Table/" rel="bookmark" title="哈希表知识">哈希表知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/04.Solutions-List/" rel="bookmark" title="LeetCode 题解（字典序排序，700+ 道题解）">LeetCode 题解（字典序排序，700+ 道题解）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="bookmark" title="哈希表题目">哈希表题目</a></li><li class="active"><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" rel="bookmark" title="数组基础知识">数组基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="bookmark" title="数组基础题目">数组基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/01.Array-Bubble-Sort/" rel="bookmark" title="冒泡排序">冒泡排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/02.Array-Selection-Sort/" rel="bookmark" title="选择排序">选择排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/03.Array-Insertion-Sort/" rel="bookmark" title="插入排序">插入排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/04.Array-Shell-Sort/" rel="bookmark" title="希尔排序">希尔排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/05.Array-Merge-Sort/" rel="bookmark" title="归并排序">归并排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/06.Array-Quick-Sort/" rel="bookmark" title="快速排序">快速排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" rel="bookmark" title="堆排序">堆排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" rel="bookmark" title="计数排序">计数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" rel="bookmark" title="桶排序">桶排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" rel="bookmark" title="基数排序">基数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/11.Array-Sort-List/" rel="bookmark" title="数组排序题目">数组排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/01.Array-Binary-Search/" rel="bookmark" title="二分查找知识">二分查找知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" rel="bookmark" title="二分查找题目">二分查找题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/01.Array-Two-Pointers/" rel="bookmark" title="数组双指针知识">数组双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="bookmark" title="数组双指针题目">数组双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" rel="bookmark" title="链表双指针知识">链表双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="bookmark" title="链表双指针题目">链表双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" rel="bookmark" title="链表排序知识">链表排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" rel="bookmark" title="链表排序题目">链表排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" rel="bookmark" title="单调栈知识">单调栈知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/02.Monotone-Stack-List/" rel="bookmark" title="单调栈题目">单调栈题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/01.Stack-Basic/" rel="bookmark" title="堆栈基础知识">堆栈基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/02.Stack-Basic-List/" rel="bookmark" title="堆栈基础题目">堆栈基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" rel="bookmark" title="队列基础知识">队列基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/02.Queue-Basic-List/" rel="bookmark" title="队列基础题目">队列基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" rel="bookmark" title="优先队列知识">优先队列知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" rel="bookmark" title="优先队列题目">优先队列题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" rel="bookmark" title="树与二叉树基础知识">树与二叉树基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/02.Binary-Tree-Traverse/" rel="bookmark" title="二叉树的遍历知识">二叉树的遍历知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/04.Binary-Tree-Reduction/" rel="bookmark" title="二叉树的还原知识">二叉树的还原知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/05.Binary-Tree-Reduction-List/" rel="bookmark" title="二叉树的还原题目">二叉树的还原题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" rel="bookmark" title="二叉树的遍历题目">二叉树的遍历题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" rel="bookmark" title="二叉搜索树知识">二叉搜索树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/02.Binary-Search-Tree-List/" rel="bookmark" title="二叉搜索树题目">二叉搜索树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" rel="bookmark" title="数组滑动窗口知识">数组滑动窗口知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="bookmark" title="数组滑动窗口题目">数组滑动窗口题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" rel="bookmark" title="线段树知识">线段树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="bookmark" title="线段树题目">线段树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" rel="bookmark" title="链表基础知识">链表基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" rel="bookmark" title="链表经典题目">链表经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/01.Binary-Indexed-Tree/" rel="bookmark" title="树状数组知识">树状数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/02.Binary-Indexed-Tree-List/" rel="bookmark" title="树状数组题目">树状数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/01.String-Basic/" rel="bookmark" title="字符串基础知识">字符串基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" rel="bookmark" title="字符串经典题目">字符串经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" rel="bookmark" title="字典树知识">字典树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/02.Trie-List/" rel="bookmark" title="字典树题目">字典树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/03.AC-Automaton/" rel="bookmark" title="AC 自动机知识">AC 自动机知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" rel="bookmark" title="AC 自动机题目">AC 自动机题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" rel="bookmark" title="后缀数组知识">后缀数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" rel="bookmark" title="后缀数组题目">后缀数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="bookmark" title="图的定义和分类">图的定义和分类</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="bookmark" title="图的存储结构和问题应用">图的存储结构和问题应用</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="bookmark" title="并查集知识">并查集知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="bookmark" title="并查集题目">并查集题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/01.Graph-DFS/" rel="bookmark" title="图的深度优先搜索知识">图的深度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/02.Graph-DFS-List/" rel="bookmark" title="图的深度优先搜索题目">图的深度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" rel="bookmark" title="图的广度优先搜索知识">图的广度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" rel="bookmark" title="图的广度优先搜索题目">图的广度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/05.Graph-Topological-Sorting/" rel="bookmark" title="图的拓扑排序知识">图的拓扑排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/06.Graph-Topological-Sorting-List/" rel="bookmark" title="图的拓扑排序题目">图的拓扑排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" rel="bookmark" title="图的生成树知识">图的生成树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" rel="bookmark" title="Prim 算法">Prim 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/03.Graph-Kruskal/" rel="bookmark" title="Kruskal 算法">Kruskal 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/04.Gaph-Spanning-Tree-List/" rel="bookmark" title="图的生成树题目">图的生成树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/01.String-Brute-Force/" rel="bookmark" title="Brute Force 算法">Brute Force 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/02.String-Rabin-Karp/" rel="bookmark" title="Rabin Karp 算法">Rabin Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="bookmark" title="KMP 算法">KMP 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" rel="bookmark" title="Boyer Moore 算法">Boyer Moore 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="bookmark" title="Horspool 算法">Horspool 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" rel="bookmark" title="Sunday 算法">Sunday 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" rel="bookmark" title="单模式串匹配题目">单模式串匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" rel="bookmark" title="枚举算法知识">枚举算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/02.Enumeration-Algorithm-List/" rel="bookmark" title="枚举算法题目">枚举算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" rel="bookmark" title="二分图基础知识">二分图基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" rel="bookmark" title="二分图基础题目">二分图基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/03.Graph-Bipartite-Matching/" rel="bookmark" title="二分图最大匹配知识">二分图最大匹配知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/04.Graph-Hungarian-Algorithm/" rel="bookmark" title="匈牙利算法">匈牙利算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/05.Graph-Hopcroft-Karp/" rel="bookmark" title="Hopcroft-Karp 算法">Hopcroft-Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/06.Graph-Bipartite-Matching-List/" rel="bookmark" title="二分图最大匹配题目">二分图最大匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" rel="bookmark" title="回溯算法知识">回溯算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" rel="bookmark" title="回溯算法题目">回溯算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" rel="bookmark" title="贪心算法知识">贪心算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" rel="bookmark" title="贪心算法题目">贪心算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" rel="bookmark" title="分治算法知识">分治算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/02.Divide-And-Conquer-Algorithm-List/" rel="bookmark" title="分治算法题目">分治算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" rel="bookmark" title="递归算法知识">递归算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/02.Recursive-Algorithm-List/" rel="bookmark" title="递归算法题目">递归算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" rel="bookmark" title="位运算知识">位运算知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/02.Bit-Operation-List/" rel="bookmark" title="位运算题目">位运算题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" rel="bookmark" title="单源最短路径知识">单源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/02.Graph-Dijkstra/" rel="bookmark" title="Dijkstra 算法">Dijkstra 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/03.Graph-Bellman-Ford/" rel="bookmark" title="Bellman-Ford 算法">Bellman-Ford 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/04.Graph-SPFA/" rel="bookmark" title="SPFA 算法">SPFA 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/05.Graph-Single-Source-Shortest-Path-List/" rel="bookmark" title="单源最短路径题目">单源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/06.Graph-Multi-Source-Shortest-Path/" rel="bookmark" title="多源最短路径知识">多源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/07.Graph-Floyed/" rel="bookmark" title="Floyed 算法">Floyed 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/08.Graph-Multi-Source-Shortest-Path-List/" rel="bookmark" title="多源最短路径题目">多源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/09.Graph-The-Second-Shortest-Path/" rel="bookmark" title="次短路径知识">次短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" rel="bookmark" title="次短路径题目">次短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" rel="bookmark" title="差分约束系统知识">差分约束系统知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/12.Graph-System-Of-Difference-Constraints-List/" rel="bookmark" title="差分约束系统题目">差分约束系统题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/01.Dynamic-Programming-Basic/" rel="bookmark" title="动态规划基础知识">动态规划基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/02.Dynamic-Programming-Basic-List/" rel="bookmark" title="动态规划基础题目">动态规划基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" rel="bookmark" title="背包问题知识">背包问题知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" rel="bookmark" title="背包问题题目">背包问题题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/01.Tree-DP/" rel="bookmark" title="树形 DP 知识">树形 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" rel="bookmark" title="树形 DP 题目">树形 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/01.Linear-DP/" rel="bookmark" title="线性 DP 知识">线性 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" rel="bookmark" title="线性 DP 题目">线性 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/01.Memoization/" rel="bookmark" title="记忆化搜索知识">记忆化搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/02.Memoization-List/" rel="bookmark" title="记忆化搜索题目">记忆化搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" rel="bookmark" title="状态压缩 DP 知识">状态压缩 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" rel="bookmark" title="状态压缩 DP 题目">状态压缩 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" rel="bookmark" title="区间 DP 知识">区间 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/02.Interval-DP-List/" rel="bookmark" title="区间 DP 题目">区间 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/01.Count-DP/" rel="bookmark" title="计数 DP 知识">计数 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/02.Count-DP-List/" rel="bookmark" title="计数 DP 题目">计数 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/01.Probability-DP/" rel="bookmark" title="概率 DP 知识">概率 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" rel="bookmark" title="概率 DP 题目">概率 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/01.Number-DP/" rel="bookmark" title="数位 DP 知识">数位 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" rel="bookmark" title="数位 DP 题目">数位 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" rel="bookmark" title="单调栈 / 优先队列优化">单调栈 / 优先队列优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" rel="bookmark" title="斜率优化">斜率优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/03.Quadrangle-Optimization/" rel="bookmark" title="四边形不等式优化">四边形不等式优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" rel="bookmark" title="动态规划优化题目">动态规划优化题目</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch15/" title="第 15 章 先写注释">第 15 章 先写注释</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" title="单调栈 &#x2F; 优先队列优化">单调栈 / 优先队列优化</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/1.1.3/README/" title="分布式数据库详解">分布式数据库详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology200/" title="Linux 搭建 socks 服务器（翻墙）">Linux 搭建 socks 服务器（翻墙）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/02/01/" title="07丨池化技术：如何减少频繁创建数据库连接的性能损耗？">07丨池化技术：如何减少频繁创建数据库连接的性能损耗？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" title="枚举算法知识">枚举算法知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology142/" title="Mybatis系列 - mybatis-plus">Mybatis系列 - mybatis-plus</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%95%B0%E5%AD%A6/" title="分类于 数学">数学</a>
+</div>
+
+    <span><a href="/2019/07/01/other/3.2_math/math/" title="高等数学">高等数学</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/1.1.1/README/" title="操作系统">操作系统</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" title="数组滑动窗口知识">数组滑动窗口知识</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

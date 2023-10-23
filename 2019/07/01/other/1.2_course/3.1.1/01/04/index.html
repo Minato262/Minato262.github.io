@@ -1,0 +1,556 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="高并发系统设计 40 问" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/04/">
+
+
+
+  <title>
+04丨系统设计目标 2：系统怎样做到高可用？ - 课程 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">04丨系统设计目标 2：系统怎样做到高可用？
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:02">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:02+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E8%AF%BE%E7%A8%8B/" itemprop="item" rel="index" title="分类于 课程"><span itemprop="name">课程</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/04/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="04丨系统设计目标-2：系统怎样做到高可用？"><a href="#04丨系统设计目标-2：系统怎样做到高可用？" class="headerlink" title="04丨系统设计目标 2：系统怎样做到高可用？"></a>04丨系统设计目标 2：系统怎样做到高可用？</h1><p>本节课，我会继续带你了解高并发系统设计的第二个目标——高可用性。你需要在本节课对提升系统可用性的思路和方法有一个直观的了解，这样，当后续对点讲解这些内容时，你能马上反应过来，你的系统在遇到可用性的问题时，也能参考这些方法进行优化。</p>
+<p><strong>高可用性（High Availability，HA）</strong>是你在系统设计时经常会听到的一个名词，<strong>它指的是系统具备较高的无故障运行的能力</strong>。</p>
+<p>我们在很多开源组件的文档中看到的 HA 方案就是提升组件可用性，让系统免于宕机无法服务的方案。比如，你知道 Hadoop 1.0 中的 NameNode 是单点的，一旦发生故障则整个集群就会不可用；而在 Hadoop2 中提出的 NameNode HA 方案就是同时启动两个 NameNode，一个处于 Active 状态，另一个处于 Standby 状态，两者共享存储，一旦 Active NameNode 发生故障，则可以将 Standby NameNode 切换成 Active 状态继续提供服务，这样就增强了 Hadoop 的持续无故障运行的能力，也就是提升了它的可用性。</p>
+<p>通常来讲，一个高并发大流量的系统，系统出现故障比系统性能低更损伤用户的使用体验。想象一下，一个日活用户过百万的系统，一分钟的故障可能会影响到上千的用户。而且随着系统日活的增加，一分钟的故障时间影响到的用户数也随之增加，系统对于可用性的要求也会更高。所以今天，我就带你了解一下在高并发下，我们如何来保证系统的高可用性，以便给你的系统设计提供一些思路。</p>
+<h2 id="可用性的度量"><a href="#可用性的度量" class="headerlink" title="可用性的度量"></a>可用性的度量</h2><p>可用性是一个抽象的概念，你需要知道要如何来度量它，与之相关的概念是： <strong>MTBF 和 MTTR。</strong></p>
+<p><strong>MTBF（Mean Time Between Failure）</strong>是平均故障间隔的意思，代表两次故障的间隔时间，也就是系统正常运转的平均时间。这个时间越长，系统稳定性越高。</p>
+<p><strong>MTTR（Mean Time To Repair）</strong>表示故障的平均恢复时间，也可以理解为平均故障时间。这个值越小，故障对于用户的影响越小。</p>
+<p>可用性与 MTBF 和 MTTR 的值息息相关，我们可以用下面的公式表示它们之间的关系：</p>
+<blockquote>
+<p>Availability &#x3D; MTBF &#x2F; (MTBF + MTTR)</p>
+</blockquote>
+<p>这个公式计算出的结果是一个比例，而这个比例代表着系统的可用性。一般来说，我们会使用几个九来描述系统的可用性。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/73a87a9bc14a27c9ec9dfda1b72e1e75.jpg" alt="img"></p>
+<p>其实通过这张图你可以发现，一个九和两个九的可用性是很容易达到的，只要没有蓝翔技校的铲车搞破坏，基本上可以通过人肉运维的方式实现。</p>
+<p>三个九之后，系统的年故障时间从 3 天锐减到 8 小时。到了四个九之后，年故障时间缩减到 1 小时之内。在这个级别的可用性下，你可能需要建立完善的运维值班体系、故障处理流程和业务变更流程。你可能还需要在系统设计上有更多的考虑。比如，在开发中你要考虑，如果发生故障，是否不用人工介入就能自动恢复。当然了，在工具建设方面，你也需要多加完善，以便快速排查故障原因，让系统快速恢复。</p>
+<p>到达五个九之后，故障就不能靠人力恢复了。想象一下，从故障发生到你接收报警，再到你打开电脑登录服务器处理问题，时间可能早就过了十分钟了。所以这个级别的可用性考察的是系统的容灾和自动恢复的能力，让机器来处理故障，才会让可用性指标提升一个档次。</p>
+<p>一般来说，我们的核心业务系统的可用性，需要达到四个九，非核心系统的可用性最多容忍到三个九。在实际工作中，你可能听到过类似的说法，只是不同级别，不同业务场景的系统对于可用性要求是不一样的。</p>
+<p>目前，你已经对可用性的评估指标有了一定程度的了解了，接下来，我们来看一看高可用的系统设计需要考虑哪些因素。</p>
+<p><strong>高可用系统设计的思路</strong></p>
+<p>一个成熟系统的可用性需要从系统设计和系统运维两方面来做保障，两者共同作用，缺一不可。那么如何从这两方面入手，解决系统高可用的问题呢？</p>
+<h2 id="1-系统设计"><a href="#1-系统设计" class="headerlink" title="1. 系统设计"></a>1. 系统设计</h2><p><strong>Design for failure</strong> 是我们做高可用系统设计时秉持的第一原则。在承担百万 QPS 的高并发系统中，集群中机器的数量成百上千台，单机的故障是常态，几乎每一天都有发生故障的可能。</p>
+<p>未雨绸缪才能决胜千里。我们在做系统设计的时候，<strong>要把发生故障作为一个重要的考虑点</strong>，预先考虑如何自动化地发现故障，发生故障之后要如何解决。当然了，除了要有未雨绸缪的思维之外，我们还需要掌握一些具体的优化方法，比如 <strong>failover（故障转移）、超时控制以及降级和限流。</strong></p>
+<h3 id="failover（故障转移）"><a href="#failover（故障转移）" class="headerlink" title="failover（故障转移）"></a>failover（故障转移）</h3><p>一般来说，发生 failover 的节点可能有两种情况：</p>
+<ol>
+<li>是在 <strong>完全对等</strong> 的节点之间做 failover。</li>
+<li>是在 <strong>不对等</strong> 的节点之间，即系统中存在主节点也存在备节点。</li>
+</ol>
+<p>在对等节点之间做 failover 相对来说简单些。在这类系统中所有节点都承担读写流量，并且节点中不保存状态，每个节点都可以作为另一个节点的镜像。在这种情况下，如果访问某一个节点失败，那么简单地随机访问另一个节点就好了。</p>
+<p>举个例子，Nginx 可以配置当某一个 Tomcat 出现大于 500 的请求的时候，重试请求另一个 Tomcat 节点，就像下面这样：</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/e167ec1db28e977e37455d746e9d1d0a.jpg" alt="img"></p>
+<p><strong>针对不对等节点的 failover 机制会复杂很多</strong>。比方说我们有一个主节点，有多台备用节点，这些备用节点可以是热备（同样在线提供服务的备用节点），也可以是冷备（只作为备份使用），那么我们就需要在代码中控制如何检测主备机器是否故障，以及如何做主备切换。</p>
+<p>使用最广泛的故障检测机制是「心跳」。你可以在客户端上定期地向主节点发送心跳包，也可以从备份节点上定期发送心跳包。当一段时间内未收到心跳包，就可以认为主节点已经发生故障，可以触发选主的操作。</p>
+<p>选主的结果需要在多个备份节点上达成一致，所以会使用某一种分布式一致性算法，比方说 Paxos，Raft。</p>
+<h3 id="调用超时控制"><a href="#调用超时控制" class="headerlink" title="调用超时控制"></a>调用超时控制</h3><p>除了故障转移以外，对于系统间调用超时的控制也是高可用系统设计的一个重要考虑方面。</p>
+<p>复杂的高并发系统通常会有很多的系统模块组成，同时也会依赖很多的组件和服务，比如说缓存组件，队列服务等等。**它们之间的调用最怕的就是延迟而非失败 ** ，因为失败通常是瞬时的，可以通过重试的方式解决。而一旦调用某一个模块或者服务发生比较大的延迟，调用方就会阻塞在这次调用上，它已经占用的资源得不到释放。当存在大量这种阻塞请求时，调用方就会因为用尽资源而挂掉。</p>
+<p>在系统开发的初期，超时控制通常不被重视，或者是没有方式来确定正确的超时时间。</p>
+<p><strong>我之前经历过一个项目，</strong> 模块之间通过 RPC 框架来调用，超时时间是默认的 30 秒。平时系统运行得非常稳定，可是一旦遇到比较大的流量，RPC 服务端出现一定数量慢请求的时候，RPC 客户端线程就会大量阻塞在这些慢请求上长达 30 秒，造成 RPC 客户端用尽调用线程而挂掉。后面我们在故障复盘的时候发现这个问题后，调整了 RPC，数据库，缓存以及调用第三方服务的超时时间，这样在出现慢请求的时候可以触发超时，就不会造成整体系统雪崩。</p>
+<p>既然要做超时控制，那么我们怎么来确定超时时间呢？这是一个比较困难的问题。</p>
+<p>超时时间短了，会造成大量的超时错误，对用户体验产生影响；超时时间长了，又起不到作用。 <strong>我建议你通过收集系统之间的调用日志，统计比如说 99% 的响应时间是怎样的，然后依据这个时间来指定超时时间。</strong> 如果没有调用的日志，那么你只能按照经验值来指定超时时间。不过，无论你使用哪种方式，超时时间都不是一成不变的，需要在后面的系统维护过程中不断地修改。</p>
+<p>超时控制实际上就是不让请求一直保持，而是在经过一定时间之后让请求失败，释放资源给接下来的请求使用。这对于用户来说是有损的，但是却是必要的，因为它牺牲了少量的请求却保证了整体系统的可用性。而我们还有另外两种有损的方案能保证系统的高可用，它们就是降级和限流。</p>
+<h3 id="降级"><a href="#降级" class="headerlink" title="降级"></a>降级</h3><p><strong>降级是为了保证核心服务的稳定而牺牲非核心服务的做法。</strong> 比方说我们发一条微博会先经过反垃圾服务检测，检测内容是否是广告，通过后才会完成诸如写数据库等逻辑。</p>
+<p>反垃圾的检测是一个相对比较重的操作，因为涉及到非常多的策略匹配，在日常流量下虽然会比较耗时却还能正常响应。但是当并发较高的情况下，它就有可能成为瓶颈，而且它也不是发布微博的主体流程，所以我们可以暂时关闭反垃圾服务检测，这样就可以保证主体的流程更加稳定。</p>
+<h3 id="限流"><a href="#限流" class="headerlink" title="限流"></a>限流</h3><p>**限流完全是另外一种思路， ** 它通过对并发的请求进行限速来保护系统。</p>
+<p>比如对于 Web 应用，我限制单机只能处理每秒 1000 次的请求，超过的部分直接返回错误给客户端。虽然这种做法损害了用户的使用体验，但是它是在极端并发下的无奈之举，是短暂的行为，因此是可以接受的。</p>
+<p>实际上，无论是降级还是限流，在细节上还有很多可供探讨的地方，我会在后面的课程中，随着系统的不断演进深入地剖析，在基础篇里就不多说了。</p>
+<h2 id="2-系统运维"><a href="#2-系统运维" class="headerlink" title="2. 系统运维"></a>2. 系统运维</h2><p>在系统设计阶段为了保证系统的可用性可以采取上面的几种方法，那在系统运维的层面又能做哪些事情呢？其实，我们可以从 <strong>灰度发布、故障演练</strong> 两个方面来考虑如何提升系统的可用性。</p>
+<p>你应该知道，在业务平稳运行过程中，系统是很少发生故障的，90% 的故障是发生在上线变更阶段的。比方说，你上了一个新的功能，由于设计方案的问题，数据库的慢请求数翻了一倍，导致系统请求被拖慢而产生故障。</p>
+<p>如果没有变更，数据库怎么会无缘无故地产生那么多的慢请求呢？因此，为了提升系统的可用性，重视变更管理尤为重要。而除了提供必要回滚方案，以便在出现问题时快速回滚恢复之外， <strong>另一个主要的手段就是灰度发布。</strong></p>
+<h3 id="灰度发布"><a href="#灰度发布" class="headerlink" title="灰度发布"></a>灰度发布</h3><p>灰度发布指的是系统的变更不是一次性地推到线上的，而是按照一定比例逐步推进的。一般情况下，<strong>灰度发布是以机器维度进行的</strong>。比方说，我们先在 10% 的机器上进行变更，同时观察 Dashboard 上的系统性能指标以及错误日志。如果运行了一段时间之后系统指标比较平稳并且没有出现大量的错误日志，那么再推动全量变更。</p>
+<p>灰度发布给了开发和运维同学绝佳的机会，让他们能在线上流量上观察变更带来的影响，是保证系统高可用的重要关卡。</p>
+<p>灰度发布是在系统正常运行条件下，保证系统高可用的运维手段，那么我们如何知道发生故障时系统的表现呢？这里就要依靠另外一个手段： <strong>故障演练。</strong></p>
+<h3 id="演练"><a href="#演练" class="headerlink" title="演练"></a>演练</h3><p>故障演练指的是对系统进行一些破坏性的手段，观察在出现局部故障时，整体的系统表现是怎样的，从而发现系统中存在的，潜在的可用性问题。</p>
+<p>一个复杂的高并发系统依赖了太多的组件，比方说磁盘，数据库，网卡等，这些组件随时随地都可能会发生故障，而一旦它们发生故障，会不会如蝴蝶效应一般造成整体服务不可用呢？我们并不知道，因此，故障演练尤为重要。</p>
+<p>在我来看， <strong>故障演练和时下比较流行的“混沌工程”的思路如出一辙，</strong> 作为混沌工程的鼻祖，Netfix 在 2010 年推出的 Chaos Monkey 工具就是故障演练绝佳的工具。它通过在线上系统上随机地关闭线上节点来模拟故障，让工程师可以了解，在出现此类故障时会有什么样的影响。</p>
+<p>当然，这一切是以你的系统可以抵御一些异常情况为前提的。如果你的系统还没有做到这一点，那么 <strong>我建议你</strong> 另外搭建一套和线上部署结构一模一样的线下系统，然后在这套系统上做故障演练，从而避免对生产系统造成影响。</p>
+<h2 id="课程小结"><a href="#课程小结" class="headerlink" title="课程小结"></a>课程小结</h2><p>本节课我带你了解了如何度量系统的可用性，以及在做高并发系统设计时如何来保证高可用。</p>
+<p>说了这么多，你可以看到从开发和运维角度上来看，提升可用性的方法是不同的：</p>
+<ul>
+<li><p><strong>开发</strong>  注重的是如何处理故障，关键词是 <strong>冗余和取舍</strong>。</p>
+<p>冗余指的是有备用节点，集群来顶替出故障的服务，比如文中提到的故障转移，还有多活架构等等；取舍指的是丢卒保车，保障主体服务的安全。</p>
+</li>
+<li><p>从 <strong>运维角度</strong> 来看则更偏保守，注重的是如何避免故障的发生</p>
+<p>比如更关注变更管理以及如何做故障的演练。</p>
+</li>
+</ul>
+<p>两者结合起来才能组成一套完善的高可用体系。</p>
+<p><strong>你还需要注意的是，</strong>提高系统的可用性有时候是以牺牲用户体验或者是牺牲系统性能为前提的，也需要大量人力来建设相应的系统，完善机制。所以我们要把握一个度，不该做过度的优化。就像我在文中提到的，核心系统四个九的可用性已经可以满足需求，就没有必要一味地追求五个九甚至六个九的可用性。</p>
+<p>另外，一般的系统或者组件都是追求极致的性能的，那么有没有不追求性能，只追求极致的可用性的呢？答案是有的。比如配置下发的系统，它只需要在其它系统启动时提供一份配置即可，所以秒级返回也可，十秒钟也 OK，无非就是增加了其它系统的启动速度而已。但是，它对可用性的要求是极高的，甚至会到六个九，原因是配置可以获取的慢，但是不能获取不到。<strong>我给你举这个例子是想让你了解，</strong> 可用性和性能有时候是需要做取舍的，但如何取舍就要视不同的系统而定，不能一概而论了。</p>
+<h2 id="一课一思"><a href="#一课一思" class="headerlink" title="一课一思"></a>一课一思</h2><p>在今天的课程中，我提到了很多保证高可用的手段，那么你在工作中会有哪些保证系统高可用的设计技巧呢？</p>
+<h2 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h2><ul>
+<li>针对于操作系统，网络或磁盘这种应该怎么故障注入，故障模拟应该怎么模拟呢？</li>
+</ul>
+<p>  一般使用 tc 来模拟网络慢的情况，磁盘故障可以使用 fiu-ctrl</p>
+
+      <div class="tags">
+          <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-40-%E9%97%AE/" rel="tag"><i class="ic i-tag"></i> 高并发系统设计 40 问</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-20 00:10:48" itemprop="dateModified" datetime="2023-02-20T00:10:48+08:00">2023-02-20</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/04/" title="04丨系统设计目标 2：系统怎样做到高可用？">http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/04/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giciszlczyj20zk0m816d.jpg" title="05丨系统设计目标 3：如何让系统易于扩展？">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>05丨系统设计目标 3：如何让系统易于扩展？</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giciszlczyj20zk0m816d.jpg" title="03丨系统设计目标 1：如何提升系统性能？">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>03丨系统设计目标 1：如何提升系统性能？</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#04%E4%B8%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87-2%EF%BC%9A%E7%B3%BB%E7%BB%9F%E6%80%8E%E6%A0%B7%E5%81%9A%E5%88%B0%E9%AB%98%E5%8F%AF%E7%94%A8%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">04丨系统设计目标 2：系统怎样做到高可用？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%AF%E7%94%A8%E6%80%A7%E7%9A%84%E5%BA%A6%E9%87%8F"><span class="toc-number">1.1.</span> <span class="toc-text">可用性的度量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.2.</span> <span class="toc-text">1. 系统设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#failover%EF%BC%88%E6%95%85%E9%9A%9C%E8%BD%AC%E7%A7%BB%EF%BC%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">failover（故障转移）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8%E8%B6%85%E6%97%B6%E6%8E%A7%E5%88%B6"><span class="toc-number">1.2.2.</span> <span class="toc-text">调用超时控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%8D%E7%BA%A7"><span class="toc-number">1.2.3.</span> <span class="toc-text">降级</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%99%90%E6%B5%81"><span class="toc-number">1.2.4.</span> <span class="toc-text">限流</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4"><span class="toc-number">1.3.</span> <span class="toc-text">2. 系统运维</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%81%B0%E5%BA%A6%E5%8F%91%E5%B8%83"><span class="toc-number">1.3.1.</span> <span class="toc-text">灰度发布</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%BC%94%E7%BB%83"><span class="toc-number">1.3.2.</span> <span class="toc-text">演练</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%B0%8F%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">课程小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%AF%BE%E4%B8%80%E6%80%9D"><span class="toc-number">1.5.</span> <span class="toc-text">一课一思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%E9%98%85%E8%AF%BB"><span class="toc-number">1.6.</span> <span class="toc-text">拓展阅读</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/1.2_course/course/" rel="bookmark" title="课程">课程</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.1/README/" rel="bookmark" title="操作系统">操作系统</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.2/README/" rel="bookmark" title="领域驱动设计">领域驱动设计</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.4/README/" rel="bookmark" title="ElasticSearch知识体系详解">ElasticSearch知识体系详解</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.3/README/" rel="bookmark" title="分布式数据库详解">分布式数据库详解</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.1/README/" rel="bookmark" title="计算机基础实战课">计算机基础实战课</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/README/" rel="bookmark" title="高并发系统设计 40 问">高并发系统设计 40 问</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.2/README/" rel="bookmark" title="Java业务开发常见错误">Java业务开发常见错误</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.2/README/" rel="bookmark" title="消息队列理论课">消息队列理论课</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.1/README/" rel="bookmark" title="Java 并发编程">Java 并发编程</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.2/README/" rel="bookmark" title="Netty 核心原理剖析与 RPC 实践">Netty 核心原理剖析与 RPC 实践</a></li><li><a href="/2019/07/01/other/1.2_course/3.3.1/README/" rel="bookmark" title="性能测试">性能测试</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.5/README/" rel="bookmark" title="Redis 核心原理与实战">Redis 核心原理与实战</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.3/README/" rel="bookmark" title="深入理解 Sentinel">深入理解 Sentinel</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/00/README/" rel="bookmark" title="开篇-为什么你要学习高并发系统设计">开篇-为什么你要学习高并发系统设计</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" rel="bookmark" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" rel="bookmark" title="02丨架构分层：我们为什么一定要这么做？">02丨架构分层：我们为什么一定要这么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" rel="bookmark" title="03丨系统设计目标 1：如何提升系统性能？">03丨系统设计目标 1：如何提升系统性能？</a></li><li class="active"><a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" rel="bookmark" title="04丨系统设计目标 2：系统怎样做到高可用？">04丨系统设计目标 2：系统怎样做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" rel="bookmark" title="05丨系统设计目标 3：如何让系统易于扩展？">05丨系统设计目标 3：如何让系统易于扩展？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/06/" rel="bookmark" title="06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？">06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/README/" rel="bookmark" title="01丨基础篇">01丨基础篇</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/01/" rel="bookmark" title="17丨消息队列：秒杀时如何处理每秒上万次的下单请求？">17丨消息队列：秒杀时如何处理每秒上万次的下单请求？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/02/" rel="bookmark" title="18丨消息投递：如何保证消息仅仅被消费一次？">18丨消息投递：如何保证消息仅仅被消费一次？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/03/" rel="bookmark" title="19丨消息队列：如何降低消息队列系统中消息的延迟？">19丨消息队列：如何降低消息队列系统中消息的延迟？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/04/" rel="bookmark" title="20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？">20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/05/" rel="bookmark" title="期中测试丨10 道高并发系统设计题目自测">期中测试丨10 道高并发系统设计题目自测</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" rel="bookmark" title="04丨演进篇-消息队列">04丨演进篇-消息队列</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/01/" rel="bookmark" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" rel="bookmark" title="22丨微服务架构：微服务化后，系统架构要如何改造？">22丨微服务架构：微服务化后，系统架构要如何改造？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/03/" rel="bookmark" title="23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？">23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/04/" rel="bookmark" title="24丨注册中心：分布式系统如何寻址？">24丨注册中心：分布式系统如何寻址？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" rel="bookmark" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/06/" rel="bookmark" title="26丨负载均衡：怎样提升系统的横向扩展能力？">26丨负载均衡：怎样提升系统的横向扩展能力？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" rel="bookmark" title="27丨API 网关：系统的门面要如何做呢？">27丨API 网关：系统的门面要如何做呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/08/" rel="bookmark" title="28丨多机房部署：跨地域的分布式系统如何做？">28丨多机房部署：跨地域的分布式系统如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/09/" rel="bookmark" title="29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？">29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/README/" rel="bookmark" title="05丨演进篇-分布式服务">05丨演进篇-分布式服务</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/01/" rel="bookmark" title="12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？">12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/02/" rel="bookmark" title="13丨缓存的使用姿势 1：如何选择缓存的读写策略？">13丨缓存的使用姿势 1：如何选择缓存的读写策略？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/03/" rel="bookmark" title="14丨缓存的使用姿势 2：缓存如何做到高可用？">14丨缓存的使用姿势 2：缓存如何做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/04/" rel="bookmark" title="15丨缓存的使用姿势 3：缓存穿透了怎么办？">15丨缓存的使用姿势 3：缓存穿透了怎么办？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/05/" rel="bookmark" title="16丨CDN：静态资源如何加速？">16丨CDN：静态资源如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/06/" rel="bookmark" title="加餐丨数据的迁移应该如何做？">加餐丨数据的迁移应该如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/README/" rel="bookmark" title="03丨演进篇-缓存">03丨演进篇-缓存</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/01/" rel="bookmark" title="30丨给系统加上眼睛：服务端监控要怎么做？">30丨给系统加上眼睛：服务端监控要怎么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/02/" rel="bookmark" title="31丨应用性能管理：用户的使用体验应该如何监控？">31丨应用性能管理：用户的使用体验应该如何监控？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/03/" rel="bookmark" title="32丨压力测试：怎样设计全链路压力测试平台？">32丨压力测试：怎样设计全链路压力测试平台？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/04/" rel="bookmark" title="33丨配置管理：成千上万的配置项要如何管理？">33丨配置管理：成千上万的配置项要如何管理？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/05/" rel="bookmark" title="34丨降级熔断：如何屏蔽非核心系统故障的影响？">34丨降级熔断：如何屏蔽非核心系统故障的影响？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/06/" rel="bookmark" title="35丨流量控制：高并发系统中我们如何操纵流量？">35丨流量控制：高并发系统中我们如何操纵流量？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/07/" rel="bookmark" title="36丨面试现场第 3 期：你要如何准备一场技术面试呢？">36丨面试现场第 3 期：你要如何准备一场技术面试呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/README/" rel="bookmark" title="06丨演进篇-维护">06丨演进篇-维护</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/01/" rel="bookmark" title="07丨池化技术：如何减少频繁创建数据库连接的性能损耗？">07丨池化技术：如何减少频繁创建数据库连接的性能损耗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/03/" rel="bookmark" title="09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？">09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" rel="bookmark" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/04/" rel="bookmark" title="10丨发号器：如何保证分库分表后 ID 的全局唯一性？">10丨发号器：如何保证分库分表后 ID 的全局唯一性？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/05/" rel="bookmark" title="11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？">11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/README/" rel="bookmark" title="02丨演进篇-数据库">02丨演进篇-数据库</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" rel="bookmark" title="37丨计数系统设计 1：面对海量数据的计数器要如何做？">37丨计数系统设计 1：面对海量数据的计数器要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/02/" rel="bookmark" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" rel="bookmark" title="39丨信息流设计 1：通用信息流系统的推模式要如何做？">39丨信息流设计 1：通用信息流系统的推模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/04/" rel="bookmark" title="40丨信息流设计 2：通用信息流系统的拉模式要如何做？">40丨信息流设计 2：通用信息流系统的拉模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/README/" rel="bookmark" title="07丨实战篇">07丨实战篇</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" title="贪心算法知识">贪心算法知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" title="回溯算法知识">回溯算法知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology145/" title="SpringBoot系列 - 集成MongoDB">SpringBoot系列 - 集成MongoDB</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.2.2/README/" title="Netty 核心原理剖析与 RPC 实践">Netty 核心原理剖析与 RPC 实践</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/preface/" title="前言">前言</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch19/" title="第 19 章 软件发展趋势">第 19 章 软件发展趋势</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" title="堆排序">堆排序</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" title="优先队列知识">优先队列知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" title="分类于 分布式">分布式</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/2.3_distributed-system/distributed-system/" title="分布式系统">分布式系统</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/1.2_course/3.1.1/01/04/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,913 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="算法与数据结构" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/">
+
+
+
+  <title>
+图的存储结构和问题应用 - 算法 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">图的存储结构和问题应用
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 21:43:40">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T21:43:40+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="item" rel="index" title="分类于 算法"><span itemprop="name">算法</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="1-图的存储结构"><a href="#1-图的存储结构" class="headerlink" title="1. 图的存储结构"></a>1. 图的存储结构</h2><p>图的结构比较复杂，我们需要表示顶点和边。一个图可能有任意多个（有限个）顶点，而且任何两个顶点之间都可能存在边。我们在实现图的存储时，重点需要关注边与顶点之间的关联关系，这是图的存储的关键。</p>
+<p>图的存储可以通过「顺序存储结构」和「链式存储结构」来实现。其中顺序存储结构包括邻接矩阵和边集数组。链式存储结构包括邻接表、链式前向星、十字链表和邻接多重表。</p>
+<p>接下来我们来介绍几个常用的图的存储结构。在下文中，我们约定用 $n$ 代表顶点数目，$m$ 代表边数目，$TD(v_i)$ 表示顶点 $v_i$ 的度。</p>
+<h3 id="1-1-邻接矩阵"><a href="#1-1-邻接矩阵" class="headerlink" title="1.1 邻接矩阵"></a>1.1 邻接矩阵</h3><h4 id="1-1-1-邻接矩阵的原理描述"><a href="#1-1-1-邻接矩阵的原理描述" class="headerlink" title="1.1.1 邻接矩阵的原理描述"></a>1.1.1 邻接矩阵的原理描述</h4><blockquote>
+<p><strong>邻接矩阵（Adjacency Matrix）</strong>：使用一个二维数组 <code>adj_matrix</code> 来存储顶点之间的邻接关系。</p>
+<ul>
+<li>对于无权图来说，如果 <code>adj_matrix[i][j]</code> 为 <code>1</code>，则说明顶点 $v_i$ 到 $v_j$ 存在边，如果 <code>adj_matrix[i][j]</code> 为 <code>0</code>，则说明顶点 $v_i$ 到 $v_j$ 不存在边。</li>
+<li>对于带权图来说，如果 <code>adj_matrix[i][j]</code> 为 <code>w</code>，并且 <code>w != float(&#39;inf&#39;)</code>，则说明顶点 $v_i$ 到 $v_j$ 的权值为 <code>w</code>。如果 <code>adj_matrix[i][j]</code> 为 <code>float(&#39;inf&#39;)</code> ，则说明顶点 $v_i$ 到 $v_j$ 不存在边。</li>
+</ul>
+</blockquote>
+<p>在下面的示意图中，左侧是一个无向图，右侧则是该无向图对应的邻接矩阵结构。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220317144826.png"></p>
+<p>邻接矩阵的特点：</p>
+<ul>
+<li>优点：实现简单，并且可以直接查询顶点 $v_i$ 与 $v_j$ 之间是否有边存在，还可以直接查询边的权值。</li>
+<li>缺点：初始化效率和遍历效率较低，空间开销大，空间利用率低，并且不能存储重复边，也不便于增删节点。如果当顶点数目过大（比如当 $n &gt; 10^5$）时，使用邻接矩阵建立一个 <code>n * n</code> 的二维数组不太现实。</li>
+</ul>
+<h4 id="1-1-2-邻接矩阵的算法分析"><a href="#1-1-2-邻接矩阵的算法分析" class="headerlink" title="1.1.2 邻接矩阵的算法分析"></a>1.1.2 邻接矩阵的算法分析</h4><p>邻接矩阵的时间复杂度：</p>
+<ul>
+<li>图的初始化和创建操作：$O(n^2)$。</li>
+<li>查询是否存在某条边：$O(1)$。</li>
+<li>遍历某个点的所有边：$O(n)$。</li>
+<li>遍历整张图：$O(n^2)$。</li>
+</ul>
+<p>邻接矩阵的空间复杂度：</p>
+<ul>
+<li>空间复杂度：$O(n^2)$。</li>
+</ul>
+<h4 id="1-1-3-邻接矩阵的代码实现"><a href="#1-1-3-邻接矩阵的代码实现" class="headerlink" title="1.1.3 邻接矩阵的代码实现"></a>1.1.3 邻接矩阵的代码实现</h4><pre><code class="Python">class Graph:                                    # 基本图类，采用邻接矩阵表示
+    # 图的初始化操作，ver_count 为顶点个数
+    def __init__(self, ver_count):
+        self.ver_count = ver_count              # 顶点个数
+        self.adj_matrix = [[None for _ in range(ver_count)] for _ in range(ver_count)]  # 邻接矩阵
+    
+    # 判断顶点 v 是否有效
+    def __valid(self, v):
+        return 0 &lt;= v &lt;= self.ver_count
+    
+    # 图的创建操作，edges 为边信息
+    def creatGraph(self, edges=[]):
+        for vi, vj, val in edges:
+            self.add_edge(vi, vj, val)
+    
+    # 向图的邻接矩阵中添加边：vi - vj，权值为 val
+    def add_edge(self, vi, vj, val):
+        if not self.__valid(vi) or not self.__valid(vj):
+            raise ValueError(str(vi) + &#39; or &#39; + str(vj) + &quot; is not a valid vertex.&quot;)
+        
+        self.adj_matrix[vi][vj] = val
+    
+    # 获取 vi - vj 边的权值
+    def get_edge(self, vi, vj):
+        if not self.__valid(vi) or not self.__valid(vj):
+            raise ValueError(str(vi) + &#39; or &#39; + str(vj) + &quot; is not a valid vertex.&quot;)
+
+        return self.adj_matrix[vi][vj]
+    
+    # 根据邻接矩阵打印图的边
+    def printGraph(self):
+        for vi in range(self.ver_count):
+            for vj in range(self.ver_count):
+                val = self.get_edge(vi, vj)
+                if val:
+                    print(str(vi) + &#39; - &#39; + str(vj) + &#39; : &#39; + str(val))
+    
+
+graph = Graph(5)
+edges = [[1, 2, 5],[2, 1, 5],[1, 3, 30],[3, 1, 30],[2, 3, 14],[3, 2, 14],[2, 4, 26], [4, 2, 26]]
+graph.creatGraph(edges)
+print(graph.get_edge(3, 4))
+graph.printGraph()
+</code></pre>
+<h3 id="1-2-边集数组"><a href="#1-2-边集数组" class="headerlink" title="1.2 边集数组"></a>1.2 边集数组</h3><h4 id="1-2-1-边集数组的原理描述"><a href="#1-2-1-边集数组的原理描述" class="headerlink" title="1.2.1 边集数组的原理描述"></a>1.2.1 边集数组的原理描述</h4><blockquote>
+<p><strong>边集数组（Edgeset Array）</strong>：使用一个数组来存储存储顶点之间的邻接关系。数组中每个元素都包含一条边的起点 <code>vi</code>、终点 <code>vj</code> 和边的权值 <code>val</code>（如果是带权图）。</p>
+</blockquote>
+<p>在下面的示意图中，左侧是一个有向图，右侧则是该有向图对应的边集数组结构。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220317161454.png"></p>
+<h4 id="1-2-2-边集数组的算法分析"><a href="#1-2-2-边集数组的算法分析" class="headerlink" title="1.2.2 边集数组的算法分析"></a>1.2.2 边集数组的算法分析</h4><p>边集数组的时间复杂度：</p>
+<ul>
+<li>图的初始化和创建操作：$O(m)$。</li>
+<li>查询是否存在某条边：$O(m)$。</li>
+<li>遍历某个点的所有边：$O(m)$。</li>
+<li>遍历整张图：$O(nm)$。</li>
+</ul>
+<p>边集数组的空间复杂度：</p>
+<ul>
+<li>空间复杂度：$O(m)$。</li>
+</ul>
+<p>采用边集数组计算节点的度或者查找某条边时，需要遍历整个边集数组，时间复杂度为 $O(m)$，<code>m</code> 是边的数量。除非特殊必要，很少用使用边集数组来存储图。</p>
+<p>一般来说，边集数组适合那些对边依次进行处理的运算，不适合对顶点的运算和对任何一条边的运算。</p>
+<h4 id="1-2-3-边集数组的代码实现"><a href="#1-2-3-边集数组的代码实现" class="headerlink" title="1.2.3 边集数组的代码实现"></a>1.2.3 边集数组的代码实现</h4><pre><code class="Python">class EdgeNode:                                 # 边信息类
+    def __init__(self, vi, vj, val):
+        self.vi = vi                            # 边的起点
+        self.vj = vj                            # 边的终点
+        self.val = val                          # 边的权值
+        
+class Graph:                                    # 基本图类，采用边集数组表示
+    def __init__(self):
+        self.edges = []                         # 边数组
+        
+    # 图的创建操作，edges 为边信息
+    def creatGraph(self, edges=[]):
+        for vi, vj, val in edges:
+            self.add_edge(vi, vj, val)
+            
+    # 向图的边数组中添加边：vi - vj，权值为 val
+    def add_edge(self, vi, vj, val):
+        edge = EdgeNode(vi, vj, val)            # 创建边节点
+        self.edges.append(edge)                 # 将边节点添加到边数组中
+        
+    # 获取 vi - vj 边的权值
+    def get_edge(self, vi, vj):
+        for edge in self.edges:
+            if vi == edge.vi and vj == edge.vj:
+                val = edge.val
+                return val
+        return None
+    
+    # 根据边数组打印图
+    def printGraph(self):
+        for edge in self.edges:
+            print(str(edge.vi) + &#39; - &#39; + str(edge.vj) + &#39; : &#39; + str(edge.val))
+            
+graph = Graph()
+edges = [[1, 2, 5],[1, 5, 6],[2, 4, 7],[4, 3, 9],[3, 1, 2],[5, 6, 8],[6, 4, 3]]
+graph.creatGraph(edges)
+print(graph.get_edge(3, 4))
+graph.printGraph()
+</code></pre>
+<h3 id="1-3-邻接表"><a href="#1-3-邻接表" class="headerlink" title="1.3 邻接表"></a>1.3 邻接表</h3><h4 id="1-3-1-邻接表的原理描述"><a href="#1-3-1-邻接表的原理描述" class="headerlink" title="1.3.1 邻接表的原理描述"></a>1.3.1 邻接表的原理描述</h4><blockquote>
+<p><strong>邻接表（Adjacency List）</strong>：使用顺序存储和链式存储相结合的存储结构来存储图的顶点和边。其数据结构包括两个部分，其中一个部分是数组，主要用来存放顶点的数据信息，另一个部分是链表，用来存放边信息。</p>
+</blockquote>
+<p>在邻接表的存储方法中，对于对图中每个顶点 $v_i$ 建立一个线性链表，把所有邻接于 $v_i$ 的顶点链接到单链表上。这样对于具有 <code>n</code> 个顶点的图而言，其邻接表结构由 <code>n</code> 个线性链表组成。</p>
+<p>然后我们在每个顶点前边设置一个表头节点，称之为「顶点节点」。每个顶点节点由「顶点域」和「指针域」组成。其中顶点域用于存放某个顶点的数据信息，指针域用于指出该顶点第 <code>1</code> 条边所对应的链节点。</p>
+<p>为了方便随机访问任意顶点的链表，通常我们会使用一组顺序存储结构（数组）存储所有「顶点节点」部分，顺序存储结构（数组）的下标表示该顶点在图中的位置。</p>
+<p>在下面的示意图中，左侧是一个有向图，右侧则是该有向图对应的邻接表结构。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220317154531.png"></p>
+<h4 id="1-3-2-邻接表的算法分析"><a href="#1-3-2-邻接表的算法分析" class="headerlink" title="1.3.2 邻接表的算法分析"></a>1.3.2 邻接表的算法分析</h4><p>邻接表的时间复杂度：</p>
+<ul>
+<li>图的初始化和创建操作：$O(n + m)$。</li>
+<li>查询是否存在 $v_i$ 到 $v_j$ 的边：$O(TD(v_i))$。</li>
+<li>遍历某个点的所有边：$O(TD(v_i))$。</li>
+<li>遍历整张图：$O(n + m)$。</li>
+</ul>
+<p>邻接表的空间复杂度：</p>
+<ul>
+<li>空间复杂度：$O(n + m)$。</li>
+</ul>
+<h4 id="1-3-3-邻接表的代码实现"><a href="#1-3-3-邻接表的代码实现" class="headerlink" title="1.3.3 邻接表的代码实现"></a>1.3.3 邻接表的代码实现</h4><pre><code class="Python">class EdgeNode:                                 # 边信息类
+    def __init__(self, vj, val):
+        self.vj = vj                            # 边的终点
+        self.val = val                          # 边的权值
+        self.next = None                        # 下一条边
+
+class VertexNode:                               # 顶点信息类
+    def __init__(self, vi):
+        self.vi = vi                            # 边的起点
+        self.head = None                        # 下一个邻接点
+        
+class Graph:
+    def __init__(self, ver_count):
+        self.ver_count = ver_count
+        self.vertices = []
+        for vi in range(ver_count):
+            vertex = VertexNode(vi)
+            self.vertices.append(vertex)
+    
+    # 判断顶点 v 是否有效
+    def __valid(self, v):
+        return 0 &lt;= v &lt;= self.ver_count
+    
+    # 图的创建操作，edges 为边信息
+    def creatGraph(self, edges=[]):
+        for vi, vj, val in edges:
+            self.add_edge(vi, vj, val)
+    
+    # 向图的邻接表中添加边：vi - vj，权值为 val
+    def add_edge(self, vi, vj, val):
+        if not self.__valid(vi) or not self.__valid(vj):
+            raise ValueError(str(vi) + &#39; or &#39; + str(vj) + &quot; is not a valid vertex.&quot;)
+            
+        vertex = self.vertices[vi]
+        edge = EdgeNode(vj, val)
+        edge.next = vertex.head
+        vertex.head = edge
+
+    # 获取 vi - vj 边的权值
+    def get_edge(self, vi, vj):
+        if not self.__valid(vi) or not self.__valid(vj):
+            raise ValueError(str(vi) + &#39; or &#39; + str(vj) + &quot; is not a valid vertex.&quot;)
+        
+        vertex = self.vertices[vi]
+        cur_edge = vertex.head
+        while cur_edge:
+            if cur_edge.vj == vj:
+                return cur_edge.val
+            cur_edge = cur_edge.next
+        return None
+        
+    # 根据邻接表打印图的边
+    def printGraph(self):
+        for vertex in self.vertices:
+            cur_edge = vertex.head
+            while cur_edge:
+                print(str(vertex.vi) + &#39; - &#39; + str(cur_edge.vj) + &#39; : &#39; + str(cur_edge.val))
+                cur_edge = cur_edge.next
+                
+graph = Graph(7)
+edges = [[1, 2, 5],[1, 5, 6],[2, 4, 7],[4, 3, 9],[3, 1, 2],[5, 6, 8],[6, 4, 3]]
+graph.creatGraph(edges)
+print(graph.get_edge(3, 4))
+graph.printGraph()
+</code></pre>
+<h3 id="1-4-链式前向星"><a href="#1-4-链式前向星" class="headerlink" title="1.4 链式前向星"></a>1.4 链式前向星</h3><h4 id="1-4-1-链式前向星的原理描述"><a href="#1-4-1-链式前向星的原理描述" class="headerlink" title="1.4.1 链式前向星的原理描述"></a>1.4.1 链式前向星的原理描述</h4><blockquote>
+<p><strong>链式前向星（Linked Forward Star）</strong>：也叫做静态邻接表，实质上就是使用静态链表实现的邻接表。链式前向星将边集数组和邻接表相结合，可以快速访问一个节点所有的邻接点，并且使用很少的额外空间。</p>
+</blockquote>
+<p>链式前向星采用了一种静态链表的存储方式，可以说是目前建图和遍历效率最高的存储方式。</p>
+<p>链式前向星由两种数据结构组成：</p>
+<ul>
+<li><strong>特殊的边集数组</strong>：<code>edges</code>，其中 <code>edges[i]</code> 表示第 <code>i</code> 条边。<code>edges[i].vj</code> 表示第 <code>i</code> 条边的终止点，<code>edges[i].val</code> 表示第 <code>i</code> 条边的权值，<code>edges[i].next</code> 表示与第 <code>i</code> 条边同起始点的下一条边的存储位置。</li>
+<li><strong>头节点数组</strong>：<code>head</code>，其中 <code>head[i]</code> 存储以顶点 <code>i</code> 为起始点的第 <code>1</code> 条边在数组 <code>edges</code> 中的下标。</li>
+</ul>
+<p>链式前向星其实并没有改变边集数组原来的存储数学，只是利用 <code>head</code> 数组构成静态链表，建立了顶点 $v_i$ 和顶点 $v_i$ 所连第 <code>1</code> 条边的关系。</p>
+<p>在下面的示意图中，左侧是一个有向图，右侧则是该有向图对应的链式前向星结构。</p>
+<p>如果需要在该图中遍历顶点 $v_1$ 的所有边，则步骤如下：</p>
+<ul>
+<li>找到以顶点 $v_1$ 为起始点的的 <code>1</code> 条边在数组 <code>edges</code> 中的下标，即 <code>index = head[1] = 1 </code>。则在 <code>edges</code> 数组中找到与顶点 $v_1$ 相连的第 <code>1</code> 条边为 <code>edges[1]</code>，即 $\langle v_1, v_5 \rangle$，权值为 6。</li>
+<li>查找 <code>index = self.edges[1].next = 0 </code>，则在 <code>edges</code> 数组中找到与顶点 $v_1$ 相连的第 <code>2</code> 条边 <code>edges[0]</code>，即 $\langle v_1, v_2 \rangle$，权值为 5。</li>
+<li>继续查找 <code>index = self.edges[0].next = -1</code>，则不存在其余边，查找结束。</li>
+</ul>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220317161217.png"></p>
+<h4 id="1-4-2-链式前向星的算法分析"><a href="#1-4-2-链式前向星的算法分析" class="headerlink" title="1.4.2 链式前向星的算法分析"></a>1.4.2 链式前向星的算法分析</h4><p>链式前向星的时间复杂度：</p>
+<ul>
+<li>图的初始化和创建操作：$O(n + m)$。</li>
+<li>查询是否存在 $v_i$ 到 $v_j$ 的边：$O(TD(v_i))$。</li>
+<li>遍历某个点的所有边：$O(TD(v_i))$。</li>
+<li>遍历整张图：$O(n + m)$。</li>
+</ul>
+<p>链式前向星的空间复杂度：</p>
+<ul>
+<li>空间复杂度：$O(n + m)$。</li>
+</ul>
+<h4 id="1-4-3-链式前向星的代码实现"><a href="#1-4-3-链式前向星的代码实现" class="headerlink" title="1.4.3 链式前向星的代码实现"></a>1.4.3 链式前向星的代码实现</h4><pre><code class="Python">class EdgeNode:                                 # 边信息类
+    def __init__(self, vj, val):
+        self.vj = vj                            # 边的终点
+        self.val = val                          # 边的权值
+        self.next = None                        # 下一条边
+        
+class Graph:
+    def __init__(self, ver_count, edge_count):
+        self.ver_count = ver_count              # 顶点个数
+        self.edge_count = edge_count            # 边个数
+        self.head = [-1 for _ in range(ver_count)]  # 头节点数组
+        self.edges = []                         # 边集数组
+    
+    # 判断顶点 v 是否有效
+    def __valid(self, v):
+        return 0 &lt;= v &lt;= self.ver_count
+    
+    # 图的创建操作，edges 为边信息
+    def creatGraph(self, edges=[]):
+        for i in range(len(edges)):
+            vi, vj, val = edges[i]
+            self.add_edge(i, vi, vj, val)
+            
+    # 向图的边集数组中添加边：vi - vj，权值为 val
+    def add_edge(self, index, vi, vj, val):
+        if not self.__valid(vi) or not self.__valid(vj):
+            raise ValueError(str(vi) + &#39; or &#39; + str(vj) + &quot; is not a valid vertex.&quot;)
+            
+        edge = EdgeNode(vj, val)                # 构造边节点
+        edge.next = self.head[vi]               # 边节点的 next 指向原来首指针
+        self.edges.append(edge)                 # 边集数组添加该边
+        self.head[vi] = index                   # 首指针指向新加边所在边集数组的下标
+    
+    # 获取 vi - vj 边的权值
+    def get_edge(self, vi, vj):
+        if not self.__valid(vi) or not self.__valid(vj):
+            raise ValueError(str(vi) + &#39; or &#39; + str(vj) + &quot; is not a valid vertex.&quot;)
+            
+        index = self.head[vi]                   # 得到顶点 vi 相连的第一条边在边集数组的下标
+        while index != -1:                      # index == -1 时说明 vi 相连的边遍历完了
+            if vj == self.edges[index].vj:      # 找到了 vi - vj 边
+                return self.edges[index].val    # 返回 vi - vj 边的权值
+            index = self.edges[index].next      # 取顶点 vi 相连的下一条边在边集数组的下标
+        return None                             # 没有找到 vi - vj 边
+    
+    # 根据链式前向星打印图的边
+    def printGraph(self):
+        for vi in range(self.ver_count):        # 遍历顶点 vi
+            index = self.head[vi]               # 得到顶点 vi 相连的第一条边在边集数组的下标
+            while index != -1:                  # index == -1 时说明 vi 相连的边遍历完了
+                print(str(vi) + &#39; - &#39; + str(self.edges[index].vj) + &#39; : &#39; + str(self.edges[index].val))
+                index = self.edges[index].next  # 取顶点 vi 相连的下一条边在边集数组的下标
+                
+
+graph = Graph(7, 7)
+edges = [[1, 2, 5],[1, 5, 6],[2, 4, 7],[4, 3, 9],[3, 1, 2],[5, 6, 8],[6, 4, 3]]
+graph.creatGraph(edges)    
+print(graph.get_edge(4, 3))
+print(graph.get_edge(4, 5))
+graph.printGraph()
+</code></pre>
+<h3 id="1-5-哈希表实现邻接表"><a href="#1-5-哈希表实现邻接表" class="headerlink" title="1.5 哈希表实现邻接表"></a>1.5 哈希表实现邻接表</h3><h4 id="1-5-1-哈希表实现邻接表的原理描述"><a href="#1-5-1-哈希表实现邻接表的原理描述" class="headerlink" title="1.5.1 哈希表实现邻接表的原理描述"></a>1.5.1 哈希表实现邻接表的原理描述</h4><p>在 Python 中，通过哈希表（字典）可以轻松的实现邻接表。哈希表实现邻接表包含两个哈希表：第一个哈希表主要用来存放顶点的数据信息，哈希表的键是顶点，值是该点所有邻接边构成的另一个哈希表。另一个哈希表用来存放顶点相连的边信息，哈希表的键是边的终点，值是边的权重。</p>
+<h4 id="1-5-2-哈希表实现邻接表的算法分析"><a href="#1-5-2-哈希表实现邻接表的算法分析" class="headerlink" title="1.5.2 哈希表实现邻接表的算法分析"></a>1.5.2 哈希表实现邻接表的算法分析</h4><p>哈希表实现邻接表的时间复杂度：</p>
+<ul>
+<li>图的初始化和创建操作：$O(n + m)$。</li>
+<li>查询是否存在 $v_i$ 到 $v_j$ 的边：$O(1)$。</li>
+<li>遍历某个点的所有边：$O(TD(v_i))$。</li>
+<li>遍历整张图：$O(n + m)$。</li>
+</ul>
+<p>哈希表实现邻接表的空间复杂度：</p>
+<ul>
+<li>空间复杂度：$O(n + m)$。</li>
+</ul>
+<h4 id="1-5-3-哈希表实现邻接表的代码实现"><a href="#1-5-3-哈希表实现邻接表的代码实现" class="headerlink" title="1.5.3 哈希表实现邻接表的代码实现"></a>1.5.3 哈希表实现邻接表的代码实现</h4><pre><code class="Python">class VertexNode:                               # 顶点信息类
+    def __init__(self, vi):
+        self.vi = vi                            # 顶点
+        self.adj_edges = dict()                 # 顶点的邻接边
+        
+class Graph:
+    def __init__(self):
+        self.vertices = dict()                   # 顶点
+    
+    # 图的创建操作，edges 为边信息
+    def creatGraph(self, edges=[]):
+        for vi, vj, val in edges:
+            self.add_edge(vi, vj, val)
+    
+    # 向图中添加节点
+    def add_vertex(self, vi):
+        vertex = VertexNode(vi)
+        self.vertices[vi] = vertex
+    
+    # 向图的邻接表中添加边：vi - vj，权值为 val
+    def add_edge(self, vi, vj, val):        
+        if vi not in self.vertices:
+            self.add_vertex(vi)
+        if vj not in self.vertices:
+            self.add_vertex(vj)
+        
+        self.vertices[vi].adj_edges[vj] = val
+        
+    # 获取 vi - vj 边的权值
+    def get_edge(self, vi, vj):
+        if vi in self.vertices and vj in self.vertices[vi].adj_edges:
+            return self.vertices[vi].adj_edges[vj]
+        return None
+    
+    # 根据邻接表打印图的边
+    def printGraph(self):
+        for vi in self.vertices:
+            for vj in self.vertices[vi].adj_edges:
+                print(str(vi) + &#39; - &#39; + str(vj) + &#39; : &#39; + str(self.vertices[vi].adj_edges[vj]))
+
+
+graph = Graph()
+edges = [[1, 2, 5],[1, 5, 6],[2, 4, 7],[4, 3, 9],[3, 1, 2],[5, 6, 8],[6, 4, 3]]
+graph.creatGraph(edges)
+print(graph.get_edge(3, 4))
+graph.printGraph()
+</code></pre>
+<h2 id="2-图论问题应用"><a href="#2-图论问题应用" class="headerlink" title="2. 图论问题应用"></a>2. 图论问题应用</h2><p>图论和图论算法在计算机科学中扮演这很重要的角色，它提供了对很多问题都有效的一种简单而系统的建模方式。很多实际问题都可以转化为图论问题，然后使用图论的景点算法加以解决。例如：</p>
+<ul>
+<li>集成电路的设计和布线。</li>
+<li>互联网和路由移动电话网的路由设计。</li>
+<li>工程项目的计划安排问题。</li>
+</ul>
+<p>常见的图论问题应用大概可以分为以下几类：<strong>图的遍历问题</strong>、<strong>图的连通性问题</strong>、<strong>图的生成树问题</strong>、<strong>图的最短路径问题</strong>、<strong>图的网络流问题</strong>、<strong>二分图问题</strong> 等等。</p>
+<h3 id="2-1-图的遍历问题"><a href="#2-1-图的遍历问题" class="headerlink" title="2.1 图的遍历问题"></a>2.1 图的遍历问题</h3><blockquote>
+<p><strong>图的遍历</strong>：与树的遍历类似，图的遍历指的是从图的某一个顶点出发，按照某种搜索方式对图中的所有节点都仅访问一次。</p>
+</blockquote>
+<p>图的遍历是求解图的连通性问题、拓扑排序和求关键路径等算法的基础。</p>
+<p>根据搜索方式的不同，可以将图的遍历分为「深度优先搜索」和「广度优先搜索」。</p>
+<ul>
+<li><strong>深度优先搜索</strong>：从某一顶点出发，沿着⼀条路径⼀直搜索下去，在⽆法搜索时，回退到刚刚访问过的节点。</li>
+<li><strong>广度优先搜索</strong>：从某个顶点出发，⼀次性访问所有未被访问的邻接点，再依次从这些已访问过的邻接点出发，⼀层⼀层地访问。</li>
+</ul>
+<h3 id="2-2-图的连通性问题"><a href="#2-2-图的连通性问题" class="headerlink" title="2.2 图的连通性问题"></a>2.2 图的连通性问题</h3><p>我们在「2.3 连通图和非连通图」中提到过「2.3.1 连通无向图和连通分量」和「2.3.2 强连通有向图和强连通分量」。</p>
+<p>在无向图中，图的连通性问题主要包括：<strong>求无向图的连通分量</strong>、<strong>求点双连通分量（找割点）</strong>、<strong>求边双连通分量（找桥）</strong>、<strong>全局最小割问题</strong> 等等。</p>
+<p>在有向图中，图的连通性问题主要包括：<strong>求有向图的强连通分量</strong>、<strong>最小点基</strong>、<strong>最小权点基</strong>、<strong>2-SAT 问题</strong> 等等。</p>
+<h3 id="2-3-图的生成树问题"><a href="#2-3-图的生成树问题" class="headerlink" title="2.3 图的生成树问题"></a>2.3 图的生成树问题</h3><blockquote>
+<p><strong>图的生成树（Spanning Tree）</strong>：如果连通图 G 的一个子图是一棵包含图 G 所有顶点的树，则称该子图为 G 的生成树。生成树是连通图的包含图中的所有顶点的极小连通子图。图的生成树不惟一。从不同的顶点出发进行遍历，可以得到不同的生成树。</p>
+</blockquote>
+<p>图的生成树问题主要包括：<strong>最小生成树问题</strong>、<strong>次小生成树问题</strong> 和 <strong>有向图的最小树形图问题</strong> 等等。</p>
+<ul>
+<li><strong>无向图的最小生成树</strong>：如果连通图 $G$ 是一个带权无向图，则生成树的边也带权，则称该带权图中所有带权生成树中权值总和最小的生成树为最小生成树（也称为最小代价生成树）。</li>
+<li><strong>无向图的次小生成树</strong>：如果连通图 $G$ 是一个带权无向图，生成树 $T$ 是图 $G$ 的一个最小生成树，如果有另一棵生成树 $T_1$，$T_1 \ne T$，满足不存在树 $T^{‘}$，$T^{‘} \ne T$，且 $w(T^{‘}) &lt; W(T_1)$，则称 $T_1$ 是图 $G$ 的次小生成树。 </li>
+<li><strong>有向图的最小树形图</strong>：如果连通图 $G$ 是一个带权有向图，以顶点 $v_i$ 为根节点的生成树 $T$ 中，顶点 $v_i$ 到任意非 $v_i$ 顶点的路径存在且唯一，并且生成树 $T$ 中权值总和最小，则该生成树被称为有向图 $G$ 的最小树形图。</li>
+</ul>
+<h3 id="2-4-图的最短路径问题"><a href="#2-4-图的最短路径问题" class="headerlink" title="2.4 图的最短路径问题"></a>2.4 图的最短路径问题</h3><blockquote>
+<p><strong>图的最短路径问题</strong>：如果用带权图来表示真实的交通、物流或社交网络，则边的权重可能代表交通运输费、距离或者熟悉程度。此时我们会考虑两个不同顶点之间的最短路径有多长，这一类问题统称为最短路径。并且我们称路径上的第一个顶点为源点，最后一个顶点为终点。</p>
+</blockquote>
+<p>按照源点数目的不同，可以将图的最短路径问题分为 <strong>单源最短路径问题</strong> 和 <strong>多源最短路径问题</strong>。</p>
+<ul>
+<li><strong>单源最短路径问题</strong>：从一个顶点出发到图中其余各个顶点之间的最短路径问题。</li>
+<li><strong>多源最短路径问题</strong>：图中任意两点之间的最短路径问题。</li>
+</ul>
+<p><strong>单元最短路径问题</strong> 的求解还是 <strong>差分约束系统问题</strong> 的基础。</p>
+<p>除此之外，在实际应用中，有时候除了需要知道最短路径外，还需要知道次最短路径或者第三最短路径。这样的多条最短路径问题称为 <strong><code>k</code> 最短路径问题</strong>。</p>
+<h3 id="2-5-图的网络流问题"><a href="#2-5-图的网络流问题" class="headerlink" title="2.5 图的网络流问题"></a>2.5 图的网络流问题</h3><blockquote>
+<p><strong>图的网络流</strong>：这里的「网络」指的是：带权的连通有向图。该有向图中的每条边都有一个权值（也称为容量值），当顶点之间不存在边时，两点之间的容量为 0。并且该有向图中有两个特殊的顶点：源点 $s$ 和汇点 $t$。</p>
+<p>这里的「流」指的是：网络上的流。如果把网络想象成一个自来水管道网络，那么流就是其中流动的水。每条边的方向表示允许的流向，边上的权值表示这条边允许通过的最大流量，也就是说每条边上的流都不能超过它的容量。并且对于除了源点 $s$ 和汇点 $t$ 外的所有点（即中继点），流入的流量都等于流出的流量。</p>
+</blockquote>
+<p>图的网络流中最常见的问题就是 <strong>网络最大流问题</strong>。其次还有 <strong>网络最小费用最大流问题</strong>、<strong>网络最小割问题</strong>。</p>
+<ul>
+<li><strong>网络最大流</strong>：给定一个网络，要求计算从源点流向汇点的最大流量（可以有很多条路到达汇点）。</li>
+<li><strong>网络最小费用最大流</strong>：给定一个网络，并且每条边都有一个费用，代表单位流量流过这条边的开销。要求计算出最大流的同时，要求花费的费用最小。</li>
+<li><strong>网络最小割</strong>：割是删边的意思。给定一个网络，删掉其中 $x$ 条边，从而使原本连通的网络变得不连通，要求计算出 $x$ 条边加起来最小的流量总和是多少。</li>
+</ul>
+<h3 id="2-6-二分图问题"><a href="#2-6-二分图问题" class="headerlink" title="2.6 二分图问题"></a>2.6 二分图问题</h3><blockquote>
+<p><strong>二分图</strong>：设 $G &#x3D; (V, E)$ 是一个无向图，如果顶点 $V$ 可以分为两个互不相交的子集 $(A, B)$，并且图中每条边 $(u, v)$ 所关联的两个顶点 $u$ 和 $v$ 分别属于这两个不同的顶点集（即 $u \in A, v \in B$），则称图 $G$ 是一个二分图。</p>
+</blockquote>
+<p>二分图中的常见问题有：<strong>二分图最大匹配问题</strong>、<strong>二分图最大权匹配问题</strong>、<strong>二分图多重匹配问题</strong>。</p>
+<p>先来介绍一下匹配的概念：在二分图中，一个匹配就是一个边的集合，其中任意两条边之间都没有公共节点。</p>
+<ul>
+<li><strong>二分图最大匹配</strong>：在一个二分图的所有匹配中，边数最多的匹配叫做该二分图的最大匹配。</li>
+<li><strong>二分图最大权匹配</strong>：在一个二分图的所有匹配中，边的权值和最大的匹配叫做该二分图的最大权匹配。</li>
+<li><strong>二分图多重匹配</strong>：在二分图最大匹配问题中，每个点最多只能和一条匹配边相关联。但是在二分图多重匹配中，每个点可以多次匹配但是有匹配上限。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>【书籍】ACM-ICPC 程序设计系列 - 图论及应用 - 陈宇 吴昊 主编</li>
+<li>【书籍】数据结构教程 第 3 版 - 唐发根 著</li>
+<li>【书籍】大话数据结构 - 程杰 著</li>
+<li>【书籍】算法训练营 - 陈小玉 著</li>
+<li>【书籍】Python 数据结构与算法分析 第 2 版 - 布拉德利·米勒 戴维·拉努姆 著</li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly93d3cuZ2Vla3hoLmNvbS8xLjk5LiVFNSU4NSVCNiVFNCVCQiU5NiVFOCVBMSVBNSVFNSU4NSU4NSVFOSVBMiU5OCVFNyU5QiVBRS81MC5odG1s">图的基础知识 | 小浩算法</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9tYWxhc2gubWUvMjAwOTEwL2xpbmtlZC1mb3J3YXJkLXN0YXIv">链式前向星及其简单应用 | Malash’s Blog</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9vaS13aWtpLm9yZy9ncmFwaC8=">图论部分简介 - OI Wiki</span></li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="ic i-tag"></i> 算法与数据结构</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-19 22:49:54" itemprop="dateModified" datetime="2023-02-19T22:49:54+08:00">2023-02-19</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" title="图的存储结构和问题应用">http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis081o9j20zk0m8dmr.jpg" title="并查集知识">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>并查集知识</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis3attqj20zk0m8k7l.jpg" title="图的定义和分类">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>图的定义和分类</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%9B%BE%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">1. 图的存储结构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 邻接矩阵</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-1-%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E7%9A%84%E5%8E%9F%E7%90%86%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1.1 邻接矩阵的原理描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-2-%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E7%9A%84%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.1.2 邻接矩阵的算法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1-3-%E9%82%BB%E6%8E%A5%E7%9F%A9%E9%98%B5%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.1.3 邻接矩阵的代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E8%BE%B9%E9%9B%86%E6%95%B0%E7%BB%84"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 边集数组</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-%E8%BE%B9%E9%9B%86%E6%95%B0%E7%BB%84%E7%9A%84%E5%8E%9F%E7%90%86%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1 边集数组的原理描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-%E8%BE%B9%E9%9B%86%E6%95%B0%E7%BB%84%E7%9A%84%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2 边集数组的算法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-3-%E8%BE%B9%E9%9B%86%E6%95%B0%E7%BB%84%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.2.3 边集数组的代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E9%82%BB%E6%8E%A5%E8%A1%A8"><span class="toc-number">1.3.</span> <span class="toc-text">1.3 邻接表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-%E9%82%BB%E6%8E%A5%E8%A1%A8%E7%9A%84%E5%8E%9F%E7%90%86%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.3.1.</span> <span class="toc-text">1.3.1 邻接表的原理描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-2-%E9%82%BB%E6%8E%A5%E8%A1%A8%E7%9A%84%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">1.3.2 邻接表的算法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-3-%E9%82%BB%E6%8E%A5%E8%A1%A8%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.3.3.</span> <span class="toc-text">1.3.3 邻接表的代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F"><span class="toc-number">1.4.</span> <span class="toc-text">1.4 链式前向星</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-1-%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F%E7%9A%84%E5%8E%9F%E7%90%86%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.4.1 链式前向星的原理描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-2-%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F%E7%9A%84%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">1.4.2.</span> <span class="toc-text">1.4.2 链式前向星的算法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4-3-%E9%93%BE%E5%BC%8F%E5%89%8D%E5%90%91%E6%98%9F%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.4.3.</span> <span class="toc-text">1.4.3 链式前向星的代码实现</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E5%93%88%E5%B8%8C%E8%A1%A8%E5%AE%9E%E7%8E%B0%E9%82%BB%E6%8E%A5%E8%A1%A8"><span class="toc-number">1.5.</span> <span class="toc-text">1.5 哈希表实现邻接表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-1-%E5%93%88%E5%B8%8C%E8%A1%A8%E5%AE%9E%E7%8E%B0%E9%82%BB%E6%8E%A5%E8%A1%A8%E7%9A%84%E5%8E%9F%E7%90%86%E6%8F%8F%E8%BF%B0"><span class="toc-number">1.5.1.</span> <span class="toc-text">1.5.1 哈希表实现邻接表的原理描述</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-2-%E5%93%88%E5%B8%8C%E8%A1%A8%E5%AE%9E%E7%8E%B0%E9%82%BB%E6%8E%A5%E8%A1%A8%E7%9A%84%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">1.5.2.</span> <span class="toc-text">1.5.2 哈希表实现邻接表的算法分析</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-5-3-%E5%93%88%E5%B8%8C%E8%A1%A8%E5%AE%9E%E7%8E%B0%E9%82%BB%E6%8E%A5%E8%A1%A8%E7%9A%84%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.5.3.</span> <span class="toc-text">1.5.3 哈希表实现邻接表的代码实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%9B%BE%E8%AE%BA%E9%97%AE%E9%A2%98%E5%BA%94%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">2. 图论问题应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9B%BE%E7%9A%84%E9%81%8D%E5%8E%86%E9%97%AE%E9%A2%98"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 图的遍历问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%9B%BE%E7%9A%84%E8%BF%9E%E9%80%9A%E6%80%A7%E9%97%AE%E9%A2%98"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 图的连通性问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E5%9B%BE%E7%9A%84%E7%94%9F%E6%88%90%E6%A0%91%E9%97%AE%E9%A2%98"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 图的生成树问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%9B%BE%E7%9A%84%E6%9C%80%E7%9F%AD%E8%B7%AF%E5%BE%84%E9%97%AE%E9%A2%98"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 图的最短路径问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-5-%E5%9B%BE%E7%9A%84%E7%BD%91%E7%BB%9C%E6%B5%81%E9%97%AE%E9%A2%98"><span class="toc-number">2.5.</span> <span class="toc-text">2.5 图的网络流问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-6-%E4%BA%8C%E5%88%86%E5%9B%BE%E9%97%AE%E9%A2%98"><span class="toc-number">2.6.</span> <span class="toc-text">2.6 二分图问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">3.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" rel="bookmark" title="数据结构与算法">数据结构与算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/01.Data-Structures-Algorithms/" rel="bookmark" title="算法与数据结构">算法与数据结构</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" rel="bookmark" title="算法复杂度">算法复杂度</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" rel="bookmark" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/06.Interview-100-List/" rel="bookmark" title="LeetCode 面试最常考 100 题（按分类排序）">LeetCode 面试最常考 100 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" rel="bookmark" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/08.Algorithms-Overview/" rel="bookmark" title="算法">算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" rel="bookmark" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/01.Hash-Table/" rel="bookmark" title="哈希表知识">哈希表知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/04.Solutions-List/" rel="bookmark" title="LeetCode 题解（字典序排序，700+ 道题解）">LeetCode 题解（字典序排序，700+ 道题解）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="bookmark" title="哈希表题目">哈希表题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" rel="bookmark" title="数组基础知识">数组基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="bookmark" title="数组基础题目">数组基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/01.Array-Bubble-Sort/" rel="bookmark" title="冒泡排序">冒泡排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/02.Array-Selection-Sort/" rel="bookmark" title="选择排序">选择排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/03.Array-Insertion-Sort/" rel="bookmark" title="插入排序">插入排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/04.Array-Shell-Sort/" rel="bookmark" title="希尔排序">希尔排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/05.Array-Merge-Sort/" rel="bookmark" title="归并排序">归并排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/06.Array-Quick-Sort/" rel="bookmark" title="快速排序">快速排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" rel="bookmark" title="堆排序">堆排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" rel="bookmark" title="计数排序">计数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" rel="bookmark" title="桶排序">桶排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" rel="bookmark" title="基数排序">基数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/11.Array-Sort-List/" rel="bookmark" title="数组排序题目">数组排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/01.Array-Binary-Search/" rel="bookmark" title="二分查找知识">二分查找知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" rel="bookmark" title="二分查找题目">二分查找题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/01.Array-Two-Pointers/" rel="bookmark" title="数组双指针知识">数组双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="bookmark" title="数组双指针题目">数组双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" rel="bookmark" title="链表双指针知识">链表双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="bookmark" title="链表双指针题目">链表双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" rel="bookmark" title="链表排序知识">链表排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" rel="bookmark" title="链表排序题目">链表排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" rel="bookmark" title="单调栈知识">单调栈知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/02.Monotone-Stack-List/" rel="bookmark" title="单调栈题目">单调栈题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/01.Stack-Basic/" rel="bookmark" title="堆栈基础知识">堆栈基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/02.Stack-Basic-List/" rel="bookmark" title="堆栈基础题目">堆栈基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" rel="bookmark" title="队列基础知识">队列基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/02.Queue-Basic-List/" rel="bookmark" title="队列基础题目">队列基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" rel="bookmark" title="优先队列知识">优先队列知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" rel="bookmark" title="优先队列题目">优先队列题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" rel="bookmark" title="树与二叉树基础知识">树与二叉树基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/02.Binary-Tree-Traverse/" rel="bookmark" title="二叉树的遍历知识">二叉树的遍历知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/04.Binary-Tree-Reduction/" rel="bookmark" title="二叉树的还原知识">二叉树的还原知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/05.Binary-Tree-Reduction-List/" rel="bookmark" title="二叉树的还原题目">二叉树的还原题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" rel="bookmark" title="二叉树的遍历题目">二叉树的遍历题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" rel="bookmark" title="二叉搜索树知识">二叉搜索树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/02.Binary-Search-Tree-List/" rel="bookmark" title="二叉搜索树题目">二叉搜索树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" rel="bookmark" title="数组滑动窗口知识">数组滑动窗口知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="bookmark" title="数组滑动窗口题目">数组滑动窗口题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" rel="bookmark" title="线段树知识">线段树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="bookmark" title="线段树题目">线段树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" rel="bookmark" title="链表基础知识">链表基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" rel="bookmark" title="链表经典题目">链表经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/01.Binary-Indexed-Tree/" rel="bookmark" title="树状数组知识">树状数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/02.Binary-Indexed-Tree-List/" rel="bookmark" title="树状数组题目">树状数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/01.String-Basic/" rel="bookmark" title="字符串基础知识">字符串基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" rel="bookmark" title="字符串经典题目">字符串经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" rel="bookmark" title="字典树知识">字典树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/02.Trie-List/" rel="bookmark" title="字典树题目">字典树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/03.AC-Automaton/" rel="bookmark" title="AC 自动机知识">AC 自动机知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" rel="bookmark" title="AC 自动机题目">AC 自动机题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" rel="bookmark" title="后缀数组知识">后缀数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" rel="bookmark" title="后缀数组题目">后缀数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="bookmark" title="图的定义和分类">图的定义和分类</a></li><li class="active"><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="bookmark" title="图的存储结构和问题应用">图的存储结构和问题应用</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="bookmark" title="并查集知识">并查集知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="bookmark" title="并查集题目">并查集题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/01.Graph-DFS/" rel="bookmark" title="图的深度优先搜索知识">图的深度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/02.Graph-DFS-List/" rel="bookmark" title="图的深度优先搜索题目">图的深度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" rel="bookmark" title="图的广度优先搜索知识">图的广度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" rel="bookmark" title="图的广度优先搜索题目">图的广度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/05.Graph-Topological-Sorting/" rel="bookmark" title="图的拓扑排序知识">图的拓扑排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/06.Graph-Topological-Sorting-List/" rel="bookmark" title="图的拓扑排序题目">图的拓扑排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" rel="bookmark" title="图的生成树知识">图的生成树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" rel="bookmark" title="Prim 算法">Prim 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/03.Graph-Kruskal/" rel="bookmark" title="Kruskal 算法">Kruskal 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/04.Gaph-Spanning-Tree-List/" rel="bookmark" title="图的生成树题目">图的生成树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/01.String-Brute-Force/" rel="bookmark" title="Brute Force 算法">Brute Force 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/02.String-Rabin-Karp/" rel="bookmark" title="Rabin Karp 算法">Rabin Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="bookmark" title="KMP 算法">KMP 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" rel="bookmark" title="Boyer Moore 算法">Boyer Moore 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="bookmark" title="Horspool 算法">Horspool 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" rel="bookmark" title="Sunday 算法">Sunday 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" rel="bookmark" title="单模式串匹配题目">单模式串匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" rel="bookmark" title="枚举算法知识">枚举算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/02.Enumeration-Algorithm-List/" rel="bookmark" title="枚举算法题目">枚举算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" rel="bookmark" title="二分图基础知识">二分图基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" rel="bookmark" title="二分图基础题目">二分图基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/03.Graph-Bipartite-Matching/" rel="bookmark" title="二分图最大匹配知识">二分图最大匹配知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/04.Graph-Hungarian-Algorithm/" rel="bookmark" title="匈牙利算法">匈牙利算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/05.Graph-Hopcroft-Karp/" rel="bookmark" title="Hopcroft-Karp 算法">Hopcroft-Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/06.Graph-Bipartite-Matching-List/" rel="bookmark" title="二分图最大匹配题目">二分图最大匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" rel="bookmark" title="回溯算法知识">回溯算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" rel="bookmark" title="回溯算法题目">回溯算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" rel="bookmark" title="贪心算法知识">贪心算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" rel="bookmark" title="贪心算法题目">贪心算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" rel="bookmark" title="分治算法知识">分治算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/02.Divide-And-Conquer-Algorithm-List/" rel="bookmark" title="分治算法题目">分治算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" rel="bookmark" title="递归算法知识">递归算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/02.Recursive-Algorithm-List/" rel="bookmark" title="递归算法题目">递归算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" rel="bookmark" title="位运算知识">位运算知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/02.Bit-Operation-List/" rel="bookmark" title="位运算题目">位运算题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" rel="bookmark" title="单源最短路径知识">单源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/02.Graph-Dijkstra/" rel="bookmark" title="Dijkstra 算法">Dijkstra 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/03.Graph-Bellman-Ford/" rel="bookmark" title="Bellman-Ford 算法">Bellman-Ford 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/04.Graph-SPFA/" rel="bookmark" title="SPFA 算法">SPFA 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/05.Graph-Single-Source-Shortest-Path-List/" rel="bookmark" title="单源最短路径题目">单源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/06.Graph-Multi-Source-Shortest-Path/" rel="bookmark" title="多源最短路径知识">多源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/07.Graph-Floyed/" rel="bookmark" title="Floyed 算法">Floyed 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/08.Graph-Multi-Source-Shortest-Path-List/" rel="bookmark" title="多源最短路径题目">多源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/09.Graph-The-Second-Shortest-Path/" rel="bookmark" title="次短路径知识">次短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" rel="bookmark" title="次短路径题目">次短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" rel="bookmark" title="差分约束系统知识">差分约束系统知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/12.Graph-System-Of-Difference-Constraints-List/" rel="bookmark" title="差分约束系统题目">差分约束系统题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/01.Dynamic-Programming-Basic/" rel="bookmark" title="动态规划基础知识">动态规划基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/02.Dynamic-Programming-Basic-List/" rel="bookmark" title="动态规划基础题目">动态规划基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" rel="bookmark" title="背包问题知识">背包问题知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" rel="bookmark" title="背包问题题目">背包问题题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/01.Tree-DP/" rel="bookmark" title="树形 DP 知识">树形 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" rel="bookmark" title="树形 DP 题目">树形 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/01.Linear-DP/" rel="bookmark" title="线性 DP 知识">线性 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" rel="bookmark" title="线性 DP 题目">线性 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/01.Memoization/" rel="bookmark" title="记忆化搜索知识">记忆化搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/02.Memoization-List/" rel="bookmark" title="记忆化搜索题目">记忆化搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" rel="bookmark" title="状态压缩 DP 知识">状态压缩 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" rel="bookmark" title="状态压缩 DP 题目">状态压缩 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" rel="bookmark" title="区间 DP 知识">区间 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/02.Interval-DP-List/" rel="bookmark" title="区间 DP 题目">区间 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/01.Count-DP/" rel="bookmark" title="计数 DP 知识">计数 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/02.Count-DP-List/" rel="bookmark" title="计数 DP 题目">计数 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/01.Probability-DP/" rel="bookmark" title="概率 DP 知识">概率 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" rel="bookmark" title="概率 DP 题目">概率 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/01.Number-DP/" rel="bookmark" title="数位 DP 知识">数位 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" rel="bookmark" title="数位 DP 题目">数位 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" rel="bookmark" title="单调栈 / 优先队列优化">单调栈 / 优先队列优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" rel="bookmark" title="斜率优化">斜率优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/03.Quadrangle-Optimization/" rel="bookmark" title="四边形不等式优化">四边形不等式优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" rel="bookmark" title="动态规划优化题目">动态规划优化题目</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/00/README/" title="开篇-为什么你要学习高并发系统设计">开篇-为什么你要学习高并发系统设计</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch14/" title="第 14 章 选择的名字">第 14 章 选择的名字</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" title="图的生成树知识">图的生成树知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" title="图的定义和分类">图的定义和分类</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/preface/" title="前言">前言</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/05/README/" title="05丨演进篇-分布式服务">05丨演进篇-分布式服务</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" title="二分图基础题目">二分图基础题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" title="斜率优化">斜率优化</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" title="链表经典题目">链表经典题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" title="二分查找题目">二分查找题目</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

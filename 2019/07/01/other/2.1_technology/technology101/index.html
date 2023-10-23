@@ -1,0 +1,633 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="java" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology101/">
+
+
+
+  <title>
+JMH 简介 - 技术积累 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">JMH 简介
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:14">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:14+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="item" rel="index" title="分类于 技术积累"><span itemprop="name">技术积累</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology101/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h3 id="JMH-简介"><a href="#JMH-简介" class="headerlink" title="JMH 简介"></a>JMH 简介</h3><p>JMH(Java Microbenchmark Harness)是用于代码微基准测试的工具套件，主要是基于方法层面的基准测试，精度可以达到纳秒级。该工具是由 Oracle 内部实现 JIT 的大牛们编写的，他们应该比任何人都了解 JIT 以及 JVM 对于基准测试的影响。</p>
+<p>当你定位到热点方法，希望进一步优化方法性能的时候，就可以使用 JMH 对优化的结果进行量化的分析。</p>
+<p>JMH 比较典型的应用场景如下：</p>
+<p>想准确地知道某个方法需要执行多长时间，以及执行时间和输入之间的相关性<br>对比接口不同实现在给定条件下的吞吐量<br>查看多少百分比的请求在多长时间内完成<br>下面我们以字符串拼接的两种方法为例子使用 JMH 做基准测试。</p>
+<h3 id="加入依赖"><a href="#加入依赖" class="headerlink" title="加入依赖"></a>加入依赖</h3><p>因为 JMH 是 JDK9 自带的，如果是 JDK9 之前的版本需要加入如下依赖（目前 JMH 的最新版本为 1.27）：</p>
+<pre><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.openjdk.jmh&lt;/groupId&gt;
+    &lt;artifactId&gt;jmh-core&lt;/artifactId&gt;
+    &lt;version&gt;1.27&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.openjdk.jmh&lt;/groupId&gt;
+    &lt;artifactId&gt;jmh-generator-annprocess&lt;/artifactId&gt;
+    &lt;version&gt;1.27&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h3 id="编写基准测试"><a href="#编写基准测试" class="headerlink" title="编写基准测试"></a>编写基准测试</h3><p>接下来，创建一个 JMH 测试类，用来判断 + 和 StringBuilder.append() 两种字符串拼接哪个耗时更短，具体代码如下所示：</p>
+<pre><code>@BenchmarkMode(Mode.AverageTime)
+@Warmup(iterations = 3, time = 1)
+@Measurement(iterations = 5, time = 5)
+@Threads(4)
+@Fork(1)
+@State(value = Scope.Benchmark)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+public class StringConnectTest &#123;
+
+    @Param(value = &#123;&quot;10&quot;, &quot;50&quot;, &quot;100&quot;&#125;)
+    private int length;
+
+    @Benchmark
+    public void testStringAdd(Blackhole blackhole) &#123;
+        String a = &quot;&quot;;
+        for (int i = 0; i &lt; length; i++) &#123;
+            a += i;
+        &#125;
+        blackhole.consume(a);
+    &#125;
+
+    @Benchmark
+    public void testStringBuilderAdd(Blackhole blackhole) &#123;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i &lt; length; i++) &#123;
+            sb.append(i);
+        &#125;
+        blackhole.consume(sb.toString());
+    &#125;
+
+    public static void main(String[] args) throws RunnerException &#123;
+        Options opt = new OptionsBuilder()
+                .include(StringConnectTest.class.getSimpleName())
+                .result(&quot;result.json&quot;)
+                .resultFormat(ResultFormatType.JSON).build();
+        new Runner(opt).run();
+    &#125;
+&#125;
+</code></pre>
+<p>其中需要测试的方法用 @Benchmark 注解标识，这些注解的具体含义将在下面介绍。</p>
+<p>在 main() 函数中，首先对测试用例进行配置，使用 Builder 模式配置测试，将配置参数存入 Options 对象，并使用 Options 对象构造 Runner 启动测试。</p>
+<p>另外大家可以看下官方提供的 jmh 示例 demo：<span class="exturl" data-url="aHR0cDovL2hnLm9wZW5qZGsuamF2YS5uZXQvY29kZS10b29scy9qbWgvZmlsZS90aXAvam1oLXNhbXBsZXMvc3JjL21haW4vamF2YS9vcmcvb3Blbmpkay9qbWgvc2FtcGxlcy8=">http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/</span></p>
+<h3 id="执行基准测试"><a href="#执行基准测试" class="headerlink" title="执行基准测试"></a>执行基准测试</h3><p>准备工作做好了，接下来，运行代码，等待片刻，测试结果就出来了，下面对结果做下简单说明：</p>
+<pre><code># JMH version: 1.23
+# VM version: JDK 1.8.0_201, Java HotSpot(TM) 64-Bit Server VM, 25.201-b09
+# VM invoker: D:\Software\Java\jdk1.8.0_201\jre\bin\java.exe
+# VM options: -javaagent:D:\Software\JetBrains\IntelliJ IDEA 2019.1.3\lib\idea_rt.jar=61018:D:\Software\JetBrains\IntelliJ IDEA 2019.1.3\bin -Dfile.encoding=UTF-8
+# Warmup: 3 iterations, 1 s each
+# Measurement: 5 iterations, 5 s each
+# Timeout: 10 min per iteration
+# Threads: 4 threads, will synchronize iterations
+# Benchmark mode: Average time, time/op
+# Benchmark: com.wupx.jmh.StringConnectTest.testStringBuilderAdd
+# Parameters: (length = 100)
+</code></pre>
+<p>该部分为测试的基本信息，比如使用的 Java 路径，预热代码的迭代次数，测量代码的迭代次数，使用的线程数量，测试的统计单位等。</p>
+<pre><code># Warmup Iteration   1: 1083.569 ±(99.9%) 393.884 ns/op
+# Warmup Iteration   2: 864.685 ±(99.9%) 174.120 ns/op
+# Warmup Iteration   3: 798.310 ±(99.9%) 121.161 ns/op
+</code></pre>
+<p>该部分为每一次热身中的性能指标，预热测试不会作为最终的统计结果。预热的目的是让 JVM 对被测代码进行足够多的优化，比如，在预热后，被测代码应该得到了充分的 JIT 编译和优化。</p>
+<pre><code>Iteration   1: 810.667 ±(99.9%) 51.505 ns/op
+Iteration   2: 807.861 ±(99.9%) 13.163 ns/op
+Iteration   3: 851.421 ±(99.9%) 33.564 ns/op
+Iteration   4: 805.675 ±(99.9%) 33.038 ns/op
+Iteration   5: 821.020 ±(99.9%) 66.943 ns/op
+</code></pre>
+<pre><code>Result &quot;com.wupx.jmh.StringConnectTest.testStringBuilderAdd&quot;:
+  819.329 ±(99.9%) 72.698 ns/op [Average]
+  (min, avg, max) = (805.675, 819.329, 851.421), stdev = 18.879
+  CI (99.9%): [746.631, 892.027] (assumes normal distribution)
+
+Benchmark                               (length)  Mode  Cnt     Score     Error  Units
+StringConnectTest.testStringBuilderAdd       100  avgt    5   819.329 ±  72.698  ns/op
+</code></pre>
+<p>该部分显示测量迭代的情况，每一次迭代都显示了当前的执行速率，即一个操作所花费的时间。在进行 5 次迭代后，进行统计，在本例中，length 为 100 的情况下 testStringBuilderAdd 方法的平均执行花费时间为 819.329 ns，误差为 72.698 ns。最后的测试结果如下所示：</p>
+<pre><code>Benchmark                               (length)  Mode  Cnt     Score     Error  Units
+StringConnectTest.testStringAdd               10  avgt    5   161.496 ±  17.097  ns/op
+StringConnectTest.testStringAdd               50  avgt    5  1854.657 ± 227.902  ns/op
+StringConnectTest.testStringAdd              100  avgt    5  6490.062 ± 327.626  ns/op
+StringConnectTest.testStringBuilderAdd        10  avgt    5    68.769 ±   4.460  ns/op
+StringConnectTest.testStringBuilderAdd        50  avgt    5   413.021 ±  30.950  ns/op
+StringConnectTest.testStringBuilderAdd       100  avgt    5   819.329 ±  72.698  ns/op
+</code></pre>
+<p>结果表明，在拼接字符次数越多的情况下，StringBuilder.append() 的性能就更好。</p>
+<h3 id="生成-jar-包执行"><a href="#生成-jar-包执行" class="headerlink" title="生成 jar 包执行"></a>生成 jar 包执行</h3><p>对于一些小测试，直接用上面的方式写一个 main 函数手动执行就好了。</p>
+<p>对于大型的测试，需要测试的时间比较久、线程数比较多，加上测试的服务器需要，一般要放在 Linux 服务器里去执行。</p>
+<p>JMH 官方提供了生成 jar 包的方式来执行，我们需要在 maven 里增加一个 plugin，具体配置如下：</p>
+<pre><code>&lt;plugins&gt;
+    &lt;plugin&gt;
+        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+        &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+        &lt;version&gt;2.4.1&lt;/version&gt;
+        &lt;executions&gt;
+            &lt;execution&gt;
+                &lt;phase&gt;package&lt;/phase&gt;
+                &lt;goals&gt;
+                    &lt;goal&gt;shade&lt;/goal&gt;
+                &lt;/goals&gt;
+                &lt;configuration&gt;
+                    &lt;finalName&gt;jmh-demo&lt;/finalName&gt;
+                    &lt;transformers&gt;
+                        &lt;transformer
+                                implementation=&quot;org.apache.maven.plugins.shade.resource.ManifestResourceTransformer&quot;&gt;
+                            &lt;mainClass&gt;org.openjdk.jmh.Main&lt;/mainClass&gt;
+                        &lt;/transformer&gt;
+                    &lt;/transformers&gt;
+                &lt;/configuration&gt;
+            &lt;/execution&gt;
+        &lt;/executions&gt;
+    &lt;/plugin&gt;
+&lt;/plugins&gt;
+</code></pre>
+<p>接着执行 maven 的命令生成可执行 jar 包并执行：</p>
+<pre><code>mvn clean install
+java -jar target/jmh-demo.jar StringConnectTest
+</code></pre>
+<h3 id="JMH-基础"><a href="#JMH-基础" class="headerlink" title="JMH 基础"></a>JMH 基础</h3><p>为了能够更好地使用 JMH 的各项功能，下面对 JMH 的基本概念进行讲解：</p>
+<h4 id="BenchmarkMode"><a href="#BenchmarkMode" class="headerlink" title="@BenchmarkMode"></a>@BenchmarkMode</h4><p>用来配置 Mode 选项，可用于类或者方法上，这个注解的 value 是一个数组，可以把几种 Mode 集合在一起执行，如：@BenchmarkMode({Mode.SampleTime, Mode.AverageTime})，还可以设置为 Mode.All，即全部执行一遍。</p>
+<p>Throughput：整体吞吐量，每秒执行了多少次调用，单位为 ops&#x2F;time<br>AverageTime：用的平均时间，每次操作的平均时间，单位为 time&#x2F;op<br>SampleTime：随机取样，最后输出取样结果的分布<br>SingleShotTime：只运行一次，往往同时把 Warmup 次数设为 0，用于测试冷启动时的性能<br>All：上面的所有模式都执行一次</p>
+<h4 id="State"><a href="#State" class="headerlink" title="@State"></a>@State</h4><p>通过 State 可以指定一个对象的作用范围，JMH 根据 scope 来进行实例化和共享操作。@State 可以被继承使用，如果父类定义了该注解，子类则无需定义。由于 JMH 允许多线程同时执行测试，不同的选项含义如下：</p>
+<p>Scope.Benchmark：所有测试线程共享一个实例，测试有状态实例在多线程共享下的性能<br>Scope.Group：同一个线程在同一个 group 里共享实例<br>Scope.Thread：默认的 State，每个测试线程分配一个实例<br>@OutputTimeUnit</p>
+<p>为统计结果的时间单位，可用于类或者方法注解</p>
+<h4 id="Warmup"><a href="#Warmup" class="headerlink" title="@Warmup"></a>@Warmup</h4><p>预热所需要配置的一些基本测试参数，可用于类或者方法上。一般前几次进行程序测试的时候都会比较慢，所以要让程序进行几轮预热，保证测试的准确性。参数如下所示：</p>
+<p>iterations：预热的次数<br>time：每次预热的时间<br>timeUnit：时间的单位，默认秒<br>batchSize：批处理大小，每次操作调用几次方法<br>为什么需要预热？ 因为 JVM 的 JIT 机制的存在，如果某个函数被调用多次之后，JVM 会尝试将其编译为机器码，从而提高执行速度，所以为了让 benchmark 的结果更加接近真实情况就需要进行预热。</p>
+<h4 id="Measurement"><a href="#Measurement" class="headerlink" title="@Measurement"></a>@Measurement</h4><p>实际调用方法所需要配置的一些基本测试参数，可用于类或者方法上，参数和 @Warmup 相同。</p>
+<h4 id="Threads"><a href="#Threads" class="headerlink" title="@Threads"></a>@Threads</h4><p>每个进程中的测试线程，可用于类或者方法上。</p>
+<h4 id="Fork"><a href="#Fork" class="headerlink" title="@Fork"></a>@Fork</h4><p>进行 fork 的次数，可用于类或者方法上。如果 fork 数是 2 的话，则 JMH 会 fork 出两个进程来进行测试。</p>
+<h4 id="Param"><a href="#Param" class="headerlink" title="@Param"></a>@Param</h4><p>指定某项参数的多种情况，特别适合用来测试一个函数在不同的参数输入的情况下的性能，只能作用在字段上，使用该注解必须定义 </p>
+<h4 id="State-注解。"><a href="#State-注解。" class="headerlink" title="@State 注解。"></a>@State 注解。</h4><p>在介绍完常用的注解后，让我们来看下 JMH 有哪些陷阱。</p>
+<h3 id="基准测试中建议"><a href="#基准测试中建议" class="headerlink" title="基准测试中建议"></a>基准测试中建议</h3><p>编译器还有其他一些优化行为，常见的包括（更多参见）：死代码消除（DCE）、方法内敛（method inline）、循环优化、常量折叠。</p>
+<p>方法内敛可以用上面提到的注解做控制，但更多的需要我们在些测试时采用一些小技巧规避，比如：DCE可以根据情况采用Blackhole消费输出结果。</p>
+<p>测试前后较重的处理放在@Setup和@TearDown中<br>注意DCE（死代码消除）<br>不出现循环被编译器优化，具体建议参考JMHSample_34_SafeLooping<br>测试必须为fork，fork是分离出来子进程进行测试，@fork(2)含义为顺次（one-by-one）fork出子进程来测试<br>使用@fork多次fork测试，减少运行间差异<br>多线程测试时参考JMHSample_17_SyncIterations<br>对非循环方法需要测量冷启动的时间消耗，参考JMHSample_26_BatchSize<br>可以通过profiler获得基准测试时JVM的相关信息，比如栈、gc、classloader。参考JMHSample_35_Profilers<br>在使用profiler时遇到no tty present and no askpass program specified错误是因为帐号并没有开启sudo免密导致的。<br>通过以下步骤可解决，但测试完成后安全起见建议删除：sudo visudo；在文件最后追加 userName ALL&#x3D;(ALL) NOPASSWD:ALL</p>
+
+      <div class="tags">
+          <a href="/tags/java/" rel="tag"><i class="ic i-tag"></i> java</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2020-12-30 16:45:04" itemprop="dateModified" datetime="2020-12-30T16:45:04+08:00">2020-12-30</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology101/" title="JMH 简介">http://kaywu.cn/2019/07/01/other/2.1_technology/technology101/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/2.1_technology/technology140/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis081o9j20zk0m8dmr.jpg" title="SpringBoot系列 - 使用RestTemplate">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术积累</span>
+  <h3>SpringBoot系列 - 使用RestTemplate</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/2.1_technology/technology200/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis3attqj20zk0m8k7l.jpg" title="Linux 搭建 socks 服务器（翻墙）">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术积累</span>
+  <h3>Linux 搭建 socks 服务器（翻墙）</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#JMH-%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">JMH 简介</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A0%E5%85%A5%E4%BE%9D%E8%B5%96"><span class="toc-number">2.</span> <span class="toc-text">加入依赖</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BC%96%E5%86%99%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="toc-number">3.</span> <span class="toc-text">编写基准测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%89%A7%E8%A1%8C%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95"><span class="toc-number">4.</span> <span class="toc-text">执行基准测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%9F%E6%88%90-jar-%E5%8C%85%E6%89%A7%E8%A1%8C"><span class="toc-number">5.</span> <span class="toc-text">生成 jar 包执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#JMH-%E5%9F%BA%E7%A1%80"><span class="toc-number">6.</span> <span class="toc-text">JMH 基础</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#BenchmarkMode"><span class="toc-number">6.1.</span> <span class="toc-text">@BenchmarkMode</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#State"><span class="toc-number">6.2.</span> <span class="toc-text">@State</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Warmup"><span class="toc-number">6.3.</span> <span class="toc-text">@Warmup</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Measurement"><span class="toc-number">6.4.</span> <span class="toc-text">@Measurement</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Threads"><span class="toc-number">6.5.</span> <span class="toc-text">@Threads</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fork"><span class="toc-number">6.6.</span> <span class="toc-text">@Fork</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Param"><span class="toc-number">6.7.</span> <span class="toc-text">@Param</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#State-%E6%B3%A8%E8%A7%A3%E3%80%82"><span class="toc-number">6.8.</span> <span class="toc-text">@State 注解。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%BB%BA%E8%AE%AE"><span class="toc-number">7.</span> <span class="toc-text">基准测试中建议</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/2.1_technology/technology/" rel="bookmark" title="技术积累">技术积累</a></li><li><a href="/2019/07/01/other/2.2_standard/standard/" rel="bookmark" title="阿里巴巴开发手册解析">阿里巴巴开发手册解析</a></li><li><a href="/2019/07/01/other/2.1_technology/technology100/" rel="bookmark" title="Java 中的那些锁事（转载）">Java 中的那些锁事（转载）</a></li><li><a href="/2019/07/01/other/2.1_technology/technology111/" rel="bookmark" title="Lambda and Anonymous Classes(I)">Lambda and Anonymous Classes(I)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology112/" rel="bookmark" title="Lambda and Anonymous Classes(II)">Lambda and Anonymous Classes(II)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology113/" rel="bookmark" title="Lambda and Collections">Lambda and Collections</a></li><li><a href="/2019/07/01/other/2.1_technology/technology114/" rel="bookmark" title="Streams API(I)">Streams API(I)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology115/" rel="bookmark" title="Streams API(II)">Streams API(II)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology116/" rel="bookmark" title="Stream Pipelines">Stream Pipelines</a></li><li><a href="/2019/07/01/other/2.1_technology/technology117/" rel="bookmark" title="ParallelStream 介绍">ParallelStream 介绍</a></li><li><a href="/2019/07/01/other/2.1_technology/technology118/" rel="bookmark" title="Stream Performance">Stream Performance</a></li><li class="active"><a href="/2019/07/01/other/2.1_technology/technology101/" rel="bookmark" title="JMH 简介">JMH 简介</a></li><li><a href="/2019/07/01/other/2.1_technology/technology140/" rel="bookmark" title="SpringBoot系列 - 使用RestTemplate">SpringBoot系列 - 使用RestTemplate</a></li><li><a href="/2019/07/01/other/2.1_technology/technology141/" rel="bookmark" title="SpringBoot系列 - RestTemplate实践（及遇到的问题）">SpringBoot系列 - RestTemplate实践（及遇到的问题）</a></li><li><a href="/2019/07/01/other/2.1_technology/technology142/" rel="bookmark" title="Mybatis系列 - mybatis-plus">Mybatis系列 - mybatis-plus</a></li><li><a href="/2019/07/01/other/2.1_technology/technology145/" rel="bookmark" title="SpringBoot系列 - 集成MongoDB">SpringBoot系列 - 集成MongoDB</a></li><li><a href="/2019/07/01/other/2.1_technology/technology200/" rel="bookmark" title="Linux 搭建 socks 服务器（翻墙）">Linux 搭建 socks 服务器（翻墙）</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/2.1_technology/technology140/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/2.1_technology/technology200/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/06/README/" title="06丨演进篇-维护">06丨演进篇-维护</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" title="队列基础知识">队列基础知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" title="差分约束系统知识">差分约束系统知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology140/" title="SpringBoot系列 - 使用RestTemplate">SpringBoot系列 - 使用RestTemplate</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E7%A8%8B/" title="分类于 计算机体系结构与计算机工程">计算机体系结构与计算机工程</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/2.1_architecture-system/architecture-system/" title="计算机体系结构与计算机工程">计算机体系结构与计算机工程</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" title="Boyer Moore 算法">Boyer Moore 算法</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" title="优先队列知识">优先队列知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" title="链表排序题目">链表排序题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" title="递归算法知识">递归算法知识</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/2.1_technology/technology101/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

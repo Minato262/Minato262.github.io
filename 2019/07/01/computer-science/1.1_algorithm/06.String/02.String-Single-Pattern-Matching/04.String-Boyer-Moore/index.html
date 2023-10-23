@@ -1,0 +1,765 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="算法与数据结构" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/">
+
+
+
+  <title>
+Boyer Moore 算法 - 算法 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">Boyer Moore 算法
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 21:43:40">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T21:43:40+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="item" rel="index" title="分类于 算法"><span itemprop="name">算法</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="1-Boyer-Moore-算法介绍"><a href="#1-Boyer-Moore-算法介绍" class="headerlink" title="1. Boyer Moore 算法介绍"></a>1. Boyer Moore 算法介绍</h2><blockquote>
+<p><strong>Boyer Moore 算法</strong>：简称为 BM 算法，是由它的两位发明者 Robert S. Boyer 和 J Strother Moore 的名字来命名的。BM 算法是他们在 1977 年提出的高效字符串搜索算法。在实际应用中，比 KMP 算法要快 3~5 倍。</p>
+<ul>
+<li><strong>BM 算法思想</strong>：对于给定文本串 <code>T</code> 与模式串 <code>p</code>，先对模式串 <code>p</code> 进行预处理。然后在匹配的过程中，当发现文本串 <code>T</code> 的某个字符与模式串 <code>p</code> 不匹配的时候，根据启发策略，能够直接尽可能地跳过一些无法匹配的情况，将模式串多向后滑动几位。</li>
+</ul>
+</blockquote>
+<p>BM 算法的精髓在于使用了两种不同的启发策略来计算后移位数：<strong>「坏字符规则（The Bad Character Rule）」</strong> 和 <strong>「好后缀规则（The Good Suffix Shift Rule）」</strong>。</p>
+<p>这两种启发策略的计算过程只与模式串 <code>p</code> 相关，而与文本串 <code>T</code> 无关。因此在对模式串 <code>p</code> 进行预处理时，可以预先生成「坏字符规则后移表」和「好后缀规则后移表」，然后在匹配的过程中，只需要比较一下两种策略下最大的后移位数进行后移即可。</p>
+<p>同时，还需要注意一点。BM 算法在移动模式串的时候和常规匹配算法一样是从左到右进行，但是在进行比较的时候是从右到左，即基于后缀进行比较。</p>
+<p>下面我们来讲解一下 BF 算法中的两种不同启发策略：「坏字符规则」和「好后缀规则」。</p>
+<h2 id="2-Boyer-Moore-算法启发策略"><a href="#2-Boyer-Moore-算法启发策略" class="headerlink" title="2. Boyer Moore 算法启发策略"></a>2. Boyer Moore 算法启发策略</h2><h3 id="2-1-坏字符规则"><a href="#2-1-坏字符规则" class="headerlink" title="2.1 坏字符规则"></a>2.1 坏字符规则</h3><blockquote>
+<p><strong>坏字符规则（The Bad Character Rule）</strong>：当文本串 <code>T</code> 中某个字符跟模式串 <code>p</code> 的某个字符不匹配时，则称文本串 <code>T</code> 中这个失配字符为 <strong>「坏字符」</strong>，此时模式串 <code>p</code> 可以快速向右移动。</p>
+</blockquote>
+<p>「坏字符规则」的移动位数分为两种情况：</p>
+<ul>
+<li><strong>情况 1：坏字符出现在模式串 <code>p</code> 中</strong>。<ul>
+<li>这种情况下，可将模式串中最后一次出现的坏字符与文本串中的坏字符对齐，如下图所示。</li>
+<li><strong>向右移动位数 &#x3D; 坏字符在模式串中的失配位置 - 坏字符在模式串中最后一次出现的位置</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220128162720.png"></p>
+<ul>
+<li><strong>情况 2：坏字符没有出现在模式串 <code>p</code> 中</strong>。<ul>
+<li>这种情况下，可将模式串向右移动一位，如下图所示。</li>
+<li><strong>向右移动位数 &#x3D; 坏字符在模式串中的失配位置 + 1</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220128162735.png"></p>
+<h3 id="2-2-好后缀规则"><a href="#2-2-好后缀规则" class="headerlink" title="2.2 好后缀规则"></a>2.2 好后缀规则</h3><blockquote>
+<p><strong>好后缀规则（The Good Suffix Shift Rule）</strong>：当文本串 <code>T</code> 中某个字符跟模式串 <code>p</code> 的某个字符不匹配时，则称文本串 <code>T</code> 中已经匹配好的字符串为 <strong>「好后缀」</strong>，此时模式串 <code>p</code> 可以快速向右移动。</p>
+</blockquote>
+<p>「好后缀规则」的移动方式分为三种情况：</p>
+<ul>
+<li><strong>情况 1：模式串中有子串匹配上好后缀</strong>。<ul>
+<li>这种情况下，移动模式串，让该子串和好后缀对齐即可。如果超过一个子串匹配上好后缀，则选择最右侧的子串对齐，如下图所示。</li>
+<li><strong>向右移动位数 &#x3D; 好后缀的最后一个字符在模式串中的位置 - 匹配的子串最后一个字符出现的位置</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220128162537.png"></p>
+<ul>
+<li><strong>情况 2：模式串中无子串匹配上好后缀，但有最长前缀匹配好后缀的后缀</strong>。<ul>
+<li>这种情况下，我们需要在模式串的前缀中寻找一个最长前缀，该前缀等于好后缀的后缀。找到该前缀后，让该前缀和好后缀的后缀对齐。</li>
+<li><strong>向右移动位数 &#x3D; 好后缀的后缀的最后一个字符在模式串中的位置 -  最长前缀的最后一个字符出现的位置</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220128162600.png"></p>
+<ul>
+<li><strong>情况 3：模式串中无子串匹配上好后缀，也找不到前缀匹配</strong>。<ul>
+<li>可将模式串整个右移。</li>
+<li><strong>向右移动位数 &#x3D; 模式串的长度</strong>。</li>
+</ul>
+</li>
+</ul>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220128162651.png"></p>
+<h2 id="3-Boyer-Moore-算法匹配过程示例"><a href="#3-Boyer-Moore-算法匹配过程示例" class="headerlink" title="3. Boyer Moore 算法匹配过程示例"></a>3. Boyer Moore 算法匹配过程示例</h2><p>下面我们根据  J Strother Moore 教授给出的例子，先来介绍一下 BF 算法的匹配过程，顺便加深对 <strong>「坏字符规则」</strong> 和 <strong>「好后缀规则」</strong> 的理解。</p>
+<ol>
+<li>假设文本串为 <code>&quot;HERE IS A SIMPLE EXAMPLE&quot;</code>，模式串为 <code>&quot;EXAMPLE&quot;</code>，如下图所示。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164130.png"></p>
+<ol start="2">
+<li>首先，令模式串与文本串的头部对齐，然后从模式串的尾部开始逐位比较，如下图所示。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164140.png"></p>
+<p>可以看出来，<code>&#39;S&#39;</code> 与 <code>&#39;E&#39;</code> 不匹配。这时候，不匹配的字符 <code>&#39;S&#39;</code> 就被称为「坏字符（Bad Character）」，对应着模式串的第 <code>6</code> 位。并且 <code>&#39;S&#39;</code> 并不包含在模式串 <code>&quot;EXAMPLE&quot;</code> 中（相当于<code>&#39;S&#39;</code> 在模式串中最后一次出现的位置是 <code>-1</code>）。根据「坏字符规则」，可以把模式串直接向右移动 <code>6 - (-1) = 7</code> 位，即将文本串中 <code>&#39;S&#39;</code> 的后一位上。</p>
+<ol start="3">
+<li>将模式串向右移动 <code>7</code> 位。然后依然从模式串尾部开始比较，发现 <code>&#39;P&#39;</code> 和 <code>&#39;E&#39;</code> 不匹配，则 <code>&#39;P&#39;</code> 是坏字符，如下图所示。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164151.png"></p>
+<p>但是 <code>&#39;P&#39;</code> 包含在模式串 <code>&quot;EXAMPLE&quot;</code> 中，<code>&#39;P&#39;</code> 这个坏字符在模式串中的失配位置是第 <code>6</code> 位，并且在模式串中最后一次出现的位置是 <code>4</code>（编号从 <code>0</code> 开始）。</p>
+<ol start="4">
+<li>根据「坏字符规则」，可以将模式串直接向右移动 <code>6 - 4 = 2</code> 位，将文本串的 <code>&#39;P&#39;</code> 和模式串中的 <code>&#39;P&#39;</code> 对齐，如下图所示。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164202.png"></p>
+<ol start="5">
+<li>我们继续从尾部开始逐位比较。先比较文本串的 <code>&#39;E&#39;</code> 和模式串的 <code>&#39;E&#39;</code>，如下图所示。可以看出文本串的 <code>&#39;E&#39;</code> 和模式串的 <code>&#39;E&#39;</code> 匹配，则 <code>&quot;E&quot;</code> 为好后缀，<code>&quot;E&quot;</code> 在模式串中的位置为 <code>6</code>（编号从 <code>0</code> 开始）。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164212.png"></p>
+<ol start="6">
+<li>继续比较前面一位，即文本串的 <code>&#39;L&#39;</code> 和模式串的 <code>&#39;L&#39;</code>，如下图所示。可以看出文本串的 <code>&#39;L&#39;</code> 和模式串的 <code>&#39;L&#39;</code> 匹配。则 <code>&quot;LE&quot;</code> 为好后缀，<code>&quot;LE&quot;</code> 在模式串中的位置为 <code>6</code>（编号从 <code>0</code> 开始）。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164222.png"></p>
+<ol start="7">
+<li>继续比较前面一位，即文本串中的 <code>&#39;P&#39;</code> 和模式串中的 <code>&#39;P&#39;</code>，如下图所示。可以看出文本串中的 <code>&#39;P&#39;</code> 和模式串中的 <code>&#39;P&#39;</code> 匹配，则 <code>&quot;PLE&quot;</code> 为好后缀，<code>&quot;PLE&quot;</code> 在模式串中的位置为 <code>6</code>（编号从 <code>0</code> 开始）。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164232.png"></p>
+<ol start="8">
+<li>继续比较前面一位，即文本串中的 <code>&#39;M&#39;</code> 和模式串中的 <code>&#39;M&#39;</code>，如下图所示。可以看出文本串中的 <code>&#39;M&#39;</code> 和模式串中的 <code>&#39;M&#39;</code> 匹配，则 <code>&quot;MPLE&quot;</code> 为好后缀。<code>&quot;MPLE&quot;</code> 在模式串中的位置为 <code>6</code>（编号从 <code>0</code> 开始）。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164241.png"></p>
+<ol start="9">
+<li>继续比较前面一位，即文本串中的 <code>&#39;I&#39;</code> 和模式串中的 <code>&#39;A&#39;</code>，如下图所示。可以看出文本串中的 <code>&#39;I&#39;</code> 和模式串中的 <code>&#39;A&#39;</code> 不匹配。</li>
+</ol>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164251.png"></p>
+<p>此时，如果按照「坏字符规则」，模式串应该向右移动 <code>2 - (-1) = 3</code> 位。但是根据「好后缀规则」，我们还有更好的移动方法。</p>
+<p>在好后缀 <code>&quot;MPLE&quot;</code> 和好后缀的后缀 <code>&quot;PLE&quot;</code>、<code>&quot;LE&quot;</code>、<code>&quot;E&quot;</code> 中，只有好后缀的后缀 <code>&quot;E&quot;</code> 和模式串中的前缀 <code>&quot;E&quot;</code> 相匹配，符合好规则的第二种情况。好后缀的后缀 <code>&quot;E&quot;</code> 的最后一个字符在模式串中的位置为 <code>6</code>，最长前缀 <code>&quot;E&quot;</code>的最后一个字符出现的位置为 <code>0</code>，则根据「好后缀规则」，可以将模式串直接向右移动 <code>6 - 0 = 6</code> 位。如下图所示。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164301.png"></p>
+<ol start="10">
+<li>继续从模式串的尾部开始逐位比较，如下图所示。</li>
+</ol>
+<p>可以看出，<code>&#39;P&#39;</code> 与<code>&#39;E&#39;</code> 不匹配，<code>&#39;P&#39;</code> 是坏字符。根据「坏字符规则」，可以将模式串直接向右移动 <code>6 - 4 = 2</code> 位，如下图所示。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220127164312.png"></p>
+<ol start="11">
+<li>继续从模式串的尾部开始逐位比较，发现模式串全部匹配，于是搜索结束，返回模式串在文本串中的位置。</li>
+</ol>
+<h2 id="4-Boyer-Moore-算法步骤"><a href="#4-Boyer-Moore-算法步骤" class="headerlink" title="4. Boyer Moore 算法步骤"></a>4. Boyer Moore 算法步骤</h2><p>整个 BM 算法步骤描述如下：</p>
+<ol>
+<li>计算出文本串 <code>T</code> 的长度为 <code>n</code>，模式串 <code>p</code> 的长度为 <code>m</code>。</li>
+<li>先对模式串 <code>p</code> 进行预处理，生成坏字符位置表 <code>bc_table</code> 和好后缀规则后移位数表 <code>gs_talbe</code>。</li>
+<li>将模式串 <code>p</code> 的头部与文本串 <code>T</code> 对齐，将 <code>i</code> 指向文本串开始位置，即 <code>i = 0</code>。<code>j</code> 指向模式串末尾位置，即 <code>j = m - 1</code>，然后从模式串末尾位置开始进行逐位比较。<ol>
+<li>如果文本串对应位置 <code>T[i + j]</code> 上的字符与 <code>p[j]</code> 相同，则继续比较前一位字符。<ol>
+<li>如果模式串全部匹配完毕，则返回模式串 <code>p</code> 在文本串中的开始位置 <code>i</code>。</li>
+</ol>
+</li>
+<li>如果文本串对应位置 <code>T[i + j]</code> 上的字符与 <code>p[j]</code> 不相同，则：<ol>
+<li>根据坏字符位置表计算出在「坏字符规则」下的移动距离 <code>bad_move</code>。</li>
+<li>根据好后缀规则后移位数表计算出在「好后缀规则」下的移动距离 <code>good_mode</code>。</li>
+<li>取两种移动距离的最大值，然后对模式串进行移动，即 <code>i += max(bad_move, good_move)</code>。</li>
+</ol>
+</li>
+</ol>
+</li>
+<li>如果移动到末尾也没有找到匹配情况，则返回 <code>-1</code>。</li>
+</ol>
+<h2 id="5-Boyer-Moore-算法代码实现"><a href="#5-Boyer-Moore-算法代码实现" class="headerlink" title="5. Boyer Moore 算法代码实现"></a>5. Boyer Moore 算法代码实现</h2><p>BM 算法的匹配过程实现起来并不是很难，而整个算法实现的难点在于预处理阶段的「生成坏字符位置表」和「生成好后缀规则后移位数表」这两步上。尤其是「生成好后缀规则后移位数表」，实现起来十分复杂。下面我们一一进行讲解。</p>
+<h3 id="5-1-生成坏字符位置表代码实现"><a href="#5-1-生成坏字符位置表代码实现" class="headerlink" title="5.1 生成坏字符位置表代码实现"></a>5.1 生成坏字符位置表代码实现</h3><p>生成坏字符位置表的代码实现比较简单。具体步骤如下：</p>
+<ul>
+<li><p>使用一个哈希表 <code>bc_table</code>， <code>bc_table[bad_char]</code> 表示坏字符 <code>bad_char</code> 在模式串中出现的最右位置。</p>
+</li>
+<li><p>遍历模式串，以当前字符 <code>p[i]</code> 为键，所在位置下标为值存入字典中。如果出现重复字符，则新的位置下标值会将之前存放的值覆盖掉。这样哈希表中存放的就是该字符在模式串中出现的最右侧位置。</p>
+</li>
+</ul>
+<p>这样如果在 BM 算法的匹配过程中，如果 <code>bad_char</code> 不在 <code>bc_table</code> 中时，可令 <code>bad_char</code> 在模式串中出现的最右侧位置为 <code>-1</code>。如果 <code>bad_char</code> 在 <code>bc_table</code> 中时，<code>bad_char</code> 在模式串中出现的最右侧位置就是 <code>bc_table[bad_char]</code>。这样就可以根据公式计算出可以向右移动的位数了。</p>
+<p>生成坏字符位置表的代码如下：</p>
+<pre><code class="Python"># 生成坏字符位置表
+# bc_table[bad_char] 表示坏字符在模式串中最后一次出现的位置
+def generateBadCharTable(p: str):
+    bc_table = dict()
+    
+    for i in range(len(p)):
+        bc_table[p[i]] = i                          # 更新坏字符在模式串中最后一次出现的位置
+    return bc_table
+</code></pre>
+<h3 id="5-2-生成好后缀规则后移位数表代码实现"><a href="#5-2-生成好后缀规则后移位数表代码实现" class="headerlink" title="5.2 生成好后缀规则后移位数表代码实现"></a>5.2 生成好后缀规则后移位数表代码实现</h3><p>为了生成好后缀规则后移位数表，我们需要先定义一个后缀数组 <code>suffix</code>，其中 <code>suffix[i] = s</code> 表示为以下标 <code>i</code> 为结尾的子串与模式串后缀匹配的最大长度为 <code>s</code>。即满足 <code>p[i-s...i] == p[m-1-s, m-1]</code> 的最大长度为 <code>s</code>。</p>
+<p>构建 <code>suffix</code> 数组的代码如下：</p>
+<pre><code class="Python"># 生成 suffix 数组
+# suffix[i] 表示为以下标 i 为结尾的子串与模式串后缀匹配的最大长度
+def generageSuffixArray(p: str):
+    m = len(p)
+    suffix = [m for _ in range(m)]                  # 初始化时假设匹配的最大长度为 m
+    for i in range(m - 2, -1, -1):                  # 子串末尾从 m - 2 开始
+        start = i                                   # start 为子串开始位置
+        while start &gt;= 0 and p[start] == p[m - 1 - i + start]:
+            start -= 1                              # 进行后缀匹配，start 为匹配到的子串开始位置
+        suffix[i] = i - start                       # 更新以下标 i 为结尾的子串与模式串后缀匹配的最大长度
+    return suffix
+</code></pre>
+<p>有了 <code>suffix</code> 数组，我们就可以在此基础上定义好后缀规则后移位数表 <code>gs_list</code>。我们使用一个数组来表示好后缀规则后移位数表。其中 <code>gs_list[j]</code> 表示在 <code>j</code> 下标处遇到坏字符时，可根据好规则向右移动的距离。</p>
+<p>由 <code>2.2 好后缀规则</code> 中可知，好后缀规则的移动方式可以分为三种情况。</p>
+<ul>
+<li>情况 1：模式串中有子串匹配上好后缀。</li>
+<li>情况 2：模式串中无子串匹配上好后缀，但有最长前缀匹配好后缀的后缀。</li>
+<li>情况 3：模式串中无子串匹配上好后缀，也找不到前缀匹配。</li>
+</ul>
+<p>这 3 种情况中，情况 2 和情况 3 可以合并，因为情况 3 可以看做是匹配到的最长前缀长度为 <code>0</code>。而如果遇到一个坏字符同时满足多种情况，则我们应该选择满足情况中最小的移动距离才不会漏掉可能匹配的情况，比如说当模式串中既有子串可以匹配上好后缀，又有前缀可以匹配上好后缀的后缀，则应该按照前者的方式移动模式串。</p>
+<ul>
+<li>为了得到精确的 <code>gs_list[j]</code>，我们可以先假定所有情况都为情况 3，即 <code>gs_list[i] = m</code>。</li>
+<li>然后通过后缀和前缀匹配的方法，更新情况 2 下  <code>gs_list</code> 中坏字符位置处的值，即 <code>gs_list[j] = m - 1 - i</code>，其中 <code>j</code> 是好后缀前的坏字符位置，<code>i</code> 是最长前缀的末尾位置，<code>m - 1 - i</code> 是可向右移动的距离。</li>
+<li>最后再计算情况 1 下 <code>gs_list</code> 中坏字符位置处的值，更新在好后缀的左端点处（<code>m - 1 - suffix[i]</code> 处）遇到坏字符可向后移动位数，即 <code>gs_list[m - 1 - suffix[i]] = m - 1 - i</code>。</li>
+</ul>
+<p>生成好后缀规则后移位数表 <code>gs_list</code> 代码如下：</p>
+<pre><code class="Python"># 生成好后缀规则后移位数表
+# gs_list[j] 表示在 j 下标处遇到坏字符时，可根据好规则向右移动的距离
+def generageGoodSuffixList(p: str):
+    # 好后缀规则后移位数表
+    # 情况 1: 模式串中有子串匹配上好后缀
+    # 情况 2: 模式串中无子串匹配上好后缀，但有最长前缀匹配好后缀的后缀
+    # 情况 3: 模式串中无子串匹配上好后缀，也找不到前缀匹配
+    
+    m = len(p)
+    gs_list = [m for _ in range(m)]                 # 情况 3：初始化时假设全部为情况 3
+    suffix = generageSuffixArray(p)                 # 生成 suffix 数组
+    
+    j = 0                                           # j 为好后缀前的坏字符位置
+    for i in range(m - 1, -1, -1):                  # 情况 2：从最长的前缀开始检索
+        if suffix[i] == i + 1:                      # 匹配到前缀，即 p[0...i] == p[m-1-i...m-1]
+            while j &lt; m - 1 - i:
+                if gs_list[j] == m:
+                    gs_list[j] = m - 1 - i          # 更新在 j 处遇到坏字符可向后移动位数
+                j += 1
+        
+    for i in range(m - 1):                          # 情况 1：匹配到子串， p[i-s...i] == p[m-1-s, m-1]
+        gs_list[m - 1 - suffix[i]] = m - 1 - i      # 更新在好后缀的左端点处遇到坏字符可向后移动位数
+    return gs_list
+</code></pre>
+<h3 id="5-3-Boyer-Moore-算法整体代码实现"><a href="#5-3-Boyer-Moore-算法整体代码实现" class="headerlink" title="5.3 Boyer Moore 算法整体代码实现"></a>5.3 Boyer Moore 算法整体代码实现</h3><pre><code class="Python"># BM 匹配算法
+def boyerMoore(T: str, p: str) -&gt; int:
+    n, m = len(T), len(p)
+    
+    bc_table = generateBadCharTable(p)              # 生成坏字符位置表
+    gs_list = generageGoodSuffixList(p)             # 生成好后缀规则后移位数表
+    
+    i = 0
+    while i &lt;= n - m:
+        j = m - 1
+        while j &gt; -1 and T[i + j] == p[j]:          # 进行后缀匹配，跳出循环说明出现坏字符
+            j -= 1
+        if j &lt; 0:
+            return i                                # 匹配完成，返回模式串 p 在文本串 T 中的位置
+        bad_move = j - bc_table.get(T[i + j], -1)   # 坏字符规则下的后移位数
+        good_move = gs_list[j]                      # 好后缀规则下的后移位数
+        i += max(bad_move, good_move)               # 取两种规则下后移位数的最大值进行移动
+    return -1
+            
+    
+# 生成坏字符位置表
+# bc_table[bad_char] 表示坏字符在模式串中最后一次出现的位置
+def generateBadCharTable(p: str):
+    bc_table = dict()
+    
+    for i in range(len(p)):
+        bc_table[p[i]] = i                          # 更新坏字符在模式串中最后一次出现的位置
+    return bc_table
+
+# 生成好后缀规则后移位数表
+# gs_list[j] 表示在 j 下标处遇到坏字符时，可根据好规则向右移动的距离
+def generageGoodSuffixList(p: str):
+    # 好后缀规则后移位数表
+    # 情况 1: 模式串中有子串匹配上好后缀
+    # 情况 2: 模式串中无子串匹配上好后缀，但有最长前缀匹配好后缀的后缀
+    # 情况 3: 模式串中无子串匹配上好后缀，也找不到前缀匹配
+    
+    m = len(p)
+    gs_list = [m for _ in range(m)]                 # 情况 3：初始化时假设全部为情况 3
+    suffix = generageSuffixArray(p)                 # 生成 suffix 数组
+    
+    j = 0                                           # j 为好后缀前的坏字符位置
+    for i in range(m - 1, -1, -1):                  # 情况 2：从最长的前缀开始检索
+        if suffix[i] == i + 1:                      # 匹配到前缀，即 p[0...i] == p[m-1-i...m-1]
+            while j &lt; m - 1 - i:
+                if gs_list[j] == m:
+                    gs_list[j] = m - 1 - i          # 更新在 j 处遇到坏字符可向后移动位数
+                j += 1
+        
+    for i in range(m - 1):                          # 情况 1：匹配到子串 p[i-s...i] == p[m-1-s, m-1]
+        gs_list[m - 1 - suffix[i]] = m - 1 - i      # 更新在好后缀的左端点处遇到坏字符可向后移动位数
+    return gs_list
+
+# 生成 suffix 数组
+# suffix[i] 表示为以下标 i 为结尾的子串与模式串后缀匹配的最大长度
+def generageSuffixArray(p: str):
+    m = len(p)
+    suffix = [m for _ in range(m)]                  # 初始化时假设匹配的最大长度为 m
+    for i in range(m - 2, -1, -1):                  # 子串末尾从 m - 2 开始
+        start = i                                   # start 为子串开始位置
+        while start &gt;= 0 and p[start] == p[m - 1 - i + start]:
+            start -= 1                              # 进行后缀匹配，start 为匹配到的子串开始位置
+        suffix[i] = i - start                       # 更新以下标 i 为结尾的子串与模式串后缀匹配的最大长度
+    return suffix
+
+print(boyerMoore(&quot;abbcfdddbddcaddebc&quot;, &quot;aaaaa&quot;))
+print(boyerMoore(&quot;&quot;, &quot;&quot;))
+</code></pre>
+<h2 id="6-Boyer-Moore-算法分析"><a href="#6-Boyer-Moore-算法分析" class="headerlink" title="6. Boyer Moore 算法分析"></a>6. Boyer Moore 算法分析</h2><ul>
+<li>BM 算法在预处理阶段的时间复杂度为 $O(n + \sigma)$，其中 $\sigma$ 是字符集的大小。</li>
+<li>BM 算法在搜索阶段最好情况是每次匹配时，模式串 <code>p</code> 中不存在与文本串 <code>T</code> 中第一个匹配的字符。这时的时间复杂度为 $O(n &#x2F; m)$。</li>
+<li>BM 算法在搜索阶段最差情况是文本串 <code>T</code> 中有多个重复的字符，并且模式串 <code>p</code> 中有 <code>m - 1</code> 个相同字符前加一个不同的字符组成。这时的时间复杂度为 $O(m * n)$。</li>
+<li>当模式串 <code>p</code> 是非周期性的，在最坏情况下，BM 算法最多需要进行 $3 * n$ 次字符比较操作。</li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>【书籍】柔性字符串匹配 - 中科院计算所网络信息安全研究组 译</li>
+<li>【文章】<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0RCQ18xMjEvYXJ0aWNsZS9kZXRhaWxzLzEwNTU2OTQ0MA==">不用找了，学习 BM 算法，这篇就够了（思路+详注代码）- BoCong-Deng 的博客</span></li>
+<li>【文章】<span class="exturl" data-url="aHR0cHM6Ly93d3cucnVhbnlpZmVuZy5jb20vYmxvZy8yMDEzLzA1L2JveWVyLW1vb3JlX3N0cmluZ19zZWFyY2hfYWxnb3JpdGhtLmh0bWw=">字符串匹配的 Boyer-Moore 算法 - 阮一峰的网络日志</span></li>
+<li>【文章】<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl8yOTIxNzIzNS9hcnRpY2xlL2RldGFpbHMvMTE0NDg4MDI3"> bm 算法好后缀 java 实现 - 长笛小号的博客 - CSDN博客</span></li>
+<li>【文章】<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vd3hnYmxvZ3MvcC81NzAxMTAxLmh0bWw=">BM算法详解 - 简单爱_wxg - 博客园</span></li>
+<li>【文章】<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vbGFueHVlemFpcGlhby9wLzM0NTI1NzkuaHRtbA==">grep 之字符串搜索算法 Boyer-Moore 由浅入深 - Alexia(minmin) - 博客园</span></li>
+<li>【文章】<span class="exturl" data-url="aHR0cHM6Ly90aW1lLmdlZWtiYW5nLm9yZy9jb2x1bW4vYXJ0aWNsZS83MTUyNQ==">字符串匹配基础（中）- 数据结构与算法之美 - 极客时间</span></li>
+<li>【代码】<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9pbXBsZW1lbnQtc3Ryc3RyL3NvbHV0aW9uL2Jtc3Vhbi1mYS1mdS15b3UtamllLXNoaS1ieS13ZW4tMTk4Lw==">BM算法 附有解释 - 实现 strStr() - 力扣</span></li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="ic i-tag"></i> 算法与数据结构</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-19 22:49:54" itemprop="dateModified" datetime="2023-02-19T22:49:54+08:00">2023-02-19</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" title="Boyer Moore 算法">http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit31ffoj20zk0m8naf.jpg" title="Horspool 算法">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>Horspool 算法</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="KMP 算法">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>KMP 算法</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-Boyer-Moore-%E7%AE%97%E6%B3%95%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.</span> <span class="toc-text">1. Boyer Moore 算法介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-Boyer-Moore-%E7%AE%97%E6%B3%95%E5%90%AF%E5%8F%91%E7%AD%96%E7%95%A5"><span class="toc-number">2.</span> <span class="toc-text">2. Boyer Moore 算法启发策略</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%9D%8F%E5%AD%97%E7%AC%A6%E8%A7%84%E5%88%99"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 坏字符规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%A5%BD%E5%90%8E%E7%BC%80%E8%A7%84%E5%88%99"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 好后缀规则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-Boyer-Moore-%E7%AE%97%E6%B3%95%E5%8C%B9%E9%85%8D%E8%BF%87%E7%A8%8B%E7%A4%BA%E4%BE%8B"><span class="toc-number">3.</span> <span class="toc-text">3. Boyer Moore 算法匹配过程示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-Boyer-Moore-%E7%AE%97%E6%B3%95%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.</span> <span class="toc-text">4. Boyer Moore 算法步骤</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-Boyer-Moore-%E7%AE%97%E6%B3%95%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.</span> <span class="toc-text">5. Boyer Moore 算法代码实现</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E7%94%9F%E6%88%90%E5%9D%8F%E5%AD%97%E7%AC%A6%E4%BD%8D%E7%BD%AE%E8%A1%A8%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 生成坏字符位置表代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E7%94%9F%E6%88%90%E5%A5%BD%E5%90%8E%E7%BC%80%E8%A7%84%E5%88%99%E5%90%8E%E7%A7%BB%E4%BD%8D%E6%95%B0%E8%A1%A8%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.2.</span> <span class="toc-text">5.2 生成好后缀规则后移位数表代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-Boyer-Moore-%E7%AE%97%E6%B3%95%E6%95%B4%E4%BD%93%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0"><span class="toc-number">5.3.</span> <span class="toc-text">5.3 Boyer Moore 算法整体代码实现</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-Boyer-Moore-%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">6.</span> <span class="toc-text">6. Boyer Moore 算法分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" rel="bookmark" title="数据结构与算法">数据结构与算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/01.Data-Structures-Algorithms/" rel="bookmark" title="算法与数据结构">算法与数据结构</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" rel="bookmark" title="算法复杂度">算法复杂度</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" rel="bookmark" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/06.Interview-100-List/" rel="bookmark" title="LeetCode 面试最常考 100 题（按分类排序）">LeetCode 面试最常考 100 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" rel="bookmark" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/08.Algorithms-Overview/" rel="bookmark" title="算法">算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" rel="bookmark" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/01.Hash-Table/" rel="bookmark" title="哈希表知识">哈希表知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/04.Solutions-List/" rel="bookmark" title="LeetCode 题解（字典序排序，700+ 道题解）">LeetCode 题解（字典序排序，700+ 道题解）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="bookmark" title="哈希表题目">哈希表题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" rel="bookmark" title="数组基础知识">数组基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="bookmark" title="数组基础题目">数组基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/01.Array-Bubble-Sort/" rel="bookmark" title="冒泡排序">冒泡排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/02.Array-Selection-Sort/" rel="bookmark" title="选择排序">选择排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/03.Array-Insertion-Sort/" rel="bookmark" title="插入排序">插入排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/04.Array-Shell-Sort/" rel="bookmark" title="希尔排序">希尔排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/05.Array-Merge-Sort/" rel="bookmark" title="归并排序">归并排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/06.Array-Quick-Sort/" rel="bookmark" title="快速排序">快速排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" rel="bookmark" title="堆排序">堆排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" rel="bookmark" title="计数排序">计数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" rel="bookmark" title="桶排序">桶排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" rel="bookmark" title="基数排序">基数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/11.Array-Sort-List/" rel="bookmark" title="数组排序题目">数组排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/01.Array-Binary-Search/" rel="bookmark" title="二分查找知识">二分查找知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" rel="bookmark" title="二分查找题目">二分查找题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/01.Array-Two-Pointers/" rel="bookmark" title="数组双指针知识">数组双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="bookmark" title="数组双指针题目">数组双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" rel="bookmark" title="链表双指针知识">链表双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="bookmark" title="链表双指针题目">链表双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" rel="bookmark" title="链表排序知识">链表排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" rel="bookmark" title="链表排序题目">链表排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" rel="bookmark" title="单调栈知识">单调栈知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/02.Monotone-Stack-List/" rel="bookmark" title="单调栈题目">单调栈题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/01.Stack-Basic/" rel="bookmark" title="堆栈基础知识">堆栈基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/02.Stack-Basic-List/" rel="bookmark" title="堆栈基础题目">堆栈基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" rel="bookmark" title="队列基础知识">队列基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/02.Queue-Basic-List/" rel="bookmark" title="队列基础题目">队列基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" rel="bookmark" title="优先队列知识">优先队列知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" rel="bookmark" title="优先队列题目">优先队列题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" rel="bookmark" title="树与二叉树基础知识">树与二叉树基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/02.Binary-Tree-Traverse/" rel="bookmark" title="二叉树的遍历知识">二叉树的遍历知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/04.Binary-Tree-Reduction/" rel="bookmark" title="二叉树的还原知识">二叉树的还原知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/05.Binary-Tree-Reduction-List/" rel="bookmark" title="二叉树的还原题目">二叉树的还原题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" rel="bookmark" title="二叉树的遍历题目">二叉树的遍历题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" rel="bookmark" title="二叉搜索树知识">二叉搜索树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/02.Binary-Search-Tree-List/" rel="bookmark" title="二叉搜索树题目">二叉搜索树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" rel="bookmark" title="数组滑动窗口知识">数组滑动窗口知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="bookmark" title="数组滑动窗口题目">数组滑动窗口题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" rel="bookmark" title="线段树知识">线段树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="bookmark" title="线段树题目">线段树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" rel="bookmark" title="链表基础知识">链表基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" rel="bookmark" title="链表经典题目">链表经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/01.Binary-Indexed-Tree/" rel="bookmark" title="树状数组知识">树状数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/02.Binary-Indexed-Tree-List/" rel="bookmark" title="树状数组题目">树状数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/01.String-Basic/" rel="bookmark" title="字符串基础知识">字符串基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" rel="bookmark" title="字符串经典题目">字符串经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" rel="bookmark" title="字典树知识">字典树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/02.Trie-List/" rel="bookmark" title="字典树题目">字典树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/03.AC-Automaton/" rel="bookmark" title="AC 自动机知识">AC 自动机知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" rel="bookmark" title="AC 自动机题目">AC 自动机题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" rel="bookmark" title="后缀数组知识">后缀数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" rel="bookmark" title="后缀数组题目">后缀数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="bookmark" title="图的定义和分类">图的定义和分类</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="bookmark" title="图的存储结构和问题应用">图的存储结构和问题应用</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="bookmark" title="并查集知识">并查集知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="bookmark" title="并查集题目">并查集题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/01.Graph-DFS/" rel="bookmark" title="图的深度优先搜索知识">图的深度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/02.Graph-DFS-List/" rel="bookmark" title="图的深度优先搜索题目">图的深度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" rel="bookmark" title="图的广度优先搜索知识">图的广度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" rel="bookmark" title="图的广度优先搜索题目">图的广度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/05.Graph-Topological-Sorting/" rel="bookmark" title="图的拓扑排序知识">图的拓扑排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/06.Graph-Topological-Sorting-List/" rel="bookmark" title="图的拓扑排序题目">图的拓扑排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" rel="bookmark" title="图的生成树知识">图的生成树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" rel="bookmark" title="Prim 算法">Prim 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/03.Graph-Kruskal/" rel="bookmark" title="Kruskal 算法">Kruskal 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/04.Gaph-Spanning-Tree-List/" rel="bookmark" title="图的生成树题目">图的生成树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/01.String-Brute-Force/" rel="bookmark" title="Brute Force 算法">Brute Force 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/02.String-Rabin-Karp/" rel="bookmark" title="Rabin Karp 算法">Rabin Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="bookmark" title="KMP 算法">KMP 算法</a></li><li class="active"><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" rel="bookmark" title="Boyer Moore 算法">Boyer Moore 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="bookmark" title="Horspool 算法">Horspool 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" rel="bookmark" title="Sunday 算法">Sunday 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" rel="bookmark" title="单模式串匹配题目">单模式串匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" rel="bookmark" title="枚举算法知识">枚举算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/02.Enumeration-Algorithm-List/" rel="bookmark" title="枚举算法题目">枚举算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" rel="bookmark" title="二分图基础知识">二分图基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" rel="bookmark" title="二分图基础题目">二分图基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/03.Graph-Bipartite-Matching/" rel="bookmark" title="二分图最大匹配知识">二分图最大匹配知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/04.Graph-Hungarian-Algorithm/" rel="bookmark" title="匈牙利算法">匈牙利算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/05.Graph-Hopcroft-Karp/" rel="bookmark" title="Hopcroft-Karp 算法">Hopcroft-Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/06.Graph-Bipartite-Matching-List/" rel="bookmark" title="二分图最大匹配题目">二分图最大匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" rel="bookmark" title="回溯算法知识">回溯算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" rel="bookmark" title="回溯算法题目">回溯算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" rel="bookmark" title="贪心算法知识">贪心算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" rel="bookmark" title="贪心算法题目">贪心算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" rel="bookmark" title="分治算法知识">分治算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/02.Divide-And-Conquer-Algorithm-List/" rel="bookmark" title="分治算法题目">分治算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" rel="bookmark" title="递归算法知识">递归算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/02.Recursive-Algorithm-List/" rel="bookmark" title="递归算法题目">递归算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" rel="bookmark" title="位运算知识">位运算知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/02.Bit-Operation-List/" rel="bookmark" title="位运算题目">位运算题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" rel="bookmark" title="单源最短路径知识">单源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/02.Graph-Dijkstra/" rel="bookmark" title="Dijkstra 算法">Dijkstra 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/03.Graph-Bellman-Ford/" rel="bookmark" title="Bellman-Ford 算法">Bellman-Ford 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/04.Graph-SPFA/" rel="bookmark" title="SPFA 算法">SPFA 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/05.Graph-Single-Source-Shortest-Path-List/" rel="bookmark" title="单源最短路径题目">单源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/06.Graph-Multi-Source-Shortest-Path/" rel="bookmark" title="多源最短路径知识">多源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/07.Graph-Floyed/" rel="bookmark" title="Floyed 算法">Floyed 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/08.Graph-Multi-Source-Shortest-Path-List/" rel="bookmark" title="多源最短路径题目">多源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/09.Graph-The-Second-Shortest-Path/" rel="bookmark" title="次短路径知识">次短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" rel="bookmark" title="次短路径题目">次短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" rel="bookmark" title="差分约束系统知识">差分约束系统知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/12.Graph-System-Of-Difference-Constraints-List/" rel="bookmark" title="差分约束系统题目">差分约束系统题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/01.Dynamic-Programming-Basic/" rel="bookmark" title="动态规划基础知识">动态规划基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/02.Dynamic-Programming-Basic-List/" rel="bookmark" title="动态规划基础题目">动态规划基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" rel="bookmark" title="背包问题知识">背包问题知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" rel="bookmark" title="背包问题题目">背包问题题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/01.Tree-DP/" rel="bookmark" title="树形 DP 知识">树形 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" rel="bookmark" title="树形 DP 题目">树形 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/01.Linear-DP/" rel="bookmark" title="线性 DP 知识">线性 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" rel="bookmark" title="线性 DP 题目">线性 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/01.Memoization/" rel="bookmark" title="记忆化搜索知识">记忆化搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/02.Memoization-List/" rel="bookmark" title="记忆化搜索题目">记忆化搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" rel="bookmark" title="状态压缩 DP 知识">状态压缩 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" rel="bookmark" title="状态压缩 DP 题目">状态压缩 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" rel="bookmark" title="区间 DP 知识">区间 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/02.Interval-DP-List/" rel="bookmark" title="区间 DP 题目">区间 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/01.Count-DP/" rel="bookmark" title="计数 DP 知识">计数 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/02.Count-DP-List/" rel="bookmark" title="计数 DP 题目">计数 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/01.Probability-DP/" rel="bookmark" title="概率 DP 知识">概率 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" rel="bookmark" title="概率 DP 题目">概率 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/01.Number-DP/" rel="bookmark" title="数位 DP 知识">数位 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" rel="bookmark" title="数位 DP 题目">数位 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" rel="bookmark" title="单调栈 / 优先队列优化">单调栈 / 优先队列优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" rel="bookmark" title="斜率优化">斜率优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/03.Quadrangle-Optimization/" rel="bookmark" title="四边形不等式优化">四边形不等式优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" rel="bookmark" title="动态规划优化题目">动态规划优化题目</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/02/03/" title="09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？">09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology141/" title="SpringBoot系列 - RestTemplate实践（及遇到的问题）">SpringBoot系列 - RestTemplate实践（及遇到的问题）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/06/04/" title="33丨配置管理：成千上万的配置项要如何管理？">33丨配置管理：成千上万的配置项要如何管理？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/1.1.5/README/" title="Redis 核心原理与实战">Redis 核心原理与实战</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology116/" title="Stream Pipelines">Stream Pipelines</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" title="数据结构与算法">数据结构与算法</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" title="算法复杂度">算法复杂度</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" title="二叉树的遍历题目">二叉树的遍历题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" title="次短路径题目">次短路径题目</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

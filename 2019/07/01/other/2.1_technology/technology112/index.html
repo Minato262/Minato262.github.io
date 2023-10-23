@@ -1,0 +1,560 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="java" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology112/">
+
+
+
+  <title>
+Lambda and Anonymous Classes(II) - 技术积累 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">Lambda and Anonymous Classes(II)
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:11">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:11+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" itemprop="item" rel="index" title="分类于 技术积累"><span itemprop="name">技术积累</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology112/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>读过上一篇之后，相信对Lambda表达式的语法以及基本原理有了一定了解。对于编写代码，有这些知识已经够用。本文将<strong>进一步区分Lambda表达式和匿名内部类在JVM层面的区别，如果对这一部分不感兴趣，可以跳过</strong>。</p>
+<h1 id="不是匿名内部类的简写"><a href="#不是匿名内部类的简写" class="headerlink" title="不是匿名内部类的简写"></a>不是匿名内部类的简写</h1><p>经过第一篇的的介绍，我们看到Lambda表达式似乎只是为了简化匿名内部类书写，这看起来仅仅通过语法糖在编译阶段把所有的Lambda表达式替换成匿名内部类就可以了。但实时并非如此。在JVM层面，Lambda表达式和匿名内部类有着明显的差别。</p>
+<h2 id="匿名内部类实现"><a href="#匿名内部类实现" class="headerlink" title="匿名内部类实现"></a>匿名内部类实现</h2><p><strong>匿名内部类仍然是一个类，只是不需要程序员显示指定类名，编译器会自动为该类取名</strong>。因此如果有如下形式的代码，编译之后将会产生两个class文件：</p>
+<pre><code class="java">public class MainAnonymousClass &#123;
+    public static void main(String[] args) &#123;
+        new Thread(new Runnable()&#123;
+            @Override
+            public void run()&#123;
+                System.out.println(&quot;Anonymous Class Thread run()&quot;);
+            &#125;
+        &#125;).start();;
+    &#125;
+&#125;
+</code></pre>
+<p>编译之后文件分布如下，两个class文件分别是主类和匿名内部类产生的：</p>
+<p><img data-src="/./Figures/2-AnonymousClass.png" alt="2-AnonymousClass.png"></p>
+<p>进一步分析主类MainAnonymousClass.class的字节码，可发现其创建了匿名内部类的对象：</p>
+<pre><code class="java">// javap -c MainAnonymousClass.class
+public class MainAnonymousClass &#123;
+  ...
+  public static void main(java.lang.String[]);
+    Code:
+       0: new           #2                  // class java/lang/Thread
+       3: dup
+       4: new           #3                  // class MainAnonymousClass$1 /*创建内部类对象*/
+       7: dup
+       8: invokespecial #4                  // Method MainAnonymousClass$1.&quot;&lt;init&gt;&quot;:()V
+      11: invokespecial #5                  // Method java/lang/Thread.&quot;&lt;init&gt;&quot;:(Ljava/lang/Runnable;)V
+      14: invokevirtual #6                  // Method java/lang/Thread.start:()V
+      17: return
+&#125;
+</code></pre>
+<h2 id="Lambda表达式实现"><a href="#Lambda表达式实现" class="headerlink" title="Lambda表达式实现"></a>Lambda表达式实现</h2><p><strong>Lambda表达式通过<em>invokedynamic</em>指令实现，书写Lambda表达式不会产生新的类</strong>。如果有如下代码，编译之后只有一个class文件：</p>
+<pre><code class="java">public class MainLambda &#123;
+    public static void main(String[] args) &#123;
+        new Thread(
+                () -&gt; System.out.println(&quot;Lambda Thread run()&quot;)
+            ).start();;
+    &#125;
+&#125;
+</code></pre>
+<p>编译之后的结果：</p>
+<p><img data-src="/./Figures/2-Lambda.png" alt="2-Lambda"></p>
+<p>通过javap反编译命名，我们更能看出Lambda表达式内部表示的不同：</p>
+<pre><code class="java">// javap -c -p MainLambda.class
+public class MainLambda &#123;
+  ...
+  public static void main(java.lang.String[]);
+    Code:
+       0: new           #2                  // class java/lang/Thread
+       3: dup
+       4: invokedynamic #3,  0              // InvokeDynamic #0:run:()Ljava/lang/Runnable; /*使用invokedynamic指令调用*/
+       9: invokespecial #4                  // Method java/lang/Thread.&quot;&lt;init&gt;&quot;:(Ljava/lang/Runnable;)V
+      12: invokevirtual #5                  // Method java/lang/Thread.start:()V
+      15: return
+
+  private static void lambda$main$0();  /*Lambda表达式被封装成主类的私有方法*/
+    Code:
+       0: getstatic     #6                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       3: ldc           #7                  // String Lambda Thread run()
+       5: invokevirtual #8                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       8: return
+&#125;
+</code></pre>
+<p>反编译之后我们发现Lambda表达式被封装成了主类的一个私有方法，并通过<em>invokedynamic</em>指令进行调用。</p>
+<h2 id="推论，this引用的意义"><a href="#推论，this引用的意义" class="headerlink" title="推论，this引用的意义"></a>推论，this引用的意义</h2><p>既然Lambda表达式不是内部类的简写，那么Lambda内部的<code>this</code>引用也就跟内部类对象没什么关系了。在Lambda表达式中<code>this</code>的意义跟在表达式外部完全一样。因此下列代码将输出两遍<code>Hello Hoolee</code>，而不是两个引用地址。</p>
+<pre><code class="Java">public class Hello &#123;
+    Runnable r1 = () -&gt; &#123; System.out.println(this); &#125;;
+    Runnable r2 = () -&gt; &#123; System.out.println(toString()); &#125;;
+    public static void main(String[] args) &#123;
+        new Hello().r1.run();
+        new Hello().r2.run();
+    &#125;
+    public String toString() &#123; return &quot;Hello Hoolee&quot;; &#125;
+&#125;
+</code></pre>
+<h2 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h2><p><span class="exturl" data-url="aHR0cDovL2NyLm9wZW5qZGsuamF2YS5uZXQvfmJyaWFuZ29ldHovbGFtYmRhL2xhbWJkYS1zdGF0ZS1maW5hbC5odG1s">http://cr.openjdk.java.net/~briangoetz/lambda/lambda-state-final.html</span></p>
+
+      <div class="tags">
+          <a href="/tags/java/" rel="tag"><i class="ic i-tag"></i> java</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2020-08-30 16:08:18" itemprop="dateModified" datetime="2020-08-30T16:08:18+08:00">2020-08-30</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/2.1_technology/technology112/" title="Lambda and Anonymous Classes(II)">http://kaywu.cn/2019/07/01/other/2.1_technology/technology112/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/2.1_technology/technology113/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis3attqj20zk0m8k7l.jpg" title="Lambda and Collections">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术积累</span>
+  <h3>Lambda and Collections</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/2.1_technology/technology111/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="Lambda and Anonymous Classes(I)">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 技术积累</span>
+  <h3>Lambda and Anonymous Classes(I)</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%89%8D%E8%A8%80"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%B8%8D%E6%98%AF%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E7%9A%84%E7%AE%80%E5%86%99"><span class="toc-number">2.</span> <span class="toc-text">不是匿名内部类的简写</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8C%BF%E5%90%8D%E5%86%85%E9%83%A8%E7%B1%BB%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.1.</span> <span class="toc-text">匿名内部类实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%AE%9E%E7%8E%B0"><span class="toc-number">2.2.</span> <span class="toc-text">Lambda表达式实现</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8E%A8%E8%AE%BA%EF%BC%8Cthis%E5%BC%95%E7%94%A8%E7%9A%84%E6%84%8F%E4%B9%89"><span class="toc-number">2.3.</span> <span class="toc-text">推论，this引用的意义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE"><span class="toc-number">2.4.</span> <span class="toc-text">参考文献</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/2.1_technology/technology/" rel="bookmark" title="技术积累">技术积累</a></li><li><a href="/2019/07/01/other/2.2_standard/standard/" rel="bookmark" title="阿里巴巴开发手册解析">阿里巴巴开发手册解析</a></li><li><a href="/2019/07/01/other/2.1_technology/technology100/" rel="bookmark" title="Java 中的那些锁事（转载）">Java 中的那些锁事（转载）</a></li><li><a href="/2019/07/01/other/2.1_technology/technology111/" rel="bookmark" title="Lambda and Anonymous Classes(I)">Lambda and Anonymous Classes(I)</a></li><li class="active"><a href="/2019/07/01/other/2.1_technology/technology112/" rel="bookmark" title="Lambda and Anonymous Classes(II)">Lambda and Anonymous Classes(II)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology113/" rel="bookmark" title="Lambda and Collections">Lambda and Collections</a></li><li><a href="/2019/07/01/other/2.1_technology/technology114/" rel="bookmark" title="Streams API(I)">Streams API(I)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology115/" rel="bookmark" title="Streams API(II)">Streams API(II)</a></li><li><a href="/2019/07/01/other/2.1_technology/technology116/" rel="bookmark" title="Stream Pipelines">Stream Pipelines</a></li><li><a href="/2019/07/01/other/2.1_technology/technology117/" rel="bookmark" title="ParallelStream 介绍">ParallelStream 介绍</a></li><li><a href="/2019/07/01/other/2.1_technology/technology118/" rel="bookmark" title="Stream Performance">Stream Performance</a></li><li><a href="/2019/07/01/other/2.1_technology/technology101/" rel="bookmark" title="JMH 简介">JMH 简介</a></li><li><a href="/2019/07/01/other/2.1_technology/technology140/" rel="bookmark" title="SpringBoot系列 - 使用RestTemplate">SpringBoot系列 - 使用RestTemplate</a></li><li><a href="/2019/07/01/other/2.1_technology/technology141/" rel="bookmark" title="SpringBoot系列 - RestTemplate实践（及遇到的问题）">SpringBoot系列 - RestTemplate实践（及遇到的问题）</a></li><li><a href="/2019/07/01/other/2.1_technology/technology142/" rel="bookmark" title="Mybatis系列 - mybatis-plus">Mybatis系列 - mybatis-plus</a></li><li><a href="/2019/07/01/other/2.1_technology/technology145/" rel="bookmark" title="SpringBoot系列 - 集成MongoDB">SpringBoot系列 - 集成MongoDB</a></li><li><a href="/2019/07/01/other/2.1_technology/technology200/" rel="bookmark" title="Linux 搭建 socks 服务器（翻墙）">Linux 搭建 socks 服务器（翻墙）</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/2.1_technology/technology113/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/2.1_technology/technology111/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" title="图的广度优先搜索题目">图的广度优先搜索题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" title="状态压缩 DP 题目">状态压缩 DP 题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/03/01/" title="12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？">12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/03/04/" title="15丨缓存的使用姿势 3：缓存穿透了怎么办？">15丨缓存的使用姿势 3：缓存穿透了怎么办？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" title="图的存储结构和问题应用">图的存储结构和问题应用</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/04/01/" title="17丨消息队列：秒杀时如何处理每秒上万次的下单请求？">17丨消息队列：秒杀时如何处理每秒上万次的下单请求？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" title="次短路径题目">次短路径题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" title="树形 DP 题目">树形 DP 题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch13/" title="第 13 章 注释应该描述代码中不明显的内容">第 13 章 注释应该描述代码中不明显的内容</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/2.1_technology/technology112/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

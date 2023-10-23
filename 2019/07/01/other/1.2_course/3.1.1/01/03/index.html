@@ -1,0 +1,583 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="高并发系统设计 40 问" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/03/">
+
+
+
+  <title>
+03丨系统设计目标 1：如何提升系统性能？ - 课程 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">03丨系统设计目标 1：如何提升系统性能？
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:02">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:02+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E8%AF%BE%E7%A8%8B/" itemprop="item" rel="index" title="分类于 课程"><span itemprop="name">课程</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/03/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="03丨系统设计目标-1：如何提升系统性能？"><a href="#03丨系统设计目标-1：如何提升系统性能？" class="headerlink" title="03丨系统设计目标 1：如何提升系统性能？"></a>03丨系统设计目标 1：如何提升系统性能？</h1><p>提到互联网系统设计，你可能听到最多的词儿就是 <strong>三高</strong>，也就是 <strong>高并发</strong>、<strong>高性能</strong>、<strong>高可用</strong>，它们是互联网系统架构设计永恒的主题。在前两节课中，我带你了解了高并发系统设计的含义，意义以及分层设计原则，接下来，我想带你整体了解一下高并发系统设计的目标，然后在此基础上，进入我们今天的话题：如何提升系统的性能？</p>
+<h2 id="高并发系统设计的三大目标：高性能、高可用、可扩展"><a href="#高并发系统设计的三大目标：高性能、高可用、可扩展" class="headerlink" title="高并发系统设计的三大目标：高性能、高可用、可扩展"></a>高并发系统设计的三大目标：高性能、高可用、可扩展</h2><p><strong>高并发，</strong> 是指运用设计手段让系统能够处理更多的用户并发请求，也就是承担更大的流量。<strong>它是一切架构设计的背景和前提</strong>，脱离了它去谈性能和可用性是没有意义的。很显然嘛，你在每秒一次请求和每秒一万次请求，两种不同的场景下，分别做到毫秒级响应时间和五个九（99.999%）的可用性，无论是设计难度还是方案的复杂度，都不是一个级别的。</p>
+<p><strong>而性能和可用性，</strong> 是我们实现高并发系统设计必须考虑的因素。</p>
+<p>性能反应了系统的使用体验，想象一下，同样承担每秒一万次请求的两个系统，一个响应时间是毫秒级，一个响应时间在秒级别，它们带给用户的体验肯定是不同的。</p>
+<p>可用性则表示系统可以正常服务用户的时间。我们再类比一下，还是两个承担每秒一万次的系统，一个可以做到全年不停机、无故障，一个隔三差五宕机维护，如果你是用户，你会选择使用哪一个系统呢？答案不言而喻。</p>
+<p>另一个耳熟能详的名词叫 <strong>可扩展性</strong> ，它同样是高并发系统设计需要考虑的因素。为什么呢？我来举一个具体的例子。</p>
+<p>流量分为 <strong>平时流量</strong> 和 <strong>峰值流量</strong> 两种，峰值流量可能会是平时流量的几倍甚至几十倍，在应对峰值流量的时候，我们通常需要在架构和方案上做更多的准备。<strong>这就是淘宝会花费大半年的时间准备双十一，也是在面对「明星离婚」等热点事件时，看起来无懈可击的微博系统还是会出现服务不可用的原因。</strong> 而易于扩展的系统能在短时间内迅速完成扩容，更加平稳地承担峰值流量。</p>
+<p>高性能、高可用和可扩展，是我们在做高并发系统设计时追求的三个目标，我会用三节课的时间，带你了解在高并发大流量下如何设计高性能、高可用和易于扩展的系统。</p>
+<p>了解完这些内容之后，我们正式进入今天的话题：如何提升系统的性能？</p>
+<h2 id="性能优化原则"><a href="#性能优化原则" class="headerlink" title="性能优化原则"></a>性能优化原则</h2><p>「天下武功，唯快不破」。性能是系统设计成功与否的关键，实现高性能也是对程序员个人能力的挑战。不过在了解实现高性能的方法之前，我们先明确一下性能优化的原则。</p>
+<ul>
+<li><p><strong>首先，性能优化一定不能盲目，一定是问题导向的</strong> </p>
+<p>脱离了问题，盲目地提早优化会增加系统的复杂度，浪费开发人员的时间，也因为某些优化可能会对业务上有些折中的考虑，所以也会损伤业务。</p>
+</li>
+<li><p><strong>其次，性能优化也遵循「八二原则」</strong></p>
+<p>即你可以用 20% 的精力解决 80% 的性能问题。所以我们在优化过程中一定要抓住主要矛盾，优先优化主要的性能瓶颈点。</p>
+</li>
+<li><p><strong>再次，性能优化也要有数据支撑</strong></p>
+<p>在优化过程中，你要时刻了解你的优化让响应时间减少了多少，提升了多少的吞吐量。</p>
+</li>
+<li><p><strong>最后，性能优化的过程是持续的</strong></p>
+<p>高并发的系统通常是业务逻辑相对复杂的系统，那么在这类系统中出现的性能问题通常也会有多方面的原因。因此，我们在做性能优化的时候要明确目标，比方说，支撑每秒 1 万次请求的吞吐量下响应时间在 10ms，那么我们就需要持续不断地寻找性能瓶颈，制定优化方案，直到达到目标为止。</p>
+</li>
+</ul>
+<p>在以上四个原则的指引下，掌握常见性能问题的排查方式和优化手段，就一定能让你在设计高并发系统时更加游刃有余。</p>
+<h2 id="性能的度量指标"><a href="#性能的度量指标" class="headerlink" title="性能的度量指标"></a>性能的度量指标</h2><p>性能优化的第三点原则中提到，对于性能我们需要有度量的标准，有了数据才能明确目前存在的性能问题，也能够用数据来评估性能优化的效果。 <strong>所以明确性能的度量指标十分重要。</strong></p>
+<p>一般来说，度量性能的指标是 <strong>系统接口的响应时间</strong>，但是单次的响应时间是没有意义的，你需要知道一段时间的性能情况是什么样的。所以，我们需要收集这段时间的响应时间数据，然后依据一些统计方法计算出 <strong>特征值</strong>，这些特征值就能够代表这段时间的性能情况。我们常见的特征值有以下几类。</p>
+<ul>
+<li><p>平均值</p>
+<p>顾名思义，平均值是把这段时间所有请求的响应时间数据相加，再除以总请求数。平均值可以在一定程度上反应这段时间的性能，<strong>但它敏感度比较差</strong>，如果这段时间有少量慢请求时，在平均值上并不能如实的反应。</p>
+<p>举个例子，假设我们在 30s 内有 10000 次请求，每次请求的响应时间都是 1ms，那么这段时间响应时间平均值也是 1ms。这时，当其中 100 次请求的响应时间变成了 <code>100ms</code>，那么整体的响应时间是  <code>100 * 100 + 9900 * 1) / 10000 = 1.99ms</code>。你看，虽然从平均值上来看仅仅增加了不到 1ms，但是实际情况是有 1% 的请求<code>（100/10000）</code> 的响应时间已经增加了 100 倍。 <strong>所以，平均值对于度量性能来说只能作为一个参考。</strong> </p>
+</li>
+<li><p>最大值</p>
+<p>这个更好理解，就是这段时间内所有请求响应时间最长的值，<strong>但它的问题又在于过于敏感了</strong>。</p>
+<p>还拿上面的例子来说，如果 10000 次请求中只有一次请求的响应时间达到 100ms，那么这段时间请求的响应耗时的最大值就是 100ms，性能损耗为原先的百分之一，这种说法明显是不准确的。</p>
+</li>
+<li><p>分位值</p>
+<p>分位值有很多种，比如 90 分位、95 分位、75 分位。以 90 分位为例，我们把这段时间请求的 <strong>响应时间从小到大排序</strong>，假如一共有 100 个请求，那么排在第 90 位的响应时间就是 90 分位值。分位值排除了偶发极慢请求对于数据的影响，能够很好地反应这段时间的性能情况，<strong>分位值越大，对于慢请求的影响就越敏感</strong>。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/4ff05dbd8232c8df306470f30b07408c.jpg" alt="img"></p>
+</li>
+</ul>
+<p>在我来看，<strong>分位值是最适合作为时间段内，响应时间统计值来使用的</strong>，在实际工作中也应用最多。除此之外，平均值也可以作为一个参考值来使用。</p>
+<p>我在上面提到，<strong>脱离了并发来谈性能是没有意义的</strong>，我们通常使用 <strong>吞吐量</strong> 或者 <strong>同时在线用户数</strong> 来度量并发和流量，使用吞吐量的情况会更多一些。但是你要知道，这两个指标是呈倒数关系的。</p>
+<p>这很好理解，响应时间 1s 时，吞吐量是每秒 1 次，响应时间缩短到 10ms，<strong>那么吞吐量就上升到每秒 100 次</strong>。所以，一般我们度量性能时都会同时兼顾吞吐量和响应时间，比如我们设立性能优化的目标时通常会这样表述：在每秒 1 万次的请求量下，响应时间 99 分位值在 10ms 以下。</p>
+<p>那么，响应时间究竟控制在多长时间比较合适呢？这个不能一概而论。</p>
+<p>从用户使用体验的角度来看：</p>
+<ul>
+<li><p>200ms 是第一个分界点：</p>
+<p>接口的响应时间在 200ms 之内，用户是感觉不到延迟的，就像是瞬时发生的一样。</p>
+</li>
+<li><p>而 1s 是另外一个分界点：</p>
+<p>接口的响应时间在 1s 之内时，虽然用户可以感受到一些延迟，但却是可以接受的</p>
+</li>
+<li><p>超过 1s 之后用户就会有明显等待的感觉，等待时间越长，用户的使用体验就越差。</p>
+</li>
+</ul>
+<p>所以，健康系统的 99 分位值的响应时间通常需要控制在 200ms 之内，而不超过 1s 的请求占比要在 99.99% 以上。</p>
+<p>现在你了解了性能的度量指标，那我们再来看一看，随着并发的增长我们实现高性能的思路是怎样的。</p>
+<h2 id="高并发下的性能优化"><a href="#高并发下的性能优化" class="headerlink" title="高并发下的性能优化"></a>高并发下的性能优化</h2><p>假如说，你现在有一个系统，这个系统中处理核心只有一个，执行的任务的响应时间都在 10ms，它的吞吐量是在每秒 100 次。那么我们如何来优化性能从而提高系统的并发能力呢？主要有两种思路：</p>
+<ul>
+<li>一种是提高系统的处理核心数</li>
+<li>另一种是减少单次任务的响应时间。</li>
+</ul>
+<h3 id="1-提高系统的处理核心数"><a href="#1-提高系统的处理核心数" class="headerlink" title="1. 提高系统的处理核心数"></a>1. 提高系统的处理核心数</h3><p>提高系统的处理核心数就是 <strong>增加系统的并行处理能力</strong>，这个思路是优化性能最简单的途径。拿上一个例子来说，你可以把系统的处理核心数增加为两个，并且增加一个进程，让这两个进程跑在不同的核心上。这样从理论上，你系统的吞吐量可以增加一倍。当然了，在这种情况下，吞吐量和响应时间就不是倒数关系了，而是：<code>吞吐量 = 并发进程数 / 响应时间</code>。</p>
+<p>计算机领域的阿姆达尔定律（Amdahl’s law）是吉恩·阿姆达尔在 1967 年提出的。它描述了并发进程数与响应时间之间的关系，含义是在固定负载下，并行计算的加速比，也就是并行化之后效率提升情况，可以用下面公式来表示：<code>(Ws + Wp) / (Ws + Wp/s)</code></p>
+<p>其中，Ws 表示任务中的串行计算量，Wp 表示任务中的并行计算量，s 表示并行进程数。从这个公式我们可以推导出另外一个公式：<code>1/(1-p+p/s)</code></p>
+<p>其中，s 还是表示并行进程数，p 表示任务中并行部分的占比。当 p 为 1 时，也就是完全并行时，加速比与并行进程数相等；当 p 为 0 时，即完全串行时，加速比为 1，也就是说完全无加速；当 s 趋近于无穷大的时候，加速比就等于 <code>1/(1-p)</code>，你可以看到它完全和 p 成正比。特别是，当 p 为 1 时，加速比趋近于无穷大。</p>
+<p>以上公式的推导过程有些复杂，你只需要记住结论就好了。</p>
+<p>我们似乎找到了解决问题的银弹，<strong>是不是无限制地增加处理核心数就能无限制地提升性能，从而提升系统处理高并发的能力呢？</strong>很遗憾，随着并发进程数的增加，并行的任务对于系统资源的争抢也会愈发严重。在某一个临界点上继续增加并发进程数，反而会造成系统性能的下降，这就是性能测试中的 <strong>拐点模型</strong>。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/2379fce36fa3453a0326e62e4d5a333f.jpg" alt="img"></p>
+<p>从图中你可以发现：</p>
+<ul>
+<li>并发用户数处于轻压力区时，响应时间平稳，吞吐量和并发用户数线性相关。</li>
+<li>而当并发用户数处于重压力区时，系统资源利用率到达极限，吞吐量开始有下降的趋势，响应时间也会略有上升。</li>
+<li>这个时候，再对系统增加压力，系统就进入拐点区，处于超负荷状态，吞吐量下降，响应时间大幅度上升。</li>
+</ul>
+<p>所以我们在评估系统性能时通常需要做压力测试，目的就是找到系统的「拐点」，从而知道系统的承载能力，也便于找到系统的瓶颈，持续优化系统性能。</p>
+<p>说完了提升并行能力，我们再看看优化性能的另一种方式：减少单次任务响应时间。</p>
+<h3 id="2-减少单次任务响应时间"><a href="#2-减少单次任务响应时间" class="headerlink" title="2. 减少单次任务响应时间"></a>2. 减少单次任务响应时间</h3><p>想要减少任务的响应时间，首先要看你的系统是 <strong>CPU 密集型</strong> 还是 <strong>IO 密集型</strong> 的，因为不同类型的系统性能优化方式不尽相同。</p>
+<h4 id="CPU-密集型系统"><a href="#CPU-密集型系统" class="headerlink" title="CPU 密集型系统"></a>CPU 密集型系统</h4><p><strong>CPU 密集型系统中，需要处理大量的 CPU 运算，那么选用更高效的算法或者减少运算次数就是这类系统重要的优化手段</strong>。比方说，如果系统的主要任务是计算 Hash 值，那么这时选用更高性能的 Hash 算法就可以大大提升系统的性能。发现这类问题的主要方式，是通过一些 Profile 工具来找到消耗 CPU 时间最多的方法或者模块，比如 Linux 的 perf、eBPF 等。</p>
+<h4 id="IO-密集型系统"><a href="#IO-密集型系统" class="headerlink" title="IO 密集型系统"></a>IO 密集型系统</h4><p><strong>IO 密集型系统指的是系统的大部分操作是在等待 IO 完成，这里 IO 指的是磁盘 IO 和网络 IO</strong>。我们熟知的系统大部分都属于 IO 密集型，比如数据库系统、缓存系统、Web 系统。这类系统的性能瓶颈可能出在系统内部，也可能是依赖的其他系统，而发现这类性能瓶颈的手段主要有两类。</p>
+<ul>
+<li><p>第一类是 <strong>采用工具</strong></p>
+<p>Linux 的工具集很丰富，完全可以满足你的优化需要，比如网络协议栈、网卡、磁盘、文件系统、内存，等等。这些工具的用法很多，你可以在排查问题的过程中逐渐积累。除此之外呢，一些开发语言还有针对语言特性的分析工具，比如说 Java 语言就有其专属的内存分析工具。</p>
+</li>
+<li><p>另外一类手段就是可以通过 <strong>监控</strong> 来发现性能问题。</p>
+<p>在监控中我们可以对任务的每一个步骤做分时的统计，从而找到任务的哪一步消耗了更多的时间。这一部分在演进篇中会有专门的介绍，这里就不再展开了。</p>
+</li>
+</ul>
+<p>那么找到了系统的瓶颈点，我们要如何优化呢？优化方案会随着问题的不同而不同。比方说，如果是数据库访问慢，那么就要看是不是有锁表的情况、是不是有全表扫描、索引加得是否合适、是否有 JOIN 操作、需不需要加缓存，等等；如果是网络的问题，就要看网络的参数是否有优化的空间，抓包来看是否有大量的超时重传，网卡是否有大量丢包等。</p>
+<p>总而言之，「兵来将挡水来土掩」，我们需要制定不同的性能优化方案来应对不同的性能问题。</p>
+<h2 id="课程小结"><a href="#课程小结" class="headerlink" title="课程小结"></a>课程小结</h2><p>今天，我带你了解了性能的原则、度量指标，以及在高并发下优化性能的基本思路。性能优化是一个很大的话题，只用短短一讲是完全不够的，所以我会在后面的课程中详细介绍其中的某些方面，比方说我们如何用缓存优化系统的读取性能，如何使用消息队列优化系统的写入性能等等。</p>
+<p>有时候你在遇到性能问题的时候会束手无策，从今天的课程中你可以得到一些启示，在这里我给你总结出几点：</p>
+<ul>
+<li>数据优先，你做一个新的系统在上线之前一定要把性能监控系统做好；</li>
+<li>掌握一些性能优化工具和方法，这就需要在工作中不断的积累；</li>
+<li>计算机基础知识很重要，比如说网络知识、操作系统知识等等，掌握了基础知识才能让你在优化过程中抓住性能问题的关键，也能在性能优化过程中游刃有余。</li>
+</ul>
+<h2 id="思考时间"><a href="#思考时间" class="headerlink" title="思考时间"></a>思考时间</h2><p>在课程中我们提到了一些性能优化的原则和基本的思考点，那么你在日常工作中有哪些性能优化的手段和经验呢？</p>
+<p>笔者想了想，貌似只想到用 JVM 缓存减少短时重复命中率高的查询操作</p>
+
+      <div class="tags">
+          <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-40-%E9%97%AE/" rel="tag"><i class="ic i-tag"></i> 高并发系统设计 40 问</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-20 00:10:48" itemprop="dateModified" datetime="2023-02-20T00:10:48+08:00">2023-02-20</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/03/" title="03丨系统设计目标 1：如何提升系统性能？">http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/01/03/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giciszlczyj20zk0m816d.jpg" title="04丨系统设计目标 2：系统怎样做到高可用？">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>04丨系统设计目标 2：系统怎样做到高可用？</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit31ffoj20zk0m8naf.jpg" title="02丨架构分层：我们为什么一定要这么做？">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>02丨架构分层：我们为什么一定要这么做？</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#03%E4%B8%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87-1%EF%BC%9A%E5%A6%82%E4%BD%95%E6%8F%90%E5%8D%87%E7%B3%BB%E7%BB%9F%E6%80%A7%E8%83%BD%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">03丨系统设计目标 1：如何提升系统性能？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1%E7%9A%84%E4%B8%89%E5%A4%A7%E7%9B%AE%E6%A0%87%EF%BC%9A%E9%AB%98%E6%80%A7%E8%83%BD%E3%80%81%E9%AB%98%E5%8F%AF%E7%94%A8%E3%80%81%E5%8F%AF%E6%89%A9%E5%B1%95"><span class="toc-number">1.1.</span> <span class="toc-text">高并发系统设计的三大目标：高性能、高可用、可扩展</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%8E%9F%E5%88%99"><span class="toc-number">1.2.</span> <span class="toc-text">性能优化原则</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E7%9A%84%E5%BA%A6%E9%87%8F%E6%8C%87%E6%A0%87"><span class="toc-number">1.3.</span> <span class="toc-text">性能的度量指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E5%B9%B6%E5%8F%91%E4%B8%8B%E7%9A%84%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">1.4.</span> <span class="toc-text">高并发下的性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%8F%90%E9%AB%98%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%A4%84%E7%90%86%E6%A0%B8%E5%BF%83%E6%95%B0"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 提高系统的处理核心数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%87%8F%E5%B0%91%E5%8D%95%E6%AC%A1%E4%BB%BB%E5%8A%A1%E5%93%8D%E5%BA%94%E6%97%B6%E9%97%B4"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 减少单次任务响应时间</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#CPU-%E5%AF%86%E9%9B%86%E5%9E%8B%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">CPU 密集型系统</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#IO-%E5%AF%86%E9%9B%86%E5%9E%8B%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">IO 密集型系统</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%B0%8F%E7%BB%93"><span class="toc-number">1.5.</span> <span class="toc-text">课程小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%9D%E8%80%83%E6%97%B6%E9%97%B4"><span class="toc-number">1.6.</span> <span class="toc-text">思考时间</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/1.2_course/course/" rel="bookmark" title="课程">课程</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.1/README/" rel="bookmark" title="操作系统">操作系统</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.2/README/" rel="bookmark" title="领域驱动设计">领域驱动设计</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.4/README/" rel="bookmark" title="ElasticSearch知识体系详解">ElasticSearch知识体系详解</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.3/README/" rel="bookmark" title="分布式数据库详解">分布式数据库详解</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.1/README/" rel="bookmark" title="计算机基础实战课">计算机基础实战课</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/README/" rel="bookmark" title="高并发系统设计 40 问">高并发系统设计 40 问</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.2/README/" rel="bookmark" title="Java业务开发常见错误">Java业务开发常见错误</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.2/README/" rel="bookmark" title="消息队列理论课">消息队列理论课</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.1/README/" rel="bookmark" title="Java 并发编程">Java 并发编程</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.2/README/" rel="bookmark" title="Netty 核心原理剖析与 RPC 实践">Netty 核心原理剖析与 RPC 实践</a></li><li><a href="/2019/07/01/other/1.2_course/3.3.1/README/" rel="bookmark" title="性能测试">性能测试</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.5/README/" rel="bookmark" title="Redis 核心原理与实战">Redis 核心原理与实战</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.3/README/" rel="bookmark" title="深入理解 Sentinel">深入理解 Sentinel</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/00/README/" rel="bookmark" title="开篇-为什么你要学习高并发系统设计">开篇-为什么你要学习高并发系统设计</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" rel="bookmark" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" rel="bookmark" title="02丨架构分层：我们为什么一定要这么做？">02丨架构分层：我们为什么一定要这么做？</a></li><li class="active"><a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" rel="bookmark" title="03丨系统设计目标 1：如何提升系统性能？">03丨系统设计目标 1：如何提升系统性能？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" rel="bookmark" title="04丨系统设计目标 2：系统怎样做到高可用？">04丨系统设计目标 2：系统怎样做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" rel="bookmark" title="05丨系统设计目标 3：如何让系统易于扩展？">05丨系统设计目标 3：如何让系统易于扩展？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/06/" rel="bookmark" title="06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？">06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/README/" rel="bookmark" title="01丨基础篇">01丨基础篇</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/01/" rel="bookmark" title="17丨消息队列：秒杀时如何处理每秒上万次的下单请求？">17丨消息队列：秒杀时如何处理每秒上万次的下单请求？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/02/" rel="bookmark" title="18丨消息投递：如何保证消息仅仅被消费一次？">18丨消息投递：如何保证消息仅仅被消费一次？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/03/" rel="bookmark" title="19丨消息队列：如何降低消息队列系统中消息的延迟？">19丨消息队列：如何降低消息队列系统中消息的延迟？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/04/" rel="bookmark" title="20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？">20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/05/" rel="bookmark" title="期中测试丨10 道高并发系统设计题目自测">期中测试丨10 道高并发系统设计题目自测</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" rel="bookmark" title="04丨演进篇-消息队列">04丨演进篇-消息队列</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/01/" rel="bookmark" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" rel="bookmark" title="22丨微服务架构：微服务化后，系统架构要如何改造？">22丨微服务架构：微服务化后，系统架构要如何改造？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/03/" rel="bookmark" title="23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？">23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/04/" rel="bookmark" title="24丨注册中心：分布式系统如何寻址？">24丨注册中心：分布式系统如何寻址？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" rel="bookmark" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/06/" rel="bookmark" title="26丨负载均衡：怎样提升系统的横向扩展能力？">26丨负载均衡：怎样提升系统的横向扩展能力？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" rel="bookmark" title="27丨API 网关：系统的门面要如何做呢？">27丨API 网关：系统的门面要如何做呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/08/" rel="bookmark" title="28丨多机房部署：跨地域的分布式系统如何做？">28丨多机房部署：跨地域的分布式系统如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/09/" rel="bookmark" title="29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？">29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/README/" rel="bookmark" title="05丨演进篇-分布式服务">05丨演进篇-分布式服务</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/01/" rel="bookmark" title="12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？">12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/02/" rel="bookmark" title="13丨缓存的使用姿势 1：如何选择缓存的读写策略？">13丨缓存的使用姿势 1：如何选择缓存的读写策略？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/03/" rel="bookmark" title="14丨缓存的使用姿势 2：缓存如何做到高可用？">14丨缓存的使用姿势 2：缓存如何做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/04/" rel="bookmark" title="15丨缓存的使用姿势 3：缓存穿透了怎么办？">15丨缓存的使用姿势 3：缓存穿透了怎么办？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/05/" rel="bookmark" title="16丨CDN：静态资源如何加速？">16丨CDN：静态资源如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/06/" rel="bookmark" title="加餐丨数据的迁移应该如何做？">加餐丨数据的迁移应该如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/README/" rel="bookmark" title="03丨演进篇-缓存">03丨演进篇-缓存</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/01/" rel="bookmark" title="30丨给系统加上眼睛：服务端监控要怎么做？">30丨给系统加上眼睛：服务端监控要怎么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/02/" rel="bookmark" title="31丨应用性能管理：用户的使用体验应该如何监控？">31丨应用性能管理：用户的使用体验应该如何监控？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/03/" rel="bookmark" title="32丨压力测试：怎样设计全链路压力测试平台？">32丨压力测试：怎样设计全链路压力测试平台？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/04/" rel="bookmark" title="33丨配置管理：成千上万的配置项要如何管理？">33丨配置管理：成千上万的配置项要如何管理？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/05/" rel="bookmark" title="34丨降级熔断：如何屏蔽非核心系统故障的影响？">34丨降级熔断：如何屏蔽非核心系统故障的影响？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/06/" rel="bookmark" title="35丨流量控制：高并发系统中我们如何操纵流量？">35丨流量控制：高并发系统中我们如何操纵流量？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/07/" rel="bookmark" title="36丨面试现场第 3 期：你要如何准备一场技术面试呢？">36丨面试现场第 3 期：你要如何准备一场技术面试呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/README/" rel="bookmark" title="06丨演进篇-维护">06丨演进篇-维护</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/01/" rel="bookmark" title="07丨池化技术：如何减少频繁创建数据库连接的性能损耗？">07丨池化技术：如何减少频繁创建数据库连接的性能损耗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/03/" rel="bookmark" title="09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？">09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" rel="bookmark" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/04/" rel="bookmark" title="10丨发号器：如何保证分库分表后 ID 的全局唯一性？">10丨发号器：如何保证分库分表后 ID 的全局唯一性？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/05/" rel="bookmark" title="11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？">11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/README/" rel="bookmark" title="02丨演进篇-数据库">02丨演进篇-数据库</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" rel="bookmark" title="37丨计数系统设计 1：面对海量数据的计数器要如何做？">37丨计数系统设计 1：面对海量数据的计数器要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/02/" rel="bookmark" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" rel="bookmark" title="39丨信息流设计 1：通用信息流系统的推模式要如何做？">39丨信息流设计 1：通用信息流系统的推模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/04/" rel="bookmark" title="40丨信息流设计 2：通用信息流系统的拉模式要如何做？">40丨信息流设计 2：通用信息流系统的拉模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/README/" rel="bookmark" title="07丨实战篇">07丨实战篇</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.2.1/README/" title="Java 并发编程">Java 并发编程</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" title="位运算知识">位运算知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" title="图的存储结构和问题应用">图的存储结构和问题应用</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" title="图的广度优先搜索题目">图的广度优先搜索题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/05/04/" title="24丨注册中心：分布式系统如何寻址？">24丨注册中心：分布式系统如何寻址？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" title="动态规划优化题目">动态规划优化题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" title="优先队列题目">优先队列题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/1.1.5/README/" title="Redis 核心原理与实战">Redis 核心原理与实战</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" title="计数排序">计数排序</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" title="算法复杂度">算法复杂度</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/1.2_course/3.1.1/01/03/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

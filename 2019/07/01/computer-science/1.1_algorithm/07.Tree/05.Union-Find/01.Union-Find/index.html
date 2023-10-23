@@ -1,0 +1,919 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="算法与数据结构" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/">
+
+
+
+  <title>
+并查集知识 - 算法 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">并查集知识
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 21:43:40">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T21:43:40+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="item" rel="index" title="分类于 算法"><span itemprop="name">算法</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="1-并查集简介"><a href="#1-并查集简介" class="headerlink" title="1. 并查集简介"></a>1. 并查集简介</h2><h3 id="1-1-并查集的定义"><a href="#1-1-并查集的定义" class="headerlink" title="1.1 并查集的定义"></a>1.1 并查集的定义</h3><blockquote>
+<p><strong>并查集（Union Find）</strong>：一种树型的数据结构，用于处理一些不交集（Disjoint Sets）的合并及查询问题。不交集指的是一系列没有重复元素的集合。</p>
+<p>并查集主要支持两种操作：</p>
+<ul>
+<li><strong>合并（Union）</strong>：将两个集合合并成一个集合。</li>
+<li><strong>查找（Find）</strong>：确定某个元素属于哪个集合。通常是返回集合内的一个「代表元素」。</li>
+</ul>
+</blockquote>
+<p>简单来说，并查集就是用来处理集合的合并和集合的查询。</p>
+<ul>
+<li>并查集中的「集」指的就是我们初中所学的集合概念，在这里指的是不相交的集合，即一系列没有重复元素的集合。</li>
+<li>并查集中的「并」指的就是集合的并集操作，将两个集合合并之后就变成一个集合。合并操作如下所示：</li>
+</ul>
+<pre><code class="Python">&#123;1, 3, 5, 7&#125; ∪ &#123;2, 4, 6, 8&#125; = &#123;1, 2, 3, 4, 5, 6, 7, 8&#125;
+</code></pre>
+<ul>
+<li>并查集中的「查」是对于集合中存放的元素来说的，通常我们需要查询两个元素是否属于同一个集合。</li>
+</ul>
+<p>如果我们只是想知道一个元素是否在集合中，可以通过 <code>Python</code> 或其他语言中的 <code>set</code> 集合来解决。而如果我们想知道两个元素是否属于同一个集合，则仅用一个 <code>set</code> 集合就很难做到了。这就需要用到我们接下来要讲解的「并查集」结构。</p>
+<p>根据上文描述，我们就可以定义一下「并查集」结构所支持的操作接口：</p>
+<ul>
+<li>**合并 <code>union(x, y)</code>**：将集合 <code>x</code> 和集合 <code>y</code> 合并成一个集合。</li>
+<li>查找 <code>find(x)</code>：查找元素 <code>x</code> 属于哪个集合。</li>
+<li>**查找 <code>is_connected(x, y)</code>**：查询元素 <code>x</code> 和 <code>y</code> 是否在同一个集合中。</li>
+</ul>
+<h3 id="1-2-并查集的两种实现思路"><a href="#1-2-并查集的两种实现思路" class="headerlink" title="1.2 并查集的两种实现思路"></a>1.2 并查集的两种实现思路</h3><p>下面我们来讲解一下并查集的两种实现思路：一种是使用「快速查询」思路、基于数组结构实现的并查集；另一种是使用「快速合并」思路、基于森林实现的并查集。</p>
+<h4 id="1-2-1-快速查询：基于数组实现"><a href="#1-2-1-快速查询：基于数组实现" class="headerlink" title="1.2.1 快速查询：基于数组实现"></a>1.2.1 快速查询：基于数组实现</h4><p>如果我们希望并查集的查询效率高一些，那么我们就可以侧重于查询操作。</p>
+<p>在使用「快速查询」思路实现并查集时，我们可以使用一个「数组结构」来表示集合中的元素。数组元素和集合元素是一一对应的，我们可以将数组的索引值作为每个元素的集合编号，称为 <code>id</code>。然后可以对数组进行以下操作来实现并查集：</p>
+<ul>
+<li><strong>当初始化时</strong>：将每个元素的集合编号初始化为数组下标索引。则所有元素的 <code>id</code> 都是唯一的，代表着每个元素单独属于一个集合。</li>
+<li><strong>合并操作时</strong>：需要将其中一个集合中的所有元素 <code>id</code> 更改为另一个集合中的 <code>id</code>，这样能够保证在合并后一个集合中所有元素的 <code>id</code> 均相同。</li>
+<li><strong>查找操作时</strong>：如果两个元素的 <code>id</code> 一样，则说明它们属于同一个集合；如果两个元素的 <code>id</code> 不一样，则说明它们不属于同一个集合。</li>
+</ul>
+<p>举个例子来说明一下，我们使用数组来表示一系列集合元素 <code>&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;, &#123;7&#125;</code>，初始化时如下图所示。从下图中可以看出：元素的集合编号就是数组的索引值，代表着每个元素属于一个集合。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220505145234.png"></p>
+<p>当我们进行一系列的合并操作后，比如合并后变为 <code>&#123;0&#125;, &#123;1, 2, 3&#125;, &#123;4&#125;, &#123;5, 6&#125;, &#123;7&#125;</code>，合并操作的结果如下图所示。从图中可以看出，在进行一系列合并操作后，下标为 <code>1</code>、<code>2</code>、<code>3</code> 的元素集合编号是一致的，说明这 <code>3</code> 个 元素同属于一个集合。同理下标为 <code>5</code> 和 <code>6</code> 的元素则同属于另一个集合。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220505145302.png"></p>
+<p>在快速查询的实现思路中，单次查询操作的时间复杂度是 $O(1)$，而单次合并操作的时间复杂度为 $O(n)$（每次合并操作需要遍历数组）。两者的时间复杂度相差得比较大，完全牺牲了合并操作的性能。因此，这种并查集的实现思路并不常用。</p>
+<ul>
+<li>使用「快速查询」思路实现并查集代码如下所示：</li>
+</ul>
+<pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化：将每个元素的集合编号初始化为数组下标索引
+        self.ids = [i for i in range(n)]
+
+    def find(self, x):                              # 查找元素所属集合编号内部实现方法
+        return self.ids[x]
+
+    def union(self, x, y):                          # 合并操作：将集合 x 和集合 y 合并成一个集合
+        x_id = self.find(x)
+        y_id = self.find(y)
+        
+        if x_id == y_id:                            # x 和 y 已经同属于一个集合
+            return False
+        
+        for i in range(len(self.ids)):              # 将两个集合的集合编号改为一致
+            if self.ids[i] == y_id:
+                self.ids[i] = x_id
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+</code></pre>
+<h4 id="1-2-2-快速合并：基于森林实现"><a href="#1-2-2-快速合并：基于森林实现" class="headerlink" title="1.2.2 快速合并：基于森林实现"></a>1.2.2 快速合并：基于森林实现</h4><p>因为快速查询的实现思路中，合并操作的效率比较低。所以我们现在的重点是提高合并操作的效率。</p>
+<p>在使用「快速合并」思路实现并查集时，我们可以使用「一个森林（若干棵树）」来存储所有集合。每一棵树代表一个集合，树上的每个节点都是一个元素，树根节点为这个集合的代表元素。</p>
+<blockquote>
+<p><strong>注意</strong>：与普通的树形结构（父节点指向子节点）不同的是，基于森林实现的并查集中，树中的子节点是指向父节点的。</p>
+</blockquote>
+<p>此时，我们仍然可以使用一个数组 <code>fa</code> 来记录这个森林。我们用 <code>fa[x]</code> 来保存 <code>x</code> 的父节点的集合编号，代表着元素节点 <code>x</code> 指向父节点 <code>fa[x]</code>。</p>
+<p>当初始化时，<code>fa[x]</code> 值赋值为下标索引 <code>x</code>。在进行合并操作时，只需要将两个元素的树根节点相连接（<code>fa[root1] = root2</code>）即可。而在进行查询操作时，只需要查看两个元素的树根节点是否一致，就能知道两个元素是否属于同一个集合。</p>
+<p>总结一下，我们可以对数组 <code>fa</code> 进行以下操作来实现并查集：</p>
+<ul>
+<li><strong>当初始化时</strong>：将每个元素的集合编号初始化为数组 <code>fa</code> 的下标索引。所有元素的根节点的集合编号不一样，代表着每个元素单独属于一个集合。</li>
+<li><strong>合并操作时</strong>：需要将两个集合的树根节点相连接。即令其中一个集合的树根节点指向另一个集合的树根节点（<code>fa[root1] = root2</code>），这样合并后当前集合中的所有元素的树根节点均为同一个。</li>
+<li><strong>查找操作时</strong>：分别从两个元素开始，通过数组 <code>fa</code> 存储的值，不断递归访问元素的父节点，直到到达树根节点。如果两个元素的树根节点一样，则说明它们属于同一个集合；如果两个元素的树根节点不一样，则说明它们不属于同一个集合。</li>
+</ul>
+<p>举个例子来说明一下，我们使用数组来表示一系列集合元素 <code>&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4&#125;, &#123;5&#125;, &#123;6&#125;, &#123;7&#125;</code>，初始化时如下图所示。从下图中可以看出：元素的集合编号就是数组 <code>fa</code> 的索引值，代表着每个元素属于一个集合。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220507112934.png"></p>
+<p>当我们进行一系列的合并操作后，比如 <code>union(4, 5)</code>、<code>union(6, 7)</code>、<code>union(4, 7)</code> 操作后变为 <code>&#123;0&#125;, &#123;1&#125;, &#123;2&#125;, &#123;3&#125;, &#123;4, 5, 6, 7&#125;</code>，合并操作的步骤及结果如下图所示。从图中可以看出，在进行一系列合并操作后，<code>fa[4] == fa[5] == fa[6] == fa[fa[7]]</code>，即 <code>4</code>、<code>5</code>、<code>6</code>、<code>7</code> 的元素根节点编号都是 <code>4</code>，说明这 <code>4</code> 个 元素同属于一个集合。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220507142647.png"></p>
+<ul>
+<li>使用「快速合并」思路实现并查集代码如下所示：</li>
+</ul>
+<pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化：将每个元素的集合编号初始化为数组 fa 的下标索引
+        self.fa = [i for i in range(n)]
+
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        self.fa[root_x] = root_y                    # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+</code></pre>
+<h2 id="2-路径压缩"><a href="#2-路径压缩" class="headerlink" title="2. 路径压缩"></a>2. 路径压缩</h2><p>在集合很大或者树很不平衡时，使用上述「快速合并」思路实现并查集的代码效率很差，最坏情况下，树会退化成一条链，单次查询的时间复杂度高达 $O(n)$。并查集的最坏情况如下图所示。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220507172300.png"></p>
+<p>为了避免出现最坏情况，一个常见的优化方式是「路径压缩」。</p>
+<blockquote>
+<p><strong>路径压缩（Path Compression）</strong>：在从底向上查找根节点过程中，如果此时访问的节点不是根节点，则我们可以把这个节点尽量向上移动一下，从而减少树的层树。这个过程就叫做路径压缩。</p>
+</blockquote>
+<p>路径压缩有两种方式：一种叫做「隔代压缩」；另一种叫做「完全压缩」。</p>
+<h3 id="2-1-隔代压缩"><a href="#2-1-隔代压缩" class="headerlink" title="2.1 隔代压缩"></a>2.1 隔代压缩</h3><blockquote>
+<p><strong>隔代压缩</strong>：在查询时，两步一压缩，一直循环执行「把当前节点指向它的父亲节点的父亲节点」这样的操作，从而减小树的深度。</p>
+</blockquote>
+<p>下面是一个「隔代压缩」的例子。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220509113954.png"></p>
+<ul>
+<li>隔代压缩的查找代码如下：</li>
+</ul>
+<pre><code class="Python">def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+    while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+        self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩
+        x = self.fa[x]
+    return x                                    # 返回元素根节点的集合编号
+</code></pre>
+<h3 id="2-2-完全压缩"><a href="#2-2-完全压缩" class="headerlink" title="2.2 完全压缩"></a>2.2 完全压缩</h3><blockquote>
+<p><strong>完全压缩</strong>：在查询时，把被查询的节点到根节点的路径上的所有节点的父节点设置为根节点，从而减小树的深度。也就是说，在向上查询的同时，把在路径上的每个节点都直接连接到根上，以后查询时就能直接查询到根节点。</p>
+</blockquote>
+<p>相比较于「隔代压缩」，「完全压缩」压缩的更加彻底。下面是一个「完全压缩」的例子。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220507174723.png"></p>
+<ul>
+<li>完全压缩的查找代码如下：</li>
+</ul>
+<pre><code class="Python">def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+    if self.fa[x] != x:                         # 递归查找元素的父节点，直到根节点
+        self.fa[x] = self.find(self.fa[x])      # 完全压缩优化
+    return self.fa[x]
+</code></pre>
+<h2 id="3-按秩合并"><a href="#3-按秩合并" class="headerlink" title="3. 按秩合并"></a>3. 按秩合并</h2><p>因为路径压缩只在查询时进行，并且只压缩一棵树上的路径，所以并查集最终的结构仍然可能是比较复杂的。为了避免这种情况，另一个优化方式是「按秩合并」。</p>
+<blockquote>
+<p><strong>按秩合并（Union By Rank）</strong>：指的是在每次合并操作时，都把「秩」较小的树根节点指向「秩」较大的树根节点。</p>
+</blockquote>
+<p>这里的「秩」有两种定义，一种定义指的是树的深度；另一种定义指的是树的大小（即集合节点个数）。无论采用哪种定义，集合的秩都记录在树的根节点上。</p>
+<p>按秩合并也有两种方式：一种叫做「按深度合并」；另一种叫做「按大小合并」。</p>
+<h3 id="3-1-按深度合并"><a href="#3-1-按深度合并" class="headerlink" title="3.1 按深度合并"></a>3.1 按深度合并</h3><blockquote>
+<p><strong>按深度合并（Unoin By Rank）</strong>：在每次合并操作时，都把「深度」较小的树根节点指向「深度」较大的树根节点。</p>
+</blockquote>
+<p>我们用一个数组 <code>rank</code> 记录每个根节点对应的树的深度（如果不是根节点，其 <code>rank</code> 值相当于以它作为根节点的子树的深度）。</p>
+<p>初始化时，将所有元素的 <code>rank</code> 值设为 <code>1</code>。在合并操作时，比较两个根节点，把 <code>rank</code> 值较小的根节点指向 <code>rank</code> 值较大的根节点上合并。</p>
+<p>下面是一个「按深度合并」的例子。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220509094655.png"></p>
+<ul>
+<li>按深度合并的实现代码如下：</li>
+</ul>
+<pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化
+        self.fa = [i for i in range(n)]             # 每个元素的集合编号初始化为数组 fa 的下标索引
+        self.rank = [1 for i in range(n)]           # 每个元素的深度初始化为 1
+    
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        
+        if self.rank[root_x] &lt; self.rank[root_y]:   # x 的根节点对应的树的深度 小于 y 的根节点对应的树的深度
+            self.fa[root_x] = root_y                # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+        elif self.rank[root_y] &gt; self.rank[root_y]: # x 的根节点对应的树的深度 大于 y 的根节点对应的树的深度
+            self.fa[root_y] = root_x                # y 的根节点连接到 x 的根节点上，成为 x 的根节点的子节点
+        else:                                       # x 的根节点对应的树的深度 等于 y 的根节点对应的树的深度
+            self.fa[root_x] = root_y                # 向任意一方合并即可
+            rank[y] += 1                            # 因为层数相同，被合并的树必然层数会 +1
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+</code></pre>
+<h3 id="3-2-按大小合并"><a href="#3-2-按大小合并" class="headerlink" title="3.2 按大小合并"></a>3.2 按大小合并</h3><blockquote>
+<p><strong>按大小合并（Unoin By Size）</strong>：这里的大小指的是集合节点个数。在每次合并操作时，都把「集合节点个数」较少的树根节点指向「集合节点个数」较大的树根节点。</p>
+</blockquote>
+<p>我们用一个数组 <code>size</code> 记录每个根节点对应的集合节点个数（如果不是根节点，其 <code>size</code> 值相当于以它作为根节点的子树的集合节点个数）。</p>
+<p>初始化时，将所有元素的 <code>size</code> 值设为 <code>1</code>。在合并操作时，比较两个根节点，把 <code>size</code> 值较小的根节点指向 <code>size</code> 值较大的根节点上合并。</p>
+<p>下面是一个「按大小合并」的例子。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220509094634.png"></p>
+<ul>
+<li>按大小合并的实现代码如下：</li>
+</ul>
+<pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化
+        self.fa = [i for i in range(n)]             # 每个元素的集合编号初始化为数组 fa 的下标索引
+        self.size = [1 for i in range(n)]           # 每个元素的集合个数初始化为 1
+    
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩优化
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        
+        if self.size[root_x] &lt; self.size[root_y]:   # x 对应的集合元素个数 小于 y 对应的集合元素个数
+            self.fa[root_x] = root_y                # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+            self.size[root_y] += self.size[root_x]  # y 的根节点对应的集合元素个数 累加上 x 的根节点对应的集合元素个数
+        elif self.size[root_x] &gt; self.size[root_y]: # x 对应的集合元素个数 大于 y 对应的集合元素个数
+            self.fa[root_y] = root_x                # y 的根节点连接到 x 的根节点上，成为 x 的根节点的子节点
+            self.size[root_x] += self.size[root_y]  # x 的根节点对应的集合元素个数 累加上 y 的根节点对应的集合元素个数
+        else:                                       # x 对应的集合元素个数 小于 y 对应的集合元素个数
+            self.fa[root_x] = root_y                # 向任意一方合并即可
+            self.size[root_y] += self.size[root_x]
+            
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+</code></pre>
+<h3 id="3-3-按秩合并的注意点"><a href="#3-3-按秩合并的注意点" class="headerlink" title="3.3 按秩合并的注意点"></a>3.3 按秩合并的注意点</h3><p>看过「按深度合并」和「按大小合并」的实现代码后，大家可能会产生一个疑问：为什么在路径压缩的过程中不用更新 <code>rank</code> 值或者 <code>size</code> 值呢？</p>
+<p>其实，代码中的 <code>rank</code> 值或者 <code>size</code> 值并不完全是树中真实的深度或者集合元素个数。</p>
+<p>这是因为当我们在代码中引入路径压缩之后，维护真实的深度或者集合元素个数就会变得比较难。此时我们使用的 <code>rank</code> 值或者 <code>size</code> 值更像是用于当前节点排名的一个标志数字，只在合并操作的过程中，用于比较两棵树的权值大小。</p>
+<p>换句话说，我们完全可以不知道每个节点的具体深度或者集合元素个数，只要能够保证每两个节点之间的深度或者集合元素个数关系可以通过 <code>rank</code> 值或者 <code>size</code> 值正确的表达即可。</p>
+<p>而根据路径压缩的过程，<code>rank</code> 值或者 <code>size</code> 值只会不断的升高，而不可能降低到比原先深度更小的节点或者集合元素个数更少的节点还要小。所以，<code>rank</code> 值或者 <code>size</code> 值足够用于比较两个节点的权值，进而选择合适的方式进行合并操作。</p>
+<h2 id="4-并查集的算法分析"><a href="#4-并查集的算法分析" class="headerlink" title="4. 并查集的算法分析"></a>4. 并查集的算法分析</h2><p>首先我们来分析一下并查集的空间复杂度。在代码中，我们主要使用了数组 <code>fa</code> 来存储集合中的元素。如果使用了「按秩合并」的优化方式，还会使用数组 <code>rank</code> 或者数组 <code>size</code> 来存放权值。因为空间复杂度取决于元素个数，不难得出空间复杂度为 $O(n)$。</p>
+<p>在同时使用了「路径压缩」和「按秩合并」的情况下，并查集的合并操作和查找操作的时间复杂度可以接近于 $O(1)$。最坏情况下的时间复杂度是 $O(m * \alpha(n))$。这里的 $m$ 是合并操作和查找操作的次数，$\alpha(n)$ 是 Ackerman 函数的某个反函数，其增长极其缓慢，也就是说其单次操作的平均运行时间可以认为是一个很小的常数。</p>
+<p>总结一下：</p>
+<ul>
+<li>并查集的空间复杂度：$O(n)$。</li>
+<li>并查集的时间复杂度：$O(m * \alpha(n))$。</li>
+</ul>
+<h2 id="5-并查集的最终实现代码"><a href="#5-并查集的最终实现代码" class="headerlink" title="5. 并查集的最终实现代码"></a>5. 并查集的最终实现代码</h2><p>根据我自己的做题经验和网上大佬的经验，我使用并查集的策略（仅供参考）是这样：使用「隔代压缩」，一般不使用「按秩合并」。</p>
+<p>这样选择的原因是既能保证代码简单易写，又能得到不错的性能。如果这样写的性能还不够好的话，再考虑使用「按秩合并」。</p>
+<p>在有些题目中，还会遇到需要查询集合的个数或者集合中元素个数的情况，可以根据题目具体要求再做相应的更改。</p>
+<ul>
+<li>使用「隔代压缩」，不使用「按秩合并」的并查集最终实现代码：</li>
+</ul>
+<pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化
+        self.fa = [i for i in range(n)]             # 每个元素的集合编号初始化为数组 fa 的下标索引
+    
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩优化
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        
+        self.fa[root_x] = root_y                    # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+</code></pre>
+<ul>
+<li>使用「隔代压缩」，使用「按秩合并」的并查集最终实现代码：</li>
+</ul>
+<pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化
+        self.fa = [i for i in range(n)]             # 每个元素的集合编号初始化为数组 fa 的下标索引
+        self.rank = [1 for i in range(n)]           # 每个元素的深度初始化为 1
+    
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩优化
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        
+        if self.rank[root_x] &lt; self.rank[root_y]:   # x 的根节点对应的树的深度 小于 y 的根节点对应的树的深度
+            self.fa[root_x] = root_y                # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+        elif self.rank[root_y] &gt; self.rank[root_y]: # x 的根节点对应的树的深度 大于 y 的根节点对应的树的深度
+            self.fa[root_y] = root_x                # y 的根节点连接到 x 的根节点上，成为 x 的根节点的子节点
+        else:                                       # x 的根节点对应的树的深度 等于 y 的根节点对应的树的深度
+            self.fa[root_x] = root_y                # 向任意一方合并即可
+            self.rank[y] += 1                       # 因为层数相同，被合并的树必然层数会 +1
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+</code></pre>
+<h2 id="6-并查集的应用"><a href="#6-并查集的应用" class="headerlink" title="6. 并查集的应用"></a>6. 并查集的应用</h2><p>并查集通常用来求解不同元素之间的关系问题，比如判断两个人是否是亲戚关系、两个点之间时候存在至少一条路径连接。或者用来求解集合的个数、集合中元素的个数等等。</p>
+<h3 id="6-1-等式方程的可满足性"><a href="#6-1-等式方程的可满足性" class="headerlink" title="6.1 等式方程的可满足性"></a>6.1 等式方程的可满足性</h3><h4 id="6-1-1-题目链接"><a href="#6-1-1-题目链接" class="headerlink" title="6.1.1 题目链接"></a>6.1.1 题目链接</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9zYXRpc2ZpYWJpbGl0eS1vZi1lcXVhbGl0eS1lcXVhdGlvbnMv">990. 等式方程的可满足性 - 力扣（LeetCode）</span></li>
+</ul>
+<h4 id="6-1-2-题目大意"><a href="#6-1-2-题目大意" class="headerlink" title="6.1.2 题目大意"></a>6.1.2 题目大意</h4><p><strong>描述</strong>：给定一个由字符串方程组成的数组 <code>equations</code>，每个字符串方程 <code>equations[i]</code> 的长度为 <code>4</code>，有以下两种形式组成：<code>a==b</code> 或 <code>a!=b</code>。<code>a</code> 和 <code>b</code> 是小写字母，表示单字母变量名。</p>
+<p><strong>要求</strong>：判断所有的字符串方程是否能同时满足，如果能同时满足，返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>$1 \le equations.length \le 500$。</li>
+<li>$equations[i].length &#x3D;&#x3D; 4$。</li>
+<li>$equations[i][0]$ 和 $equations[i][3]$ 是小写字母。</li>
+<li>$equations[i][1]$ 要么是 <code>&#39;=&#39;</code>，要么是 <code>&#39;!&#39;</code>。</li>
+<li><code>equations[i][2]</code> 是 <code>&#39;=&#39;</code>。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<pre><code class="Python">输入    [&quot;a==b&quot;,&quot;b!=a&quot;]
+输出    False
+解释    如果我们指定，a = 1 且 b = 1，那么可以满足第一个方程，但无法满足第二个方程。没有办法分配变量同时满足这两个方程。
+</code></pre>
+<h4 id="6-1-3-解题思路"><a href="#6-1-3-解题思路" class="headerlink" title="6.1.3 解题思路"></a>6.1.3 解题思路</h4><p>字符串方程只有 <code>==</code> 或者 <code>!=</code>，可以考虑将相等的遍历划分到相同集合中，然后再遍历所有不等式方程，看方程的两个变量是否在之前划分的相同集合中，如果在则说明不满足。</p>
+<p>这就需要用到并查集，具体操作如下：</p>
+<ul>
+<li>遍历所有等式方程，将等式两边的单字母变量顶点进行合并。</li>
+<li>遍历所有不等式方程，检查不等式两边的单字母遍历是不是在一个连通分量中，如果在则返回 <code>False</code>，否则继续扫描。如果所有不等式检查都没有矛盾，则返回 <code>True</code>。</li>
+</ul>
+<h4 id="6-1-4-代码"><a href="#6-1-4-代码" class="headerlink" title="6.1.4 代码"></a>6.1.4 代码</h4><pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化
+        self.fa = [i for i in range(n)]             # 每个元素的集合编号初始化为数组 fa 的下标索引
+    
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩优化
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        
+        self.fa[root_x] = root_y                    # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+
+class Solution:
+    def equationsPossible(self, equations: List[str]) -&gt; bool:
+        union_find = UnionFind(26)
+        for eqation in equations:
+            if eqation[1] == &quot;=&quot;:
+                index1 = ord(eqation[0]) - 97
+                index2 = ord(eqation[3]) - 97
+                union_find.union(index1, index2)
+
+        for eqation in equations:
+            if eqation[1] == &quot;!&quot;:
+                index1 = ord(eqation[0]) - 97
+                index2 = ord(eqation[3]) - 97
+                if union_find.is_connected(index1, index2):
+                    return False
+        return True
+</code></pre>
+<h3 id="6-2-省份数量"><a href="#6-2-省份数量" class="headerlink" title="6.2 省份数量"></a>6.2 省份数量</h3><h4 id="6-2-1-题目链接"><a href="#6-2-1-题目链接" class="headerlink" title="6.2.1 题目链接"></a>6.2.1 题目链接</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9udW1iZXItb2YtcHJvdmluY2VzLw==">547. 省份数量 - 力扣（LeetCode）</span></li>
+</ul>
+<h4 id="6-2-2-题目大意"><a href="#6-2-2-题目大意" class="headerlink" title="6.2.2 题目大意"></a>6.2.2 题目大意</h4><p><strong>描述</strong>：有 <code>n</code> 个城市，其中一些彼此相连，另一些没有相连。如果城市 <code>a</code> 与城市 <code>b</code> 直接相连，且城市 <code>b</code> 与城市 <code>c</code> 直接相连，那么城市 <code>a</code> 与城市 <code>c</code> 间接相连。</p>
+<p>「省份」是由一组直接或间接链接的城市组成，组内不含有其他没有相连的城市。</p>
+<p>现在给定一个 <code>n * n</code> 的矩阵 <code>isConnected</code> 表示城市的链接关系。其中 <code>isConnected[i][j] = 1</code> 表示第 <code>i</code> 个城市和第 <code>j</code> 个城市直接相连，<code>isConnected[i][j] = 0</code> 表示第 <code>i</code> 个城市和第 <code>j</code> 个城市没有相连。</p>
+<p><strong>要求</strong>：根据给定的城市关系，返回「省份」的数量。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>$1 \le n \le 200$。</li>
+<li>$n &#x3D;&#x3D; isConnected.length$。</li>
+<li>$n &#x3D;&#x3D; isConnected[i].length$。</li>
+<li>$isConnected[i][j]$ 为 $1$ 或 $0$。</li>
+<li>$isConnected[i][i] &#x3D;&#x3D; 1$。</li>
+<li>$isConnected[i][j] &#x3D;&#x3D; isConnected[j][i]$。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<ul>
+<li>如图所示：</li>
+</ul>
+<p><img data-src="https://assets.leetcode.com/uploads/2020/12/24/graph1.jpg"></p>
+<pre><code class="Python">输入    isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+输出    2
+</code></pre>
+<h4 id="6-2-3-解题思路"><a href="#6-2-3-解题思路" class="headerlink" title="6.2.3 解题思路"></a>6.2.3 解题思路</h4><p>具体做法如下：</p>
+<ul>
+<li>遍历矩阵 <code>isConnected</code>。如果 <code>isConnected[i][j] = 1</code>，将 <code>i</code> 节点和 <code>j</code> 节点相连。</li>
+<li>然后判断每个城市节点的根节点，然后统计不重复的根节点有多少个，也就是集合个数，即为「省份」的数量。</li>
+</ul>
+<h4 id="6-2-4-代码"><a href="#6-2-4-代码" class="headerlink" title="6.2.4 代码"></a>6.2.4 代码</h4><pre><code class="Python">class UnionFind:
+    def __init__(self, n):                          # 初始化
+        self.fa = [i for i in range(n)]             # 每个元素的集合编号初始化为数组 fa 的下标索引
+    
+    def find(self, x):                              # 查找元素根节点的集合编号内部实现方法
+        while self.fa[x] != x:                      # 递归查找元素的父节点，直到根节点
+            self.fa[x] = self.fa[self.fa[x]]        # 隔代压缩优化
+            x = self.fa[x]
+        return x                                    # 返回元素根节点的集合编号
+
+    def union(self, x, y):                          # 合并操作：令其中一个集合的树根节点指向另一个集合的树根节点
+        root_x = self.find(x)
+        root_y = self.find(y)
+        if root_x == root_y:                        # x 和 y 的根节点集合编号相同，说明 x 和 y 已经同属于一个集合
+            return False
+        self.fa[root_x] = root_y                    # x 的根节点连接到 y 的根节点上，成为 y 的根节点的子节点
+        return True
+
+    def is_connected(self, x, y):                   # 查询操作：判断 x 和 y 是否同属于一个集合
+        return self.find(x) == self.find(y)
+
+class Solution:
+    def findCircleNum(self, isConnected: List[List[int]]) -&gt; int:
+        size = len(isConnected)
+        union_find = UnionFind(size)
+        for i in range(size):
+            for j in range(i + 1, size):
+                if isConnected[i][j] == 1:
+                    union_find.union(i, j)
+
+        res = set()
+        for i in range(size):
+            res.add(union_find.find(i))
+        return len(res)
+</code></pre>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9vaS13aWtpLm9yZy9kcy9kc3Uv">并查集 - OI Wiki</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9sZWV0Ym9vay9kZXRhaWwvZGlzam9pbnQtc2V0Lw==">并查集 - LeetBook - 力扣</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9qdWVqaW4uY24vcG9zdC82ODQ0OTAzOTU0Nzc0NDkxMTQ5">并查集概念及用法分析 - 掘金</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLjUxY3RvLmNvbS96ZXJvMDEvMjYwOTY5NQ==">数据结构之并查集 - 端碗吹水的技术博客</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9vaS13aWtpLm9yZy9kcy9kc3UtY29tcGxleGl0eS8=">并查集复杂度 - OI Wiki</span></li>
+<li>【题解】<span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9zYXRpc2ZpYWJpbGl0eS1vZi1lcXVhbGl0eS1lcXVhdGlvbnMvc29sdXRpb24vc2hpLXlvbmctYmluZy1jaGEtamktY2h1LWxpLWJ1LXhpYW5nLWppYW8tamktaGUtd2Uv">使用并查集处理不相交集合问题（Java、Python） - 等式方程的可满足性 - 力扣</span></li>
+<li>【书籍】算法训练营 - 陈小玉 著</li>
+<li>【书籍】算法 第 4 版 - 谢路云 译</li>
+<li>【书籍】算法竞赛进阶指南 - 李煜东 著</li>
+<li>【书籍】算法竞赛入门经典：训练指南 - 刘汝佳，陈锋 著</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="ic i-tag"></i> 算法与数据结构</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-19 22:49:54" itemprop="dateModified" datetime="2023-02-19T22:49:54+08:00">2023-02-19</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" title="并查集知识">http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit4jrvuj20zk0m8785.jpg" title="并查集题目">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>并查集题目</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giciryrr3rj20zk0m8nhk.jpg" title="图的存储结构和问题应用">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>图的存储结构和问题应用</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 并查集简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 并查集的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9A%84%E4%B8%A4%E7%A7%8D%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 并查集的两种实现思路</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-1-%E5%BF%AB%E9%80%9F%E6%9F%A5%E8%AF%A2%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%95%B0%E7%BB%84%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.2.1 快速查询：基于数组实现</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2-2-%E5%BF%AB%E9%80%9F%E5%90%88%E5%B9%B6%EF%BC%9A%E5%9F%BA%E4%BA%8E%E6%A3%AE%E6%9E%97%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2.2 快速合并：基于森林实现</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B7%AF%E5%BE%84%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.</span> <span class="toc-text">2. 路径压缩</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%9A%94%E4%BB%A3%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 隔代压缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AE%8C%E5%85%A8%E5%8E%8B%E7%BC%A9"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 完全压缩</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%8C%89%E7%A7%A9%E5%90%88%E5%B9%B6"><span class="toc-number">3.</span> <span class="toc-text">3. 按秩合并</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%8C%89%E6%B7%B1%E5%BA%A6%E5%90%88%E5%B9%B6"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 按深度合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%8C%89%E5%A4%A7%E5%B0%8F%E5%90%88%E5%B9%B6"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 按大小合并</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%8C%89%E7%A7%A9%E5%90%88%E5%B9%B6%E7%9A%84%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 按秩合并的注意点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9A%84%E7%AE%97%E6%B3%95%E5%88%86%E6%9E%90"><span class="toc-number">4.</span> <span class="toc-text">4. 并查集的算法分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9A%84%E6%9C%80%E7%BB%88%E5%AE%9E%E7%8E%B0%E4%BB%A3%E7%A0%81"><span class="toc-number">5.</span> <span class="toc-text">5. 并查集的最终实现代码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%B9%B6%E6%9F%A5%E9%9B%86%E7%9A%84%E5%BA%94%E7%94%A8"><span class="toc-number">6.</span> <span class="toc-text">6. 并查集的应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E7%AD%89%E5%BC%8F%E6%96%B9%E7%A8%8B%E7%9A%84%E5%8F%AF%E6%BB%A1%E8%B6%B3%E6%80%A7"><span class="toc-number">6.1.</span> <span class="toc-text">6.1 等式方程的可满足性</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-1-%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">6.1.1.</span> <span class="toc-text">6.1.1 题目链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-2-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="toc-number">6.1.2.</span> <span class="toc-text">6.1.2 题目大意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-3-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">6.1.3.</span> <span class="toc-text">6.1.3 解题思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-1-4-%E4%BB%A3%E7%A0%81"><span class="toc-number">6.1.4.</span> <span class="toc-text">6.1.4 代码</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E7%9C%81%E4%BB%BD%E6%95%B0%E9%87%8F"><span class="toc-number">6.2.</span> <span class="toc-text">6.2 省份数量</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-1-%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">6.2.1.</span> <span class="toc-text">6.2.1 题目链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-2-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="toc-number">6.2.2.</span> <span class="toc-text">6.2.2 题目大意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-3-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">6.2.3.</span> <span class="toc-text">6.2.3 解题思路</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#6-2-4-%E4%BB%A3%E7%A0%81"><span class="toc-number">6.2.4.</span> <span class="toc-text">6.2.4 代码</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">7.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" rel="bookmark" title="数据结构与算法">数据结构与算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/01.Data-Structures-Algorithms/" rel="bookmark" title="算法与数据结构">算法与数据结构</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" rel="bookmark" title="算法复杂度">算法复杂度</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" rel="bookmark" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/06.Interview-100-List/" rel="bookmark" title="LeetCode 面试最常考 100 题（按分类排序）">LeetCode 面试最常考 100 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" rel="bookmark" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/08.Algorithms-Overview/" rel="bookmark" title="算法">算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" rel="bookmark" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/01.Hash-Table/" rel="bookmark" title="哈希表知识">哈希表知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/04.Solutions-List/" rel="bookmark" title="LeetCode 题解（字典序排序，700+ 道题解）">LeetCode 题解（字典序排序，700+ 道题解）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="bookmark" title="哈希表题目">哈希表题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" rel="bookmark" title="数组基础知识">数组基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="bookmark" title="数组基础题目">数组基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/01.Array-Bubble-Sort/" rel="bookmark" title="冒泡排序">冒泡排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/02.Array-Selection-Sort/" rel="bookmark" title="选择排序">选择排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/03.Array-Insertion-Sort/" rel="bookmark" title="插入排序">插入排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/04.Array-Shell-Sort/" rel="bookmark" title="希尔排序">希尔排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/05.Array-Merge-Sort/" rel="bookmark" title="归并排序">归并排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/06.Array-Quick-Sort/" rel="bookmark" title="快速排序">快速排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" rel="bookmark" title="堆排序">堆排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" rel="bookmark" title="计数排序">计数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" rel="bookmark" title="桶排序">桶排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" rel="bookmark" title="基数排序">基数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/11.Array-Sort-List/" rel="bookmark" title="数组排序题目">数组排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/01.Array-Binary-Search/" rel="bookmark" title="二分查找知识">二分查找知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" rel="bookmark" title="二分查找题目">二分查找题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/01.Array-Two-Pointers/" rel="bookmark" title="数组双指针知识">数组双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="bookmark" title="数组双指针题目">数组双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" rel="bookmark" title="链表双指针知识">链表双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="bookmark" title="链表双指针题目">链表双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" rel="bookmark" title="链表排序知识">链表排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" rel="bookmark" title="链表排序题目">链表排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" rel="bookmark" title="单调栈知识">单调栈知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/02.Monotone-Stack-List/" rel="bookmark" title="单调栈题目">单调栈题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/01.Stack-Basic/" rel="bookmark" title="堆栈基础知识">堆栈基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/02.Stack-Basic-List/" rel="bookmark" title="堆栈基础题目">堆栈基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" rel="bookmark" title="队列基础知识">队列基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/02.Queue-Basic-List/" rel="bookmark" title="队列基础题目">队列基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" rel="bookmark" title="优先队列知识">优先队列知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" rel="bookmark" title="优先队列题目">优先队列题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" rel="bookmark" title="树与二叉树基础知识">树与二叉树基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/02.Binary-Tree-Traverse/" rel="bookmark" title="二叉树的遍历知识">二叉树的遍历知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/04.Binary-Tree-Reduction/" rel="bookmark" title="二叉树的还原知识">二叉树的还原知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/05.Binary-Tree-Reduction-List/" rel="bookmark" title="二叉树的还原题目">二叉树的还原题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" rel="bookmark" title="二叉树的遍历题目">二叉树的遍历题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" rel="bookmark" title="二叉搜索树知识">二叉搜索树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/02.Binary-Search-Tree-List/" rel="bookmark" title="二叉搜索树题目">二叉搜索树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" rel="bookmark" title="数组滑动窗口知识">数组滑动窗口知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="bookmark" title="数组滑动窗口题目">数组滑动窗口题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" rel="bookmark" title="线段树知识">线段树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="bookmark" title="线段树题目">线段树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" rel="bookmark" title="链表基础知识">链表基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" rel="bookmark" title="链表经典题目">链表经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/01.Binary-Indexed-Tree/" rel="bookmark" title="树状数组知识">树状数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/02.Binary-Indexed-Tree-List/" rel="bookmark" title="树状数组题目">树状数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/01.String-Basic/" rel="bookmark" title="字符串基础知识">字符串基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" rel="bookmark" title="字符串经典题目">字符串经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" rel="bookmark" title="字典树知识">字典树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/02.Trie-List/" rel="bookmark" title="字典树题目">字典树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/03.AC-Automaton/" rel="bookmark" title="AC 自动机知识">AC 自动机知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" rel="bookmark" title="AC 自动机题目">AC 自动机题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" rel="bookmark" title="后缀数组知识">后缀数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" rel="bookmark" title="后缀数组题目">后缀数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="bookmark" title="图的定义和分类">图的定义和分类</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="bookmark" title="图的存储结构和问题应用">图的存储结构和问题应用</a></li><li class="active"><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="bookmark" title="并查集知识">并查集知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="bookmark" title="并查集题目">并查集题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/01.Graph-DFS/" rel="bookmark" title="图的深度优先搜索知识">图的深度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/02.Graph-DFS-List/" rel="bookmark" title="图的深度优先搜索题目">图的深度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" rel="bookmark" title="图的广度优先搜索知识">图的广度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" rel="bookmark" title="图的广度优先搜索题目">图的广度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/05.Graph-Topological-Sorting/" rel="bookmark" title="图的拓扑排序知识">图的拓扑排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/06.Graph-Topological-Sorting-List/" rel="bookmark" title="图的拓扑排序题目">图的拓扑排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" rel="bookmark" title="图的生成树知识">图的生成树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" rel="bookmark" title="Prim 算法">Prim 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/03.Graph-Kruskal/" rel="bookmark" title="Kruskal 算法">Kruskal 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/04.Gaph-Spanning-Tree-List/" rel="bookmark" title="图的生成树题目">图的生成树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/01.String-Brute-Force/" rel="bookmark" title="Brute Force 算法">Brute Force 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/02.String-Rabin-Karp/" rel="bookmark" title="Rabin Karp 算法">Rabin Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="bookmark" title="KMP 算法">KMP 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" rel="bookmark" title="Boyer Moore 算法">Boyer Moore 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="bookmark" title="Horspool 算法">Horspool 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" rel="bookmark" title="Sunday 算法">Sunday 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" rel="bookmark" title="单模式串匹配题目">单模式串匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" rel="bookmark" title="枚举算法知识">枚举算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/02.Enumeration-Algorithm-List/" rel="bookmark" title="枚举算法题目">枚举算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" rel="bookmark" title="二分图基础知识">二分图基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" rel="bookmark" title="二分图基础题目">二分图基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/03.Graph-Bipartite-Matching/" rel="bookmark" title="二分图最大匹配知识">二分图最大匹配知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/04.Graph-Hungarian-Algorithm/" rel="bookmark" title="匈牙利算法">匈牙利算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/05.Graph-Hopcroft-Karp/" rel="bookmark" title="Hopcroft-Karp 算法">Hopcroft-Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/06.Graph-Bipartite-Matching-List/" rel="bookmark" title="二分图最大匹配题目">二分图最大匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" rel="bookmark" title="回溯算法知识">回溯算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" rel="bookmark" title="回溯算法题目">回溯算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" rel="bookmark" title="贪心算法知识">贪心算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" rel="bookmark" title="贪心算法题目">贪心算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" rel="bookmark" title="分治算法知识">分治算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/02.Divide-And-Conquer-Algorithm-List/" rel="bookmark" title="分治算法题目">分治算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" rel="bookmark" title="递归算法知识">递归算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/02.Recursive-Algorithm-List/" rel="bookmark" title="递归算法题目">递归算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" rel="bookmark" title="位运算知识">位运算知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/02.Bit-Operation-List/" rel="bookmark" title="位运算题目">位运算题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" rel="bookmark" title="单源最短路径知识">单源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/02.Graph-Dijkstra/" rel="bookmark" title="Dijkstra 算法">Dijkstra 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/03.Graph-Bellman-Ford/" rel="bookmark" title="Bellman-Ford 算法">Bellman-Ford 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/04.Graph-SPFA/" rel="bookmark" title="SPFA 算法">SPFA 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/05.Graph-Single-Source-Shortest-Path-List/" rel="bookmark" title="单源最短路径题目">单源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/06.Graph-Multi-Source-Shortest-Path/" rel="bookmark" title="多源最短路径知识">多源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/07.Graph-Floyed/" rel="bookmark" title="Floyed 算法">Floyed 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/08.Graph-Multi-Source-Shortest-Path-List/" rel="bookmark" title="多源最短路径题目">多源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/09.Graph-The-Second-Shortest-Path/" rel="bookmark" title="次短路径知识">次短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" rel="bookmark" title="次短路径题目">次短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" rel="bookmark" title="差分约束系统知识">差分约束系统知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/12.Graph-System-Of-Difference-Constraints-List/" rel="bookmark" title="差分约束系统题目">差分约束系统题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/01.Dynamic-Programming-Basic/" rel="bookmark" title="动态规划基础知识">动态规划基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/02.Dynamic-Programming-Basic-List/" rel="bookmark" title="动态规划基础题目">动态规划基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" rel="bookmark" title="背包问题知识">背包问题知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" rel="bookmark" title="背包问题题目">背包问题题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/01.Tree-DP/" rel="bookmark" title="树形 DP 知识">树形 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" rel="bookmark" title="树形 DP 题目">树形 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/01.Linear-DP/" rel="bookmark" title="线性 DP 知识">线性 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" rel="bookmark" title="线性 DP 题目">线性 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/01.Memoization/" rel="bookmark" title="记忆化搜索知识">记忆化搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/02.Memoization-List/" rel="bookmark" title="记忆化搜索题目">记忆化搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" rel="bookmark" title="状态压缩 DP 知识">状态压缩 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" rel="bookmark" title="状态压缩 DP 题目">状态压缩 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" rel="bookmark" title="区间 DP 知识">区间 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/02.Interval-DP-List/" rel="bookmark" title="区间 DP 题目">区间 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/01.Count-DP/" rel="bookmark" title="计数 DP 知识">计数 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/02.Count-DP-List/" rel="bookmark" title="计数 DP 题目">计数 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/01.Probability-DP/" rel="bookmark" title="概率 DP 知识">概率 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" rel="bookmark" title="概率 DP 题目">概率 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/01.Number-DP/" rel="bookmark" title="数位 DP 知识">数位 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" rel="bookmark" title="数位 DP 题目">数位 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" rel="bookmark" title="单调栈 / 优先队列优化">单调栈 / 优先队列优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" rel="bookmark" title="斜率优化">斜率优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/03.Quadrangle-Optimization/" rel="bookmark" title="四边形不等式优化">四边形不等式优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" rel="bookmark" title="动态规划优化题目">动态规划优化题目</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" title="字符串经典题目">字符串经典题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology111/" title="Lambda and Anonymous Classes(I)">Lambda and Anonymous Classes(I)</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch20/" title="第 20 章 设计性能">第 20 章 设计性能</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/1.1.3/README/" title="分布式数据库详解">分布式数据库详解</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" title="树与二叉树基础知识">树与二叉树基础知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" title="单调栈知识">单调栈知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology116/" title="Stream Pipelines">Stream Pipelines</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" title="链表双指针题目">链表双指针题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/01/README/" title="01丨基础篇">01丨基础篇</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

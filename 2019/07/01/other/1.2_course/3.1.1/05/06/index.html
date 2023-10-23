@@ -1,0 +1,577 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="高并发系统设计 40 问" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/06/">
+
+
+
+  <title>
+26丨负载均衡：怎样提升系统的横向扩展能力？ - 课程 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">26丨负载均衡：怎样提升系统的横向扩展能力？
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:02">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:02+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E8%AF%BE%E7%A8%8B/" itemprop="item" rel="index" title="分类于 课程"><span itemprop="name">课程</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/06/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="26丨负载均衡：怎样提升系统的横向扩展能力？"><a href="#26丨负载均衡：怎样提升系统的横向扩展能力？" class="headerlink" title="26丨负载均衡：怎样提升系统的横向扩展能力？"></a>26丨负载均衡：怎样提升系统的横向扩展能力？</h1><p>在基础篇中，我提到了高并发系统设计的三个通用方法：缓存、异步和横向扩展，到目前为止，你接触到了缓存的使用姿势，也了解了，如何使用消息队列异步处理业务逻辑，那么本节课，我将带你了解一下，如何提升系统的横向扩展能力。</p>
+<p>在之前的课程中，我也提到过提升系统横向扩展能力的一些案例。比如，08 讲提到，可以通过部署多个从库的方式，来提升数据库的扩展能力，从而提升数据库的查询性能，那么就需要借助组件，将查询数据库的请求，按照一些既定的策略分配到多个从库上，这是负载均衡服务器所起的作用，而我们一般使用 <strong>DNS 服务器</strong> 来承担这个角色。</p>
+<p>不过在实际的工作中，你经常使用的负载均衡的组件应该算是 Nginx，它的作用是承接前端的 HTTP 请求，然后将它们按照多种策略，分发给后端的多个业务服务器上。这样，我们可以随时通过扩容业务服务器的方式，来抵挡突发的流量高峰。<strong>与 DNS 不同的是，Nginx 可以在域名和请求 URL 地址的层面做更细致的流量分配，也提供更复杂的负载均衡策略</strong> 。</p>
+<p>你可能会想到，在微服务架构中，我们也会启动多个服务节点，来承接从用户端到应用服务器的请求，自然会需要一个负载均衡服务器，作为流量的入口，实现流量的分发。那么在微服务架构中，如何使用负载均衡服务器呢？</p>
+<p>在回答这些问题之前，我先带你了解一下，常见的负载均衡服务器都有哪几类，因为这样，你就可以依据不同类型负载均衡服务器的特点做选择了。</p>
+<h2 id="负载均衡服务器的种类"><a href="#负载均衡服务器的种类" class="headerlink" title="负载均衡服务器的种类"></a>负载均衡服务器的种类</h2><p><strong>负载均衡的含义是：</strong> 将负载（访问的请求）「均衡」地分配到多个处理节点上。这样可以减少单个处理节点的请求量，提升整体系统的性能。</p>
+<p>同时，负载均衡服务器作为流量入口，可以对请求方屏蔽服务节点的部署细节，实现对于业务方无感知的扩容。它就像交通警察，不断地疏散交通，将汽车引入合适的道路上。</p>
+<p><strong>而在我看来，</strong> 负载均衡服务大体上可以分为两大类：一类是 <strong>代理类的负载均衡服务</strong> ；另一类是 <strong>客户端负载均衡服务</strong> 。</p>
+<h3 id="代理类的负载均衡服务"><a href="#代理类的负载均衡服务" class="headerlink" title="代理类的负载均衡服务"></a>代理类的负载均衡服务</h3><p>代理类的负载均衡服务，以单独的服务方式部署，所有的请求都要先经过负载均衡服务，在负载均衡服务中，选出一个合适的服务节点后，再由负载均衡服务，调用这个服务节点来实现流量的分发。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/7a76b0b7c6e3fc4b60cfcda8dbd93dc9.jpg" alt="img"></p>
+<p>由于这类服务需要承担全量的请求，所以对于性能的要求极高。代理类的负载均衡服务有很多开源实现，比较著名的有 LVS，Nginx 等等。LVS 在 OSI 网络模型中的第四层，传输层工作，所以 LVS 又可以称为四层负载；而 Nginx 运行在 OSI 网络模型中的第七层，应用层，所以又可以称它为七层负载（你可以回顾一下02 讲的内容）。</p>
+<p>在项目的架构中，我们一般会同时部署 LVS 和 Nginx 来做 HTTP 应用服务的负载均衡。也就是说，在入口处部署 LVS，将流量分发到多个 Nginx 服务器上，再由 Nginx 服务器分发到应用服务器上， <strong>为什么这么做呢？</strong></p>
+<p>主要和 LVS 和 Nginx 的特点有关，LVS 是在网络栈的四层做请求包的转发，请求包转发之后，由客户端和后端服务直接建立连接，后续的响应包不会再经过 LVS 服务器，所以相比 Nginx，性能会更高，也能够承担更高的并发。</p>
+<p>可 LVS 缺陷是工作在四层，而请求的 URL 是七层的概念，不能针对 URL 做更细致地请求分发，而且 LVS 也没有提供探测后端服务是否存活的机制；而 Nginx 虽然比 LVS 的性能差很多，但也可以承担每秒几万次的请求，并且它在配置上更加灵活，还可以感知后端服务是否出现问题。</p>
+<p>因此，LVS 适合在入口处，承担大流量的请求分发，而 Nginx 要部署在业务服务器之前做更细维度的请求分发。 <strong>我给你的建议是，</strong> 如果你的 QPS 在十万以内，那么可以考虑不引入 LVS 而直接使用 Nginx 作为唯一的负载均衡服务器，这样少维护一个组件，也会减少系统的维护成本。</p>
+<p>不过这两个负载均衡服务适用于普通的 Web 服务，对于微服务架构来说，它们是不合适的。因为微服务架构中的服务节点存储在注册中心里，使用 LVS 就很难和注册中心交互，获取全量的服务节点列表。另外，一般微服务架构中，使用的是 RPC 协议而不是 HTTP 协议，所以 Nginx 也不能满足要求。</p>
+<h3 id="客户端负载均衡服务"><a href="#客户端负载均衡服务" class="headerlink" title="客户端负载均衡服务"></a>客户端负载均衡服务</h3><p><strong>所以，我们会使用另一类的负载均衡服务，客户端负载均衡服务，也就是把负载均衡的服务内嵌在 RPC 客户端中。</strong></p>
+<p>它一般和客户端应用，部署在一个进程中，提供多种选择节点的策略，最终为客户端应用提供一个最佳的，可用的服务端节点。这类服务一般会结合注册中心来使用，注册中心提供服务节点的完整列表，客户端拿到列表之后使用负载均衡服务的策略选取一个合适的节点，然后将请求发到这个节点上。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/539f9fd7196c3c0b17eba55584d4c6c1.jpg" alt="img"></p>
+<p>了解负载均衡服务的分类，是你学习负载均衡服务的第一步，接下来，你需要掌握负载均衡策略，这样一来，你在实际工作中，配置负载均衡服务的时候，可以对原理有更深刻的了解。</p>
+<h2 id="常见的负载均衡策略有哪些"><a href="#常见的负载均衡策略有哪些" class="headerlink" title="常见的负载均衡策略有哪些"></a>常见的负载均衡策略有哪些</h2><p>负载均衡策略从大体上来看可以分为两类：</p>
+<ul>
+<li><p>一类是静态策略，也就是说负载均衡服务器在选择服务节点时，不会参考后端服务的实际运行的状态。</p>
+</li>
+<li><p>一类是动态策略，也就是说负载均衡服务器会依据后端服务的一些负载特性，来决定要选择哪一个服务节点。</p>
+</li>
+</ul>
+<h3 id="静态策略"><a href="#静态策略" class="headerlink" title="静态策略"></a>静态策略</h3><p>常见的静态策略有几种，其中使用最广泛的是 <strong>轮询的策略（RoundRobin，RR），</strong> 这种策略会记录上次请求后端服务的地址或者序号，然后在请求时，按照服务列表的顺序，请求下一个后端服务节点。伪代码如下：</p>
+<pre><code class="java">
+AtomicInteger lastCounter = getLastCounter();// 获取上次请求的服务节点的序号 
+List&lt;String&gt; serverList = getServerList(); // 获取服务列表
+int currentIndex = lastCounter.addAndGet(); // 增加序列号
+if(currentIndex &gt;= serverList.size()) &#123;
+  currentIndex = 0;
+&#125;
+setLastCounter(currentIndex);
+return serverList.get(currentIndex);
+</code></pre>
+<p>它其实是一种通用的策略，基本上，大部分的负载均衡服务器都支持。轮询的策略可以做到将请求尽量平均地分配到所有服务节点上，但是，它没有考虑服务节点的具体配置情况。比如，你有三个服务节点，其中一个服务节点的配置是 8 核 8G，另外两个节点的配置是 4 核 4G，那么如果使用轮询的方式来平均分配请求的话，8 核 8G 的节点分到的请求数量和 4 核 4G 的一样多，就不能发挥性能上的优势了</p>
+<p>所以，我们考虑给节点加上权重值，比如给 8 核 8G 的机器配置权重为 2，那么就会给它分配双倍的流量， <strong>这种策略就是带有权重的轮询策略。</strong></p>
+<p>除了这两种策略之外，目前开源的负载均衡服务还提供了很多静态策略：</p>
+<ul>
+<li><p>Nginx 提供了 ip_hash 和 url_hash 算法；</p>
+</li>
+<li><p>LVS 提供了按照请求的源地址，和目的地址做 hash 的策略；</p>
+</li>
+<li><p>Dubbo 也提供了随机选取策略，以及一致性 hash 的策略。</p>
+</li>
+</ul>
+<p><strong>但是在我看来，</strong> 轮询和带有权重的轮询策略，能够将请求尽量平均地分配到后端服务节点上，也就能够做到对于负载的均衡分配，在没有更好的动态策略之前，应该优先使用这两种策略，比如 Nginx 就会优先使用轮询的策略。</p>
+<h3 id="动态策略"><a href="#动态策略" class="headerlink" title="动态策略"></a>动态策略</h3><p>而目前开源的负载均衡服务中，也会提供一些动态策略，我强调一下它们的原理。</p>
+<p>在负载均衡服务器上会收集对后端服务的调用信息，比如从负载均衡端到后端服务的活跃连接数，或者是调用的响应时间，然后从中选择连接数最少的服务，或者响应时间最短的后端服务。  <strong>我举几个具体的例子：</strong></p>
+<ul>
+<li><p>Dubbo 提供的 LeastAcive 策略，就是优先选择活跃连接数最少的服务；</p>
+</li>
+<li><p>Spring Cloud 全家桶中的 Ribbon 提供了 WeightedResponseTimeRule 是使用响应时间，给每个服务节点计算一个权重，然后依据这个权重，来给调用方分配服务节点。</p>
+</li>
+</ul>
+<p>**这些策略的思考点 ** 是从调用方的角度出发，选择负载最小、资源最空闲的服务来调用，以期望能得到更高的服务调用性能，也就能最大化地使用服务器的空闲资源，请求也会响应地更迅速， <strong>所以，我建议你，</strong> 在实际开发中，优先考虑使用动态的策略。</p>
+<p>到目前为止，你已经可以根据上面的分析，选择适合自己的负载均衡策略，并选择一个最优的服务节点， <strong>那么问题来了：</strong> 你怎么保证选择出来的这个节点，一定是一个可以正常服务的节点呢？如果你采用的是轮询的策略，选择出来的，是一个故障节点又要怎么办呢？所以，为了降低请求被分配到一个故障节点的几率，有些负载均衡服务器，还提供了对服务节点的故障检测功能。</p>
+<h2 id="如何检测节点是否故障"><a href="#如何检测节点是否故障" class="headerlink" title="如何检测节点是否故障"></a>如何检测节点是否故障</h2><p>24 讲中，我带你了解到，在微服务化架构中，服务节点会定期地向注册中心发送心跳包，这样注册中心就能够知晓服务节点是否故障，也就可以确认传递给负载均衡服务的节点，一定是可用的。</p>
+<p>但对于 Nginx 来说， <strong>我们要如何保证配置的服务节点是可用的呢？</strong></p>
+<p>这就要感谢淘宝开源的 Nginx 模块 <code>nginx_upstream_check_module</code> 了，这个模块可以让 Nginx 定期地探测后端服务的一个指定的接口，然后根据返回的状态码，来判断服务是否还存活。当探测不存活的次数达到一定阈值时，就自动将这个后端服务从负载均衡服务器中摘除。 <strong>它的配置样例如下：</strong></p>
+<pre><code class="bash">upstream server &#123;
+        server 192.168.1.1:8080;
+        server 192.168.1.2:8080;
+        // 检测间隔为 3 秒，检测超时时间是 1 秒，使用 http 协议。如果连续失败次数达到 5 次就认为服务不可用；如果连续连续成功次数达到 2 次，则认为服务可用。后端服务刚启动时状态是不可用的
+        check interval=3000 rise=2 fall=5 timeout=1000 type=http default_down=true;
+        check_http_send &quot;GET /health_check HTTP/1.0\r\n\r\n&quot;; // 检测 URL
+        check_http_expect_alive http_2xx; // 检测返回状态码为 200 时认为检测成功
+&#125;
+</code></pre>
+<p>Nginx 按照上面的方式配置之后，你的业务服务器也要实现一个 <code>/health_check</code> 的接口，在这个接口中返回的 HTTP 状态码，这个返回的状态码可以存储在配置中心中，这样在变更状态码时，就不需要重启服务了（配置中心在第 33 节课中会讲到）。</p>
+<p>节点检测的功能，还能够帮助我们实现 Web 服务的优雅关闭。在 24 讲中介绍注册中心时，我曾经提到，服务的优雅关闭需要先切除流量再关闭服务，使用了注册中心之后，就可以先从注册中心中摘除节点，再重启服务，以便达到优雅关闭的目的。那么 Web 服务要如何实现优雅关闭呢？接下来，我来给你了解一下，有了节点检测功能之后，服务是如何启动和关闭的。</p>
+<p><strong>在服务刚刚启动时，</strong> 可以初始化默认的 HTTP 状态码是 500，这样 Nginx 就不会很快将这个服务节点标记为可用，也就可以等待服务中，依赖的资源初始化完成，避免服务初始启动时的波动。</p>
+<p><strong>在完全初始化之后，</strong> 再将 HTTP 状态码变更为 200，Nginx 经过两次探测后，就会标记服务为可用。在服务关闭时，也应该先将 HTTP 状态码变更为 500，等待 Nginx 探测将服务标记为不可用后，前端的流量也就不会继续发往这个服务节点。在等待服务正在处理的请求全部处理完毕之后，再对服务做重启，可以避免直接重启导致正在处理的请求失败的问题。 <strong>这是启动和关闭线上 Web 服务时的标准姿势，你可以在项目中参考使用。</strong></p>
+<h2 id="课程小结"><a href="#课程小结" class="headerlink" title="课程小结"></a>课程小结</h2><p>本节课，我带你了解了与负载均衡服务相关的一些知识点，以及在实际工作中的运用技巧。我想强调几个重点：</p>
+<ul>
+<li><p>网站负载均衡服务的部署，是以 LVS 承接入口流量，在应用服务器之前，部署 Nginx 做细化的流量分发，和故障节点检测。当然，如果你的网站的并发不高，也可以考虑不引入 LVS。</p>
+</li>
+<li><p>负载均衡的策略可以优先选择动态策略，保证请求发送到性能最优的节点上；如果没有合适的动态策略，那么可以选择轮询的策略，让请求平均分配到所有的服务节点上。</p>
+</li>
+<li><p>Nginx 可以引入 nginx_upstream_check_module，对后端服务做定期的存活检测，后端的服务节点在重启时，也要秉承着「先切流量后重启」的原则，尽量减少节点重启对于整体系统的影响。</p>
+</li>
+</ul>
+<p>你可能会认为，像 Nginx、LVS 应该是运维所关心的组件，作为开发人员不用操心维护。 <strong>不过通过今天的学习你应该可以看到：</strong> 负载均衡服务是提升系统扩展性，和性能的重要组件，在高并发系统设计中，它发挥的作用是无法替代的。理解它的原理，掌握使用它的正确姿势，应该是每一个后端开发同学的必修课。</p>
+<h2 id="一课一思"><a href="#一课一思" class="headerlink" title="一课一思"></a>一课一思</h2><p>在实际的工作中，你一定也用过很多的负载均衡的服务和组件，那么在使用过程中你遇到过哪些问题呢，有哪些注意的点呢？</p>
+<h2 id="拓展阅读"><a href="#拓展阅读" class="headerlink" title="拓展阅读"></a>拓展阅读</h2><ul>
+<li><p>对于普通 web 服务，nginx 有办法感知新增结点吗？</p>
+<p>有一种 consul + nginx 方案，就是把节点信息写在 consul 里面，这样当节点变化时，nginx 可以得到通知</p>
+</li>
+<li><p>关闭服务之前，用 503 状态码响应健康检查语义更明确一些。</p>
+</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-40-%E9%97%AE/" rel="tag"><i class="ic i-tag"></i> 高并发系统设计 40 问</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-20 00:36:04" itemprop="dateModified" datetime="2023-02-20T00:36:04+08:00">2023-02-20</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/06/" title="26丨负载均衡：怎样提升系统的横向扩展能力？">http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/06/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis3attqj20zk0m8k7l.jpg" title="27丨API 网关：系统的门面要如何做呢？">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>27丨API 网关：系统的门面要如何做呢？</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1giciryrr3rj20zk0m8nhk.jpg" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#26%E4%B8%A8%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%EF%BC%9A%E6%80%8E%E6%A0%B7%E6%8F%90%E5%8D%87%E7%B3%BB%E7%BB%9F%E7%9A%84%E6%A8%AA%E5%90%91%E6%89%A9%E5%B1%95%E8%83%BD%E5%8A%9B%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">26丨负载均衡：怎样提升系统的横向扩展能力？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84%E7%A7%8D%E7%B1%BB"><span class="toc-number">1.1.</span> <span class="toc-text">负载均衡服务器的种类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%A3%E7%90%86%E7%B1%BB%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.1.</span> <span class="toc-text">代理类的负载均衡服务</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E6%9C%8D%E5%8A%A1"><span class="toc-number">1.1.2.</span> <span class="toc-text">客户端负载均衡服务</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1%E7%AD%96%E7%95%A5%E6%9C%89%E5%93%AA%E4%BA%9B"><span class="toc-number">1.2.</span> <span class="toc-text">常见的负载均衡策略有哪些</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E7%AD%96%E7%95%A5"><span class="toc-number">1.2.1.</span> <span class="toc-text">静态策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8A%A8%E6%80%81%E7%AD%96%E7%95%A5"><span class="toc-number">1.2.2.</span> <span class="toc-text">动态策略</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E6%A3%80%E6%B5%8B%E8%8A%82%E7%82%B9%E6%98%AF%E5%90%A6%E6%95%85%E9%9A%9C"><span class="toc-number">1.3.</span> <span class="toc-text">如何检测节点是否故障</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%B0%8F%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">课程小结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E8%AF%BE%E4%B8%80%E6%80%9D"><span class="toc-number">1.5.</span> <span class="toc-text">一课一思</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8B%93%E5%B1%95%E9%98%85%E8%AF%BB"><span class="toc-number">1.6.</span> <span class="toc-text">拓展阅读</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/1.2_course/course/" rel="bookmark" title="课程">课程</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.1/README/" rel="bookmark" title="操作系统">操作系统</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.2/README/" rel="bookmark" title="领域驱动设计">领域驱动设计</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.4/README/" rel="bookmark" title="ElasticSearch知识体系详解">ElasticSearch知识体系详解</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.3/README/" rel="bookmark" title="分布式数据库详解">分布式数据库详解</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.1/README/" rel="bookmark" title="计算机基础实战课">计算机基础实战课</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/README/" rel="bookmark" title="高并发系统设计 40 问">高并发系统设计 40 问</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.2/README/" rel="bookmark" title="Java业务开发常见错误">Java业务开发常见错误</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.2/README/" rel="bookmark" title="消息队列理论课">消息队列理论课</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.1/README/" rel="bookmark" title="Java 并发编程">Java 并发编程</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.2/README/" rel="bookmark" title="Netty 核心原理剖析与 RPC 实践">Netty 核心原理剖析与 RPC 实践</a></li><li><a href="/2019/07/01/other/1.2_course/3.3.1/README/" rel="bookmark" title="性能测试">性能测试</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.5/README/" rel="bookmark" title="Redis 核心原理与实战">Redis 核心原理与实战</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.3/README/" rel="bookmark" title="深入理解 Sentinel">深入理解 Sentinel</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/00/README/" rel="bookmark" title="开篇-为什么你要学习高并发系统设计">开篇-为什么你要学习高并发系统设计</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" rel="bookmark" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" rel="bookmark" title="02丨架构分层：我们为什么一定要这么做？">02丨架构分层：我们为什么一定要这么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" rel="bookmark" title="03丨系统设计目标 1：如何提升系统性能？">03丨系统设计目标 1：如何提升系统性能？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" rel="bookmark" title="04丨系统设计目标 2：系统怎样做到高可用？">04丨系统设计目标 2：系统怎样做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" rel="bookmark" title="05丨系统设计目标 3：如何让系统易于扩展？">05丨系统设计目标 3：如何让系统易于扩展？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/06/" rel="bookmark" title="06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？">06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/README/" rel="bookmark" title="01丨基础篇">01丨基础篇</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/01/" rel="bookmark" title="17丨消息队列：秒杀时如何处理每秒上万次的下单请求？">17丨消息队列：秒杀时如何处理每秒上万次的下单请求？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/02/" rel="bookmark" title="18丨消息投递：如何保证消息仅仅被消费一次？">18丨消息投递：如何保证消息仅仅被消费一次？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/03/" rel="bookmark" title="19丨消息队列：如何降低消息队列系统中消息的延迟？">19丨消息队列：如何降低消息队列系统中消息的延迟？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/04/" rel="bookmark" title="20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？">20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/05/" rel="bookmark" title="期中测试丨10 道高并发系统设计题目自测">期中测试丨10 道高并发系统设计题目自测</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" rel="bookmark" title="04丨演进篇-消息队列">04丨演进篇-消息队列</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/01/" rel="bookmark" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" rel="bookmark" title="22丨微服务架构：微服务化后，系统架构要如何改造？">22丨微服务架构：微服务化后，系统架构要如何改造？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/03/" rel="bookmark" title="23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？">23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/04/" rel="bookmark" title="24丨注册中心：分布式系统如何寻址？">24丨注册中心：分布式系统如何寻址？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" rel="bookmark" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</a></li><li class="active"><a href="/2019/07/01/other/1.2_course/3.1.1/05/06/" rel="bookmark" title="26丨负载均衡：怎样提升系统的横向扩展能力？">26丨负载均衡：怎样提升系统的横向扩展能力？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" rel="bookmark" title="27丨API 网关：系统的门面要如何做呢？">27丨API 网关：系统的门面要如何做呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/08/" rel="bookmark" title="28丨多机房部署：跨地域的分布式系统如何做？">28丨多机房部署：跨地域的分布式系统如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/09/" rel="bookmark" title="29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？">29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/README/" rel="bookmark" title="05丨演进篇-分布式服务">05丨演进篇-分布式服务</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/01/" rel="bookmark" title="12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？">12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/02/" rel="bookmark" title="13丨缓存的使用姿势 1：如何选择缓存的读写策略？">13丨缓存的使用姿势 1：如何选择缓存的读写策略？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/03/" rel="bookmark" title="14丨缓存的使用姿势 2：缓存如何做到高可用？">14丨缓存的使用姿势 2：缓存如何做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/04/" rel="bookmark" title="15丨缓存的使用姿势 3：缓存穿透了怎么办？">15丨缓存的使用姿势 3：缓存穿透了怎么办？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/05/" rel="bookmark" title="16丨CDN：静态资源如何加速？">16丨CDN：静态资源如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/06/" rel="bookmark" title="加餐丨数据的迁移应该如何做？">加餐丨数据的迁移应该如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/README/" rel="bookmark" title="03丨演进篇-缓存">03丨演进篇-缓存</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/01/" rel="bookmark" title="30丨给系统加上眼睛：服务端监控要怎么做？">30丨给系统加上眼睛：服务端监控要怎么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/02/" rel="bookmark" title="31丨应用性能管理：用户的使用体验应该如何监控？">31丨应用性能管理：用户的使用体验应该如何监控？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/03/" rel="bookmark" title="32丨压力测试：怎样设计全链路压力测试平台？">32丨压力测试：怎样设计全链路压力测试平台？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/04/" rel="bookmark" title="33丨配置管理：成千上万的配置项要如何管理？">33丨配置管理：成千上万的配置项要如何管理？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/05/" rel="bookmark" title="34丨降级熔断：如何屏蔽非核心系统故障的影响？">34丨降级熔断：如何屏蔽非核心系统故障的影响？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/06/" rel="bookmark" title="35丨流量控制：高并发系统中我们如何操纵流量？">35丨流量控制：高并发系统中我们如何操纵流量？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/07/" rel="bookmark" title="36丨面试现场第 3 期：你要如何准备一场技术面试呢？">36丨面试现场第 3 期：你要如何准备一场技术面试呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/README/" rel="bookmark" title="06丨演进篇-维护">06丨演进篇-维护</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/01/" rel="bookmark" title="07丨池化技术：如何减少频繁创建数据库连接的性能损耗？">07丨池化技术：如何减少频繁创建数据库连接的性能损耗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/03/" rel="bookmark" title="09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？">09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" rel="bookmark" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/04/" rel="bookmark" title="10丨发号器：如何保证分库分表后 ID 的全局唯一性？">10丨发号器：如何保证分库分表后 ID 的全局唯一性？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/05/" rel="bookmark" title="11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？">11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/README/" rel="bookmark" title="02丨演进篇-数据库">02丨演进篇-数据库</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" rel="bookmark" title="37丨计数系统设计 1：面对海量数据的计数器要如何做？">37丨计数系统设计 1：面对海量数据的计数器要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/02/" rel="bookmark" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" rel="bookmark" title="39丨信息流设计 1：通用信息流系统的推模式要如何做？">39丨信息流设计 1：通用信息流系统的推模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/04/" rel="bookmark" title="40丨信息流设计 2：通用信息流系统的拉模式要如何做？">40丨信息流设计 2：通用信息流系统的拉模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/README/" rel="bookmark" title="07丨实战篇">07丨实战篇</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" title="二叉搜索树知识">二叉搜索树知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E9%9A%8F%E7%AC%94/" title="分类于 随笔">随笔</a>
+</div>
+
+    <span><a href="/2019/07/01/other/3.1_note/notes6/" title="随笔——白日梦想家">随笔——白日梦想家</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" title="单源最短路径知识">单源最短路径知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" title="线性 DP 题目">线性 DP 题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch04/" title="第 4 章 模块应该是深的">第 4 章 模块应该是深的</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" title="图的存储结构和问题应用">图的存储结构和问题应用</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/1.1.5/README/" title="Redis 核心原理与实战">Redis 核心原理与实战</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" title="二分图基础题目">二分图基础题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/06/07/" title="36丨面试现场第 3 期：你要如何准备一场技术面试呢？">36丨面试现场第 3 期：你要如何准备一场技术面试呢？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" title="区间 DP 知识">区间 DP 知识</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/1.2_course/3.1.1/05/06/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

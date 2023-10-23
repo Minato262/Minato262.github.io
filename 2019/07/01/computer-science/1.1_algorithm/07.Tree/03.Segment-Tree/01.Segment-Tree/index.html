@@ -1,0 +1,944 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="算法与数据结构" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/">
+
+
+
+  <title>
+线段树知识 - 算法 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">线段树知识
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 21:43:40">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T21:43:40+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="item" rel="index" title="分类于 算法"><span itemprop="name">算法</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="1-线段树简介"><a href="#1-线段树简介" class="headerlink" title="1. 线段树简介"></a>1. 线段树简介</h2><h3 id="1-1-线段树的定义"><a href="#1-1-线段树的定义" class="headerlink" title="1.1 线段树的定义"></a>1.1 线段树的定义</h3><blockquote>
+<p><strong>线段树（Segment Tree）</strong>：一种基于分治思想的二叉树，用于在区间上进行信息统计。它的每一个节点都对应一个区间 <code>[left, right]</code> ，<code>left</code>、<code>right</code> 通常是整数。每一个叶子节点表示了一个单位区间（长度为 <code>1</code>），叶子节点对应区间上 <code>left == right</code>。每一个非叶子节点 <code>[left, right]</code> 的左子节点表示的区间都为 <code>[left, (left + right) / 2]</code>，右子节点表示的的区间都为 <code>[(left + right) / 2 + 1, right]</code>。</p>
+</blockquote>
+<p>线段树是一棵平衡二叉树，树上的每个节点维护一个区间。根节点维护的是整个区间，每个节点维护的是父亲节点的区间二等分之后的其中一个子区间。当有 <code>n</code> 个元素时，对区间的操作（单点更新、区间更新、区间查询等）可以在 $O(log_2n)$ 的时间复杂度内完成。</p>
+<p>如下图所示，这是一棵区间为 <code>[0, 7]</code> 的线段树。</p>
+<p><img data-src="https://qcdn.itcharge.cn/images/20220302103338.png"></p>
+<h3 id="1-2-线段树的特点"><a href="#1-2-线段树的特点" class="headerlink" title="1.2 线段树的特点"></a>1.2 线段树的特点</h3><p>根据上述描述，我们可以总结一下线段树的特点：</p>
+<ol>
+<li>线段树的每个节点都代表一个区间。</li>
+<li>线段树具有唯一的根节点，代表的区间是整个统计范围，比如 <code>[1, n]</code>。</li>
+<li>线段树的每个叶子节点都代表一个长度为 <code>1</code> 的单位区间 <code>[x, x]</code>。</li>
+<li>对于每个内部节点 <code>[left, right]</code>，它的左子节点是 <code>[left, mid]</code>，右子节点是 <code>[mid + 1, right]</code>。其中 <code>mid = (left + right) / 2</code>（向下取整）。</li>
+</ol>
+<h2 id="2-线段树的构建"><a href="#2-线段树的构建" class="headerlink" title="2. 线段树的构建"></a>2. 线段树的构建</h2><h3 id="2-1-线段树的存储结构"><a href="#2-1-线段树的存储结构" class="headerlink" title="2.1 线段树的存储结构"></a>2.1 线段树的存储结构</h3><p>之前我们学习过二叉树的两种存储结构，一种是「链式存储结构」，另一种是「顺序存储结构」。线段树也可以使用这两种存储结构来实现。</p>
+<p>由于线段树近乎是完全二叉树，所以很适合用「顺序存储结构」来实现。</p>
+<p>我们可以采用与完全二叉树类似的编号方法来对线段树进行编号，方法如下：</p>
+<ul>
+<li>根节点的编号为 <code>0</code>。</li>
+<li>如果某二叉树节点（非叶子节点）的下标为 <code>i</code>，那么其左孩子节点下标为 <code>2 * i + 1</code>，右孩子节点下标为 <code>2 * i + 2</code>。</li>
+<li>如果某二叉树节点（非根节点）的下标为 <code>i</code>，那么其父节点下标为 <code>(i - 1) // 2</code>，<code>//</code> 表示整除。</li>
+</ul>
+<p>这样我们就能使用一个数组来保存线段树。那么这个数组的大小应该设置为多少才合适？</p>
+<ul>
+<li>在理想情况下，<code>n</code> 个单位区间构成的线段树是一棵满二叉树，节点数为 $n + n&#x2F;2 + n&#x2F;4 + … + 2 + 1 &#x3D; 2 * n - 1$ 个。 因为 $2 * n - 1 &lt; 2 * n$，所以在理想情况下，只需要使用一个大小为 $2 * n$ 的数组来存储线段树就足够了。</li>
+<li>但是在一般情况下，有些区间元素需要开辟新的一层来存储元素。线段树的深度为 $\lceil log_2n \rceil$，最坏情况下叶子节点（包括无用的节点）的数量为 $2^{\lceil log_2n \rceil}$ 个，总节点数为 $2^{\lceil log_2n \rceil + 1} - 1$ 个，可以近似看做是 $4 * n$，所以我们可以使用一个大小为 $4 * n$ 的数组来存储线段树。</li>
+</ul>
+<h3 id="2-2-线段树的构建方法"><a href="#2-2-线段树的构建方法" class="headerlink" title="2.2 线段树的构建方法"></a>2.2 线段树的构建方法</h3><p><img data-src="https://qcdn.itcharge.cn/images/20220303131328.png" alt="线段树父子节点下标关系"></p>
+<p>通过上图可知：下标为 <code>i</code> 的节点的孩子节点下标为 <code>2 * i + 1</code> 和 <code>2 * i + 2</code>。所以线段树十分适合采用递归的方法来创建。具体步骤如下：</p>
+<ol>
+<li>如果是叶子节点（<code>left == right</code>），则节点的值就是对应位置的元素值。</li>
+<li>如果是非叶子节点，则递归创建左子树和右子树。</li>
+<li>节点的区间值（区间和、区间最大值、区间最小值）等于该节点左右子节点元素值的对应计算结果。</li>
+</ol>
+<p>线段树的构建实现代码如下：</p>
+<pre><code class="Python"># 线段树的节点类
+class TreeNode:
+    def __init__(self, val=0):
+        self.left = -1                              # 区间左边界
+        self.right = -1                             # 区间右边界
+        self.val = val                              # 节点值（区间值）
+        self.lazy_tag = None                        # 区间和问题的延迟更新标记
+        
+        
+# 线段树类
+class SegmentTree:
+    def __init__(self, nums, function):
+        self.size = len(nums)
+        self.tree = [TreeNode() for _ in range(4 * self.size)]  # 维护 TreeNode 数组
+        self.nums = nums                            # 原始数据
+        self.function = function                    # function 是一个函数，左右区间的聚合方法
+        if self.size &gt; 0:
+            self.__build(0, 0, self.size - 1)
+            
+    # 构建线段树，节点的存储下标为 index，节点的区间为 [left, right]
+    def __build(self, index, left, right):
+        self.tree[index].left = left
+        self.tree[index].right = right
+        if left == right:                           # 叶子节点，节点值为对应位置的元素值
+            self.tree[index].val = self.nums[left]
+            return
+    
+        mid = left + (right - left) // 2            # 左右节点划分点
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        self.__build(left_index, left, mid)         # 递归创建左子树
+        self.__build(right_index, mid + 1, right)   # 递归创建右子树
+        self.__pushup(index)                        # 向上更新节点的区间值
+    
+    # 向上更新下标为 index 的节点区间值，节点的区间值等于该节点左右子节点元素值的聚合计算结果
+    def __pushup(self, index):
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        self.tree[index].val = self.function(self.tree[left_index].val, self.tree[right_index].val)
+</code></pre>
+<p>这里的 <code>function</code> 指的是线段树区间合并的聚合方法。可以根据题意进行变化，常见的操作有求和、取最大值、取最小值等等。</p>
+<h2 id="3-线段树的基本操作"><a href="#3-线段树的基本操作" class="headerlink" title="3. 线段树的基本操作"></a>3. 线段树的基本操作</h2><p>线段树的基本操作主要涉及到单点更新、区间查询和区间更新操作。下面我们来进行一一讲解。</p>
+<h3 id="3-1-线段树的单点更新"><a href="#3-1-线段树的单点更新" class="headerlink" title="3.1 线段树的单点更新"></a>3.1 线段树的单点更新</h3><blockquote>
+<p><strong>线段树的单点更新</strong>：修改一个元素的值，例如将 <code>nums[i]</code> 修改为 <code>val</code>。</p>
+</blockquote>
+<p>我们可以采用递归的方式进行单点更新，具体步骤如下：</p>
+<ol>
+<li>如果是叶子节点，满足 <code>left == right</code>，则更新该节点的值。</li>
+<li>如果是非叶子节点，则判断应该在左子树中更新，还是应该在右子树中更新。</li>
+<li>在对应的左子树或右子树中更新节点值。</li>
+<li>左右子树更新返回之后，向上更新节点的区间值（区间和、区间最大值、区间最小值等），区间值等于该节点左右子节点元素值的聚合计算结果。</li>
+</ol>
+<p>线段树的单点更新实现代码如下：</p>
+<pre><code class="Python">    # 单点更新，将 nums[i] 更改为 val
+    def update_point(self, i, val):
+        self.nums[i] = val
+        self.__update_point(i, val, 0, 0, self.size - 1)
+        
+    # 单点更新，将 nums[i] 更改为 val。节点的存储下标为 index，节点的区间为 [left, right]
+    def __update_point(self, i, val, index, left, right):
+        if self.tree[index].left == self.tree[index].right:
+            self.tree[index].val = val              # 叶子节点，节点值修改为 val
+            return
+        
+        mid = left + (right - left) // 2            # 左右节点划分点
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        if i &lt;= mid:                                # 在左子树中更新节点值
+            self.__update_point(i, val, left_index, left, mid)
+        else:                                       # 在右子树中更新节点值
+            self.__update_point(i, val, right_index, mid + 1, right)
+        self.__pushup(index)                        # 向上更新节点的区间值
+</code></pre>
+<h3 id="3-2-线段树的区间查询"><a href="#3-2-线段树的区间查询" class="headerlink" title="3.2 线段树的区间查询"></a>3.2 线段树的区间查询</h3><blockquote>
+<p><strong>线段树的区间查询</strong>：查询一个区间为 <code>[q_left, q_right]</code> 的区间值。</p>
+</blockquote>
+<p>我们可以采用递归的方式进行区间查询，具体步骤如下：</p>
+<ol>
+<li>如果区间 <code>[q_left, q_right]</code> 完全覆盖了当前节点所在区间  <code>[left, right]</code> ，即 <code>left &gt;= q_left</code> 并且 <code>right &lt;= q_right</code>，则返回该节点的区间值。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与当前节点所在区间 <code>[left, right]</code> 毫无关系，即 <code>right &lt; q_left</code> 或者 <code>left &gt; q_right</code>，则返回 <code>0</code>。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与当前节点所在区间有交集，则：<ol>
+<li>如果区间 <code>[q_left, q_right]</code> 与左子节点所在区间 <code>[left, mid]</code> 有交集，即 <code>q_left &lt;= mid</code>，则在当前节点的左子树中进行查询并保存查询结果 <code>res_left</code>。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与右子节点所在区间 <code>[mid + 1, right]</code> 有交集，即 <code>q_right &gt; mid</code>，则在当前节点的右子树中进行查询并保存查询结果 <code>res_right</code>。</li>
+<li>最后返回左右子树元素区间值的聚合计算结果。</li>
+</ol>
+</li>
+</ol>
+<p>线段树的区间查询代码如下：</p>
+<pre><code class="Python">    # 区间查询，查询区间为 [q_left, q_right] 的区间值
+    def query_interval(self, q_left, q_right):
+        return self.__query_interval(q_left, q_right, 0, 0, self.size - 1)
+    
+    # 区间查询，在线段树的 [left, right] 区间范围中搜索区间为 [q_left, q_right] 的区间值
+    def __query_interval(self, q_left, q_right, index, left, right):
+        if left &gt;= q_left and right &lt;= q_right:     # 节点所在区间被 [q_left, q_right] 所覆盖
+            return self.tree[index].val             # 直接返回节点值
+        if right &lt; q_left or left &gt; q_right:        # 节点所在区间与 [q_left, q_right] 无关
+            return 0
+    
+        self.__pushdown(index)
+    
+        mid = left + (right - left) // 2            # 左右节点划分点
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        res_left = 0                                # 左子树查询结果
+        res_right = 0                               # 右子树查询结果
+        if q_left &lt;= mid:                           # 在左子树中查询
+            res_left = self.__query_interval(q_left, q_right, left_index, left, mid)
+        if q_right &gt; mid:                           # 在右子树中查询
+            res_right = self.__query_interval(q_left, q_right, right_index, mid + 1, right)
+        return self.function(res_left, res_right)   # 返回左右子树元素值的聚合计算结果
+</code></pre>
+<h3 id="3-3-线段树的区间更新"><a href="#3-3-线段树的区间更新" class="headerlink" title="3.3 线段树的区间更新"></a>3.3 线段树的区间更新</h3><blockquote>
+<p><strong>线段树的区间更新</strong>：对 <code>[q_left, q_right]</code> 区间进行更新，例如将 <code>[q_left, q_right]</code> 区间内所有元素都更新为 <code>val</code>。</p>
+</blockquote>
+<h4 id="3-3-1-延迟标记"><a href="#3-3-1-延迟标记" class="headerlink" title="3.3.1 延迟标记"></a>3.3.1 延迟标记</h4><p>线段树在进行单点更新、区间查询时，区间 <code>[q_left, q_right]</code> 在线段树上会被分成 $O(log_2n)$ 个小区间（节点），从而在 $O(log_2n)$ 的时间复杂度内完成操作。</p>
+<p>而在「区间更新」操作中，如果某个节点区间 <code>[left, right]</code> 被修改区间 <code>[q_left, q_right]</code> 完全覆盖，则以该节点为根的整棵子树中所有节点的区间值都要发生变化，如果逐一进行更新的话，将使得一次区间更新操作的时间复杂度增加到 $O(n)$。</p>
+<p>设想这一种情况：如果我们在一次执行更新操作时，发现当前节点区间 <code>[left, right]</code> 被修改区间 <code>[q_left, q_right]</code> 完全覆盖，然后逐一更新了区间 <code>[left, right]</code> 对应子树中的所有节点，但是在后续的区间查询操作中却根本没有用到 <code>[left, right]</code> 作为候选答案，则更新 <code>[left, right]</code> 对应子树的工作就是徒劳的。</p>
+<p>如果我们减少更新的次数和时间复杂度，应该怎么办？</p>
+<p>我们可以向线段树的节点类中增加一个 <strong>「延迟标记」</strong>，标识为 <strong>「该区间曾经被修改为 <code>val</code>，但其子节点区间值尚未更新」</strong>。也就是说除了在进行区间更新时，将区间子节点的更新操作延迟到 <strong>「在后续操作中递归进入子节点时」</strong> 再执行。这样一来，每次区间更新和区间查询的时间复杂度都降低到了 $O(log_2n)$。</p>
+<p>使用「延迟标记」的区间更新步骤为：</p>
+<ol>
+<li>如果区间 <code>[q_left, q_right]</code> 完全覆盖了当前节点所在区间  <code>[left, right]</code> ，即 <code>left &gt;= q_left</code> 并且 <code>right &lt;= q_right</code>，则更新当前节点所在区间的值，并将当前节点的延迟标记为区间值。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与当前节点所在区间 <code>[left, right]</code> 毫无关系，即 <code>right &lt; q_left</code> 或者 <code>left &gt; q_right</code>，则直接返回。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与当前节点所在区间有交集，则：<ol>
+<li>如果当前节点使用了「延迟标记」，即延迟标记不为 <code>None</code>，则将当前区间的更新操作应用到该节点的子节点上（即向下更新）。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与左子节点所在区间 <code>[left, mid]</code> 有交集，即 <code>q_left &lt;= mid</code>，则在当前节点的左子树中更新区间值。</li>
+<li>如果区间 <code>[q_left, q_right]</code> 与右子节点所在区间 <code>[mid + 1, right]</code> 有交集，即 <code>q_right &gt; mid</code>，则在当前节点的右子树中更新区间值。</li>
+<li>左右子树更新返回之后，向上更新节点的区间值（区间和、区间最大值、区间最小值），区间值等于该节点左右子节点元素值的对应计算结果。</li>
+</ol>
+</li>
+</ol>
+<h4 id="3-3-2-向下更新"><a href="#3-3-2-向下更新" class="headerlink" title="3.3.2 向下更新"></a>3.3.2 向下更新</h4><p>上面提到了如果当前节点使用了「延迟标记」，即延迟标记不为 <code>None</code>，则将当前区间的更新操作应用到该节点的子节点上（即向下更新）。这里描述一下向下更新的具体步骤：</p>
+<ol>
+<li>更新左子节点值和左子节点懒惰标记为 <code>val</code>。</li>
+<li>更新右子节点值和右子节点懒惰标记为 <code>val</code>。</li>
+<li>将当前节点的懒惰标记更新为 <code>None</code>。</li>
+</ol>
+<p>使用「延迟标记」的区间更新实现代码如下：</p>
+<pre><code class="Python">    # 区间更新，将区间为 [q_left, q_right] 上的元素值修改为 val
+    def update_interval(self, q_left, q_right, val):
+        self.__update_interval(q_left, q_right, val, 0, 0, self.size - 1)
+        
+    # 区间更新
+    def __update_interval(self, q_left, q_right, val, index, left, right):
+        
+        if left &gt;= q_left and right &lt;= q_right:     # 节点所在区间被 [q_left, q_right] 所覆盖
+            interval_size = (right - left + 1)      # 当前节点所在区间大小
+            self.tree[index].val = interval_size * val # 当前节点所在区间每个元素值改为 val
+            self.tree[index].lazy_tag = val         # 将当前节点的延迟标记为区间值
+            return
+        if right &lt; q_left or left &gt; q_right:        # 节点所在区间与 [q_left, q_right] 无关
+            return 0
+    
+        self.__pushdown(index)
+    
+        mid = left + (right - left) // 2            # 左右节点划分点
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        if q_left &lt;= mid:                           # 在左子树中更新区间值
+            self.__update_interval(q_left, q_right, val, left_index, left, mid)
+        if q_right &gt; mid:                           # 在右子树中更新区间值
+            self.__update_interval(q_left, q_right, val, right_index, mid + 1, right)
+        
+        self.__pushup(index)
+    
+    # 向下更新下标为 index 的节点所在区间的左右子节点的值和懒惰标记
+    def __pushdown(self, index):
+        lazy_tag = self.tree[index].lazy_tag
+        if not lazy_tag:
+            return
+        
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        
+        self.tree[left_index].lazy_tag = lazy_tag   # 更新左子节点懒惰标记
+        left_size = (self.tree[left_index].right - self.tree[left_index].left + 1)
+        self.tree[left_index].val = lazy_tag * left_size    # 更新左子节点值
+
+        self.tree[right_index].lazy_tag = lazy_tag  # 更新右子节点懒惰标记
+        right_size = (self.tree[right_index].right - self.tree[right_index].left + 1)
+        self.tree[right_index].val = lazy_tag * right_size  # 更新右子节点值
+
+        self.tree[index].lazy_tag = None            # 更新当前节点的懒惰标记
+</code></pre>
+<blockquote>
+<p><strong>注意</strong>：有些题目中不是将 <code>[q_left, q_right]</code> 区间更新为 <code>val</code>，而是将 <code>[q_left, q_right]</code> 区间中每一个元素值在原值基础增加或减去 <code>val</code>。</p>
+<p>对于这种情况，我们可以更改一下「延迟标记」的定义。改变为： <strong>「该区间曾经变化了 <code>val</code>，但其子节点区间值尚未更新」</strong>。并更改对应的代码逻辑。</p>
+</blockquote>
+<p>使用「延迟标记」的区间增减更新实现代码如下：</p>
+<pre><code class="Python">    # 区间更新，将区间为 [q_left, q_right] 上的元素值修改为 val
+    def update_interval(self, q_left, q_right, val):
+        self.__update_interval(q_left, q_right, val, 0, 0, self.size - 1)
+        
+    # 区间更新
+    def __update_interval(self, q_left, q_right, val, index, left, right):
+        
+        if left &gt;= q_left and right &lt;= q_right:     # 节点所在区间被 [q_left, q_right] 所覆盖
+#            interval_size = (right - left + 1)      # 当前节点所在区间大小
+#            self.tree[index].val = interval_size * val # 当前节点所在区间每个元素值改为 val
+#            self.tree[index].lazy_tag = val         # 将当前节点的延迟标记为区间值
+        
+            if self.tree[index].lazy_tag:
+                self.tree[index].lazy_tag += val    # 将当前节点的延迟标记增加 val
+            else:
+                self.tree[index].lazy_tag = val     # 将当前节点的延迟标记增加 val
+            interval_size = (right - left + 1)      # 当前节点所在区间大小
+            self.tree[index].val += val * interval_size  # 当前节点所在区间每个元素值增加 val
+            return
+        if right &lt; q_left or left &gt; q_right:        # 节点所在区间与 [q_left, q_right] 无关
+            return 0
+    
+        self.__pushdown(index)
+    
+        mid = left + (right - left) // 2            # 左右节点划分点
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        if q_left &lt;= mid:                           # 在左子树中更新区间值
+            self.__update_interval(q_left, q_right, val, left_index, left, mid)
+        if q_right &gt; mid:                           # 在右子树中更新区间值
+            self.__update_interval(q_left, q_right, val, right_index, mid + 1, right)
+        
+        self.__pushup(index)
+    
+    # 向下更新下标为 index 的节点所在区间的左右子节点的值和懒惰标记
+    def __pushdown(self, index):
+        lazy_tag = self.tree[index].lazy_tag
+        if not lazy_tag:
+            return
+        
+        left_index = index * 2 + 1                  # 左子节点的存储下标
+        right_index = index * 2 + 2                 # 右子节点的存储下标
+        
+        if self.tree[left_index].lazy_tag:
+            self.tree[left_index].lazy_tag += lazy_tag  # 更新左子节点懒惰标记
+        else:
+            self.tree[left_index].lazy_tag = lazy_tag
+        left_size = (self.tree[left_index].right - self.tree[left_index].left + 1)
+        self.tree[left_index].val += lazy_tag * left_size   # 左子节点每个元素值增加 lazy_tag
+        
+        if self.tree[right_index].lazy_tag:
+            self.tree[right_index].lazy_tag += lazy_tag # 更新右子节点懒惰标记
+        else:
+            self.tree[right_index].lazy_tag = lazy_tag
+        right_size = (self.tree[right_index].right - self.tree[right_index].left + 1)
+        self.tree[right_index].val += lazy_tag * right_size # 右子节点每个元素值增加 lazy_tag
+        
+        self.tree[index].lazy_tag = None            # 更新当前节点的懒惰标记
+</code></pre>
+<h2 id="4-线段树的常见题型"><a href="#4-线段树的常见题型" class="headerlink" title="4. 线段树的常见题型"></a>4. 线段树的常见题型</h2><h3 id="4-1-RMQ-问题"><a href="#4-1-RMQ-问题" class="headerlink" title="4.1 RMQ 问题"></a>4.1 RMQ 问题</h3><blockquote>
+<p><strong>RMQ 问题</strong>：Range Maximum &#x2F; Minimum Query 的缩写，指的是对于长度为 <code>n</code> 的数组序列 <code>nums</code>，回答若干个询问问题 <code>RMQ(nums, q_left, q_right)</code>，要求返回数组序列 <code>nums</code> 在区间 <code>[q_left, q_right]</code> 中的最大（最小）值。也就是求区间最大（最小）值问题。</p>
+</blockquote>
+<p>假设查询次数为 <code>q</code>，则使用朴素算法解决 RMQ 问题的时间复杂度为 $O(q * n)$。而使用线段树解决 RMQ 问题的时间复杂度为 $O(q * n)$ ~ $Q(q * log_2n)$ 之间。</p>
+<h3 id="4-2-单点更新，区间查询问题"><a href="#4-2-单点更新，区间查询问题" class="headerlink" title="4.2 单点更新，区间查询问题"></a>4.2 单点更新，区间查询问题</h3><blockquote>
+<p><strong>单点更新，区间查询问题</strong>：</p>
+<ol>
+<li>修改某一个元素的值。</li>
+<li>查询区间为 <code>[q_left, q_right]</code> 的区间值。</li>
+</ol>
+</blockquote>
+<p>这类问题直接使用「3.1 线段树的单点更新」和「3.2 线段树的区间查询」即可解决。</p>
+<h3 id="4-3-区间更新，区间查询问题"><a href="#4-3-区间更新，区间查询问题" class="headerlink" title="4.3 区间更新，区间查询问题"></a>4.3 区间更新，区间查询问题</h3><blockquote>
+<p><strong>区间更新，区间查询问题</strong>：</p>
+<ol>
+<li>修改某一个区间的值。</li>
+<li>查询区间为 <code>[q_left, q_right]</code> 的区间值。</li>
+</ol>
+</blockquote>
+<p>这类问题直接使用「3.3 线段树的区间更新」和「3.2 线段树的区间查询」即可解决。</p>
+<h3 id="4-4-区间合并问题"><a href="#4-4-区间合并问题" class="headerlink" title="4.4 区间合并问题"></a>4.4 区间合并问题</h3><blockquote>
+<p><strong>区间合并，区间查询问题</strong>：</p>
+<ol>
+<li>修改某一个区间的值。</li>
+<li>查询区间为 <code>[q_left, q_right]</code> 中满足条件的连续最长区间值。</li>
+</ol>
+</blockquote>
+<p>这类问题需要在「3.3 线段树的区间更新」和「3.2 线段树的区间查询」的基础上增加变动，在进行向上更新时需要对左右子节点的区间进行合并。</p>
+<h3 id="4-5-扫描线问题"><a href="#4-5-扫描线问题" class="headerlink" title="4.5 扫描线问题"></a>4.5 扫描线问题</h3><blockquote>
+<p><strong>扫描线问题</strong>：虚拟扫描线或扫描面来解决欧几里德空间中的各种问题，一般被用来解决图形面积，周长等问题。</p>
+<p>主要思想为：想象一条线（通常是一条垂直线）在平面上扫过或移动，在某些点停止。几何操作仅限于几何对象，无论何时停止，它们都与扫描线相交或紧邻扫描线，并且一旦线穿过所有对象，就可以获得完整的解。</p>
+</blockquote>
+<p>这类问题通常坐标跨度很大，需要先对每条扫描线的坐标进行离散化处理，将 <code>y</code> 坐标映射到 <code>0, 1, 2, ...</code> 中。然后将每条竖线的端点作为区间范围，使用线段树存储每条竖线的信息（<code>x</code> 坐标、是左竖线还是右竖线等），然后再进行区间合并，并统计相关信息。</p>
+<h2 id="5-线段树的拓展"><a href="#5-线段树的拓展" class="headerlink" title="5. 线段树的拓展"></a>5. 线段树的拓展</h2><h3 id="5-1-动态开点线段树"><a href="#5-1-动态开点线段树" class="headerlink" title="5.1 动态开点线段树"></a>5.1 动态开点线段树</h3><p>在有些情况下，线段树需要维护的区间很大（例如 $[1, 10^9]$），在实际中用到的节点却很少。</p>
+<p>如果使用之前数组形式实现线段树，则需要 $4 * n$ 大小的空间，空间消耗有点过大了。</p>
+<p>这时候我们就可以使用动态开点的思想来构建线段树。</p>
+<p>动态开点线段树的算法思想如下：</p>
+<ul>
+<li>开始时只建立一个根节点，代表整个区间。</li>
+<li>当需要访问线段树的某棵子树（某个子区间）时，再建立代表这个子区间的节点。</li>
+</ul>
+<p>动态开点线段树实现代码如下：</p>
+<pre><code class="Python"># 线段树的节点类
+class TreeNode:
+    def __init__(self, left=-1, right=-1, val=0):
+        self.left = left                            # 区间左边界
+        self.right = right                          # 区间右边界
+        self.mid = left + (right - left) // 2
+        self.leftNode = None                        # 区间左节点
+        self.rightNode = None                       # 区间右节点
+        self.val = val                              # 节点值（区间值）
+        self.lazy_tag = None                        # 区间问题的延迟更新标记
+        
+        
+# 线段树类
+class SegmentTree:
+    def __init__(self, function):
+        self.tree = TreeNode(0, int(1e9))
+        self.function = function                    # function 是一个函数，左右区间的聚合方法
+            
+    # 向上更新 node 节点区间值，节点的区间值等于该节点左右子节点元素值的聚合计算结果
+    def __pushup(self, node):
+        leftNode = node.leftNode
+        rightNode = node.rightNode
+        if leftNode and rightNode:
+            node.val = self.function(leftNode.val, rightNode.val)
+            
+    # 单点更新，将 nums[i] 更改为 val
+    def update_point(self, i, val):
+        self.__update_point(i, val, self.tree)
+        
+    # 单点更新，将 nums[i] 更改为 val。node 节点的区间为 [node.left, node.right]
+    def __update_point(self, i, val, node):
+        if node.left == node.right:
+            node.val = val                          # 叶子节点，节点值修改为 val
+            return
+        
+        if i &lt;= node.mid:                           # 在左子树中更新节点值
+            if not node.leftNode:
+                node.leftNode = TreeNode(node.left, node.mid)
+            self.__update_point(i, val, node.leftNode)
+        else:                                       # 在右子树中更新节点值
+            if not node.rightNode:
+                node.rightNode = TreeNode(node.mid + 1, node.right)
+            self.__update_point(i, val, node.rightNode)
+        self.__pushup(node)                         # 向上更新节点的区间值
+        
+    # 区间查询，查询区间为 [q_left, q_right] 的区间值
+    def query_interval(self, q_left, q_right):
+        return self.__query_interval(q_left, q_right, self.tree)
+    
+    # 区间查询，在线段树的 [left, right] 区间范围中搜索区间为 [q_left, q_right] 的区间值
+    def __query_interval(self, q_left, q_right, node):
+        if node.left &gt;= q_left and node.right &lt;= q_right:   # 节点所在区间被 [q_left, q_right] 所覆盖
+            return node.val                         # 直接返回节点值
+        if node.right &lt; q_left or node.left &gt; q_right:  # 节点所在区间与 [q_left, q_right] 无关
+            return 0
+                                  
+        self.__pushdown(node)                       # 向下更新节点所在区间的左右子节点的值和懒惰标记
+        
+        res_left = 0                                # 左子树查询结果
+        res_right = 0                               # 右子树查询结果
+        if q_left &lt;= node.mid:                      # 在左子树中查询
+            if not node.leftNode:
+                node.leftNode = TreeNode(node.left, node.mid)
+            res_left = self.__query_interval(q_left, q_right, node.leftNode)
+        if q_right &gt; node.mid:                      # 在右子树中查询
+            if not node.rightNode:
+                node.rightNode = TreeNode(node.mid + 1, node.right)
+            res_right = self.__query_interval(q_left, q_right, node.rightNode)
+        return self.function(res_left, res_right)   # 返回左右子树元素值的聚合计算结果
+    
+    # 区间更新，将区间为 [q_left, q_right] 上的元素值修改为 val
+    def update_interval(self, q_left, q_right, val):
+        self.__update_interval(q_left, q_right, val, self.tree)
+        
+    # 区间更新
+    def __update_interval(self, q_left, q_right, val, node):
+        if node.left &gt;= q_left and node.right &lt;= q_right:  # 节点所在区间被 [q_left, q_right] 所覆盖
+            if node.lazy_tag:
+                node.lazy_tag += val                # 将当前节点的延迟标记增加 val
+            else:
+                node.lazy_tag = val                 # 将当前节点的延迟标记增加 val
+            interval_size = (node.right - node.left + 1)    # 当前节点所在区间大小
+            node.val += val * interval_size         # 当前节点所在区间每个元素值增加 val
+            return
+        if node.right &lt; q_left or node.left &gt; q_right:  # 节点所在区间与 [q_left, q_right] 无关
+            return 0
+    
+        self.__pushdown(node)                       # 向下更新节点所在区间的左右子节点的值和懒惰标记
+    
+        if q_left &lt;= node.mid:                      # 在左子树中更新区间值
+            if not node.leftNode:
+                node.leftNode = TreeNode(node.left, node.mid)
+            self.__update_interval(q_left, q_right, val, node.leftNode)
+        if q_right &gt; node.mid:                      # 在右子树中更新区间值
+            if not node.rightNode:
+                node.rightNode = TreeNode(node.mid + 1, node.right)
+            self.__update_interval(q_left, q_right, val, node.rightNode)
+            
+        self.__pushup(node)
+    
+    # 向下更新 node 节点所在区间的左右子节点的值和懒惰标记
+    def __pushdown(self, node):
+        lazy_tag = node.lazy_tag
+        if not node.lazy_tag:
+            return
+        
+        if not node.leftNode:
+            node.leftNode = TreeNode(node.left, node.mid)
+        if not node.rightNode:
+            node.rightNode = TreeNode(node.mid + 1, node.right)
+            
+        if node.leftNode.lazy_tag:
+            node.leftNode.lazy_tag += lazy_tag      # 更新左子节点懒惰标记
+        else:
+            node.leftNode.lazy_tag = lazy_tag       # 更新左子节点懒惰标记
+        left_size = (node.leftNode.right - node.leftNode.left + 1)
+        node.leftNode.val += lazy_tag * left_size   # 左子节点每个元素值增加 lazy_tag
+        
+        if node.rightNode.lazy_tag:
+            node.rightNode.lazy_tag += lazy_tag     # 更新右子节点懒惰标记
+        else:
+            node.rightNode.lazy_tag = lazy_tag      # 更新右子节点懒惰标记
+        right_size = (node.rightNode.right - node.rightNode.left + 1)
+        node.rightNode.val += lazy_tag * right_size # 右子节点每个元素值增加 lazy_tag
+        
+        node.lazy_tag = None                        # 更新当前节点的懒惰标记
+</code></pre>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>【书籍】ACM-ICPC 程序设计系列 - 算法设计与实现 - 陈宇 吴昊 主编</li>
+<li>【书籍】算法训练营 陈小玉 著</li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly96aHVhbmxhbi56aGlodS5jb20vcC8zNDE1MDE0Mg==">史上最详细的线段树教程 - 知乎</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9oYWxmcm9zdC5jb20vc2VnbWVudF90cmVlLw==">线段树 Segment Tree 实战 - halfrost</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9vaS13aWtpLm9yZy9kcy9zZWcv">线段树 - OI Wiki</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzMzOTM1ODk1L2FydGljbGUvZGV0YWlscy8xMDI4MDYzNTc=">线段树的 python 实现 - 年糕的博客 - CSDN博客</span></li>
+<li>【博文】<span class="exturl" data-url="aHR0cHM6Ly93d3cuY25ibG9ncy5jb20vZGlqa3N0cmEyMDAzL3AvOTY3NjcyOS5odG1s">线段树 从入门到进阶 - Dijkstra·Liu - 博客园</span></li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="ic i-tag"></i> 算法与数据结构</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-19 22:49:54" itemprop="dateModified" datetime="2023-02-19T22:49:54+08:00">2023-02-19</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" title="线段树知识">http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis081o9j20zk0m8dmr.jpg" title="线段树题目">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>线段树题目</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis3attqj20zk0m8k7l.jpg" title="数组滑动窗口题目">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>数组滑动窗口题目</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 线段树简介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="toc-number">1.1.</span> <span class="toc-text">1.1 线段树的定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E7%89%B9%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">1.2 线段树的特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E6%9E%84%E5%BB%BA"><span class="toc-number">2.</span> <span class="toc-text">2. 线段树的构建</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%AD%98%E5%82%A8%E7%BB%93%E6%9E%84"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 线段树的存储结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E6%9E%84%E5%BB%BA%E6%96%B9%E6%B3%95"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 线段树的构建方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C"><span class="toc-number">3.</span> <span class="toc-text">3. 线段树的基本操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%8D%95%E7%82%B9%E6%9B%B4%E6%96%B0"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 线段树的单点更新</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 线段树的区间查询</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%8C%BA%E9%97%B4%E6%9B%B4%E6%96%B0"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 线段树的区间更新</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-%E5%BB%B6%E8%BF%9F%E6%A0%87%E8%AE%B0"><span class="toc-number">3.3.1.</span> <span class="toc-text">3.3.1 延迟标记</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-%E5%90%91%E4%B8%8B%E6%9B%B4%E6%96%B0"><span class="toc-number">3.3.2.</span> <span class="toc-text">3.3.2 向下更新</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E5%B8%B8%E8%A7%81%E9%A2%98%E5%9E%8B"><span class="toc-number">4.</span> <span class="toc-text">4. 线段树的常见题型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-RMQ-%E9%97%AE%E9%A2%98"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 RMQ 问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%8D%95%E7%82%B9%E6%9B%B4%E6%96%B0%EF%BC%8C%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2%E9%97%AE%E9%A2%98"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 单点更新，区间查询问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%8C%BA%E9%97%B4%E6%9B%B4%E6%96%B0%EF%BC%8C%E5%8C%BA%E9%97%B4%E6%9F%A5%E8%AF%A2%E9%97%AE%E9%A2%98"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 区间更新，区间查询问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%8C%BA%E9%97%B4%E5%90%88%E5%B9%B6%E9%97%AE%E9%A2%98"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 区间合并问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%E6%89%AB%E6%8F%8F%E7%BA%BF%E9%97%AE%E9%A2%98"><span class="toc-number">4.5.</span> <span class="toc-text">4.5 扫描线问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E7%BA%BF%E6%AE%B5%E6%A0%91%E7%9A%84%E6%8B%93%E5%B1%95"><span class="toc-number">5.</span> <span class="toc-text">5. 线段树的拓展</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%8A%A8%E6%80%81%E5%BC%80%E7%82%B9%E7%BA%BF%E6%AE%B5%E6%A0%91"><span class="toc-number">5.1.</span> <span class="toc-text">5.1 动态开点线段树</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">6.</span> <span class="toc-text">参考资料</span></a></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" rel="bookmark" title="数据结构与算法">数据结构与算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/01.Data-Structures-Algorithms/" rel="bookmark" title="算法与数据结构">算法与数据结构</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" rel="bookmark" title="算法复杂度">算法复杂度</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" rel="bookmark" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/06.Interview-100-List/" rel="bookmark" title="LeetCode 面试最常考 100 题（按分类排序）">LeetCode 面试最常考 100 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" rel="bookmark" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/08.Algorithms-Overview/" rel="bookmark" title="算法">算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" rel="bookmark" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/01.Hash-Table/" rel="bookmark" title="哈希表知识">哈希表知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/04.Solutions-List/" rel="bookmark" title="LeetCode 题解（字典序排序，700+ 道题解）">LeetCode 题解（字典序排序，700+ 道题解）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="bookmark" title="哈希表题目">哈希表题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" rel="bookmark" title="数组基础知识">数组基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="bookmark" title="数组基础题目">数组基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/01.Array-Bubble-Sort/" rel="bookmark" title="冒泡排序">冒泡排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/02.Array-Selection-Sort/" rel="bookmark" title="选择排序">选择排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/03.Array-Insertion-Sort/" rel="bookmark" title="插入排序">插入排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/04.Array-Shell-Sort/" rel="bookmark" title="希尔排序">希尔排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/05.Array-Merge-Sort/" rel="bookmark" title="归并排序">归并排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/06.Array-Quick-Sort/" rel="bookmark" title="快速排序">快速排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" rel="bookmark" title="堆排序">堆排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" rel="bookmark" title="计数排序">计数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" rel="bookmark" title="桶排序">桶排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" rel="bookmark" title="基数排序">基数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/11.Array-Sort-List/" rel="bookmark" title="数组排序题目">数组排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/01.Array-Binary-Search/" rel="bookmark" title="二分查找知识">二分查找知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" rel="bookmark" title="二分查找题目">二分查找题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/01.Array-Two-Pointers/" rel="bookmark" title="数组双指针知识">数组双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="bookmark" title="数组双指针题目">数组双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" rel="bookmark" title="链表双指针知识">链表双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="bookmark" title="链表双指针题目">链表双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" rel="bookmark" title="链表排序知识">链表排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" rel="bookmark" title="链表排序题目">链表排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" rel="bookmark" title="单调栈知识">单调栈知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/02.Monotone-Stack-List/" rel="bookmark" title="单调栈题目">单调栈题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/01.Stack-Basic/" rel="bookmark" title="堆栈基础知识">堆栈基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/02.Stack-Basic-List/" rel="bookmark" title="堆栈基础题目">堆栈基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" rel="bookmark" title="队列基础知识">队列基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/02.Queue-Basic-List/" rel="bookmark" title="队列基础题目">队列基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" rel="bookmark" title="优先队列知识">优先队列知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" rel="bookmark" title="优先队列题目">优先队列题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" rel="bookmark" title="树与二叉树基础知识">树与二叉树基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/02.Binary-Tree-Traverse/" rel="bookmark" title="二叉树的遍历知识">二叉树的遍历知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/04.Binary-Tree-Reduction/" rel="bookmark" title="二叉树的还原知识">二叉树的还原知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/05.Binary-Tree-Reduction-List/" rel="bookmark" title="二叉树的还原题目">二叉树的还原题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" rel="bookmark" title="二叉树的遍历题目">二叉树的遍历题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" rel="bookmark" title="二叉搜索树知识">二叉搜索树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/02.Binary-Search-Tree-List/" rel="bookmark" title="二叉搜索树题目">二叉搜索树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" rel="bookmark" title="数组滑动窗口知识">数组滑动窗口知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="bookmark" title="数组滑动窗口题目">数组滑动窗口题目</a></li><li class="active"><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" rel="bookmark" title="线段树知识">线段树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="bookmark" title="线段树题目">线段树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" rel="bookmark" title="链表基础知识">链表基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" rel="bookmark" title="链表经典题目">链表经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/01.Binary-Indexed-Tree/" rel="bookmark" title="树状数组知识">树状数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/02.Binary-Indexed-Tree-List/" rel="bookmark" title="树状数组题目">树状数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/01.String-Basic/" rel="bookmark" title="字符串基础知识">字符串基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" rel="bookmark" title="字符串经典题目">字符串经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" rel="bookmark" title="字典树知识">字典树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/02.Trie-List/" rel="bookmark" title="字典树题目">字典树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/03.AC-Automaton/" rel="bookmark" title="AC 自动机知识">AC 自动机知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" rel="bookmark" title="AC 自动机题目">AC 自动机题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" rel="bookmark" title="后缀数组知识">后缀数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" rel="bookmark" title="后缀数组题目">后缀数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="bookmark" title="图的定义和分类">图的定义和分类</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="bookmark" title="图的存储结构和问题应用">图的存储结构和问题应用</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="bookmark" title="并查集知识">并查集知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="bookmark" title="并查集题目">并查集题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/01.Graph-DFS/" rel="bookmark" title="图的深度优先搜索知识">图的深度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/02.Graph-DFS-List/" rel="bookmark" title="图的深度优先搜索题目">图的深度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" rel="bookmark" title="图的广度优先搜索知识">图的广度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" rel="bookmark" title="图的广度优先搜索题目">图的广度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/05.Graph-Topological-Sorting/" rel="bookmark" title="图的拓扑排序知识">图的拓扑排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/06.Graph-Topological-Sorting-List/" rel="bookmark" title="图的拓扑排序题目">图的拓扑排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" rel="bookmark" title="图的生成树知识">图的生成树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" rel="bookmark" title="Prim 算法">Prim 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/03.Graph-Kruskal/" rel="bookmark" title="Kruskal 算法">Kruskal 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/04.Gaph-Spanning-Tree-List/" rel="bookmark" title="图的生成树题目">图的生成树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/01.String-Brute-Force/" rel="bookmark" title="Brute Force 算法">Brute Force 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/02.String-Rabin-Karp/" rel="bookmark" title="Rabin Karp 算法">Rabin Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="bookmark" title="KMP 算法">KMP 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" rel="bookmark" title="Boyer Moore 算法">Boyer Moore 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="bookmark" title="Horspool 算法">Horspool 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" rel="bookmark" title="Sunday 算法">Sunday 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" rel="bookmark" title="单模式串匹配题目">单模式串匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" rel="bookmark" title="枚举算法知识">枚举算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/02.Enumeration-Algorithm-List/" rel="bookmark" title="枚举算法题目">枚举算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" rel="bookmark" title="二分图基础知识">二分图基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" rel="bookmark" title="二分图基础题目">二分图基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/03.Graph-Bipartite-Matching/" rel="bookmark" title="二分图最大匹配知识">二分图最大匹配知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/04.Graph-Hungarian-Algorithm/" rel="bookmark" title="匈牙利算法">匈牙利算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/05.Graph-Hopcroft-Karp/" rel="bookmark" title="Hopcroft-Karp 算法">Hopcroft-Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/06.Graph-Bipartite-Matching-List/" rel="bookmark" title="二分图最大匹配题目">二分图最大匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" rel="bookmark" title="回溯算法知识">回溯算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" rel="bookmark" title="回溯算法题目">回溯算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" rel="bookmark" title="贪心算法知识">贪心算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" rel="bookmark" title="贪心算法题目">贪心算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" rel="bookmark" title="分治算法知识">分治算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/02.Divide-And-Conquer-Algorithm-List/" rel="bookmark" title="分治算法题目">分治算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" rel="bookmark" title="递归算法知识">递归算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/02.Recursive-Algorithm-List/" rel="bookmark" title="递归算法题目">递归算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" rel="bookmark" title="位运算知识">位运算知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/02.Bit-Operation-List/" rel="bookmark" title="位运算题目">位运算题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" rel="bookmark" title="单源最短路径知识">单源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/02.Graph-Dijkstra/" rel="bookmark" title="Dijkstra 算法">Dijkstra 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/03.Graph-Bellman-Ford/" rel="bookmark" title="Bellman-Ford 算法">Bellman-Ford 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/04.Graph-SPFA/" rel="bookmark" title="SPFA 算法">SPFA 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/05.Graph-Single-Source-Shortest-Path-List/" rel="bookmark" title="单源最短路径题目">单源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/06.Graph-Multi-Source-Shortest-Path/" rel="bookmark" title="多源最短路径知识">多源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/07.Graph-Floyed/" rel="bookmark" title="Floyed 算法">Floyed 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/08.Graph-Multi-Source-Shortest-Path-List/" rel="bookmark" title="多源最短路径题目">多源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/09.Graph-The-Second-Shortest-Path/" rel="bookmark" title="次短路径知识">次短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" rel="bookmark" title="次短路径题目">次短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" rel="bookmark" title="差分约束系统知识">差分约束系统知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/12.Graph-System-Of-Difference-Constraints-List/" rel="bookmark" title="差分约束系统题目">差分约束系统题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/01.Dynamic-Programming-Basic/" rel="bookmark" title="动态规划基础知识">动态规划基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/02.Dynamic-Programming-Basic-List/" rel="bookmark" title="动态规划基础题目">动态规划基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" rel="bookmark" title="背包问题知识">背包问题知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" rel="bookmark" title="背包问题题目">背包问题题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/01.Tree-DP/" rel="bookmark" title="树形 DP 知识">树形 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" rel="bookmark" title="树形 DP 题目">树形 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/01.Linear-DP/" rel="bookmark" title="线性 DP 知识">线性 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" rel="bookmark" title="线性 DP 题目">线性 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/01.Memoization/" rel="bookmark" title="记忆化搜索知识">记忆化搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/02.Memoization-List/" rel="bookmark" title="记忆化搜索题目">记忆化搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" rel="bookmark" title="状态压缩 DP 知识">状态压缩 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" rel="bookmark" title="状态压缩 DP 题目">状态压缩 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" rel="bookmark" title="区间 DP 知识">区间 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/02.Interval-DP-List/" rel="bookmark" title="区间 DP 题目">区间 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/01.Count-DP/" rel="bookmark" title="计数 DP 知识">计数 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/02.Count-DP-List/" rel="bookmark" title="计数 DP 题目">计数 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/01.Probability-DP/" rel="bookmark" title="概率 DP 知识">概率 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" rel="bookmark" title="概率 DP 题目">概率 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/01.Number-DP/" rel="bookmark" title="数位 DP 知识">数位 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" rel="bookmark" title="数位 DP 题目">数位 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" rel="bookmark" title="单调栈 / 优先队列优化">单调栈 / 优先队列优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" rel="bookmark" title="斜率优化">斜率优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/03.Quadrangle-Optimization/" rel="bookmark" title="四边形不等式优化">四边形不等式优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" rel="bookmark" title="动态规划优化题目">动态规划优化题目</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" title="AC 自动机题目">AC 自动机题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" title="状态压缩 DP 知识">状态压缩 DP 知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" title="链表排序知识">链表排序知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" title="图的广度优先搜索知识">图的广度优先搜索知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" title="02丨架构分层：我们为什么一定要这么做？">02丨架构分层：我们为什么一定要这么做？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" title="Sunday 算法">Sunday 算法</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" title="基数排序">基数排序</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

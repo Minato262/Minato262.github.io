@@ -1,0 +1,759 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="算法与数据结构" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/">
+
+
+
+  <title>
+链表双指针知识 - 算法 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">链表双指针知识
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 21:43:40">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T21:43:40+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E7%AE%97%E6%B3%95/" itemprop="item" rel="index" title="分类于 算法"><span itemprop="name">算法</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h2 id="1-双指针简介"><a href="#1-双指针简介" class="headerlink" title="1. 双指针简介"></a>1. 双指针简介</h2><p>在数组双指针中我们已经学习过了双指针的概念。这里再来复习一下。</p>
+<blockquote>
+<p><strong>双指针（Two Pointers）</strong>：指的是在遍历元素的过程中，不是使用单个指针进行访问，而是使用两个指针进行访问，从而达到相应的目的。如果两个指针方向相反，则称为「对撞时针」。如果两个指针方向相同，则称为「快慢指针」。如果两个指针分别属于不同的数组 &#x2F; 链表，则称为「分离双指针」。</p>
+</blockquote>
+<p>而在单链表中，因为遍历节点只能顺着 <code>next</code> 指针方向进行，所以对于链表而言，一般只会用到「快慢指针」和「分离双指针」。其中链表的「快慢指针」又分为「起点不一致的快慢指针」和「步长不一致的快慢指针」。这几种类型的双指针所解决的问题也各不相同，下面我们一一进行讲解。</p>
+<h2 id="2-起点不一致的快慢指针"><a href="#2-起点不一致的快慢指针" class="headerlink" title="2. 起点不一致的快慢指针"></a>2. 起点不一致的快慢指针</h2><blockquote>
+<p><strong>起点不一致的快慢指针</strong>：指的是两个指针从同一侧开始遍历链表，但是两个指针的起点不一样。 快指针 <code>fast</code> 比慢指针 <code>slow</code> 先走 <code>n</code> 步，直到快指针移动到链表尾端时为止。</p>
+</blockquote>
+<h3 id="2-1-起点不一致的快慢指针求解步骤"><a href="#2-1-起点不一致的快慢指针求解步骤" class="headerlink" title="2.1 起点不一致的快慢指针求解步骤"></a>2.1 起点不一致的快慢指针求解步骤</h3><ol>
+<li>使用两个指针 <code>slow</code>、<code>fast</code>。<code>slow</code>、<code>fast</code> 都指向链表的头节点，即：<code>slow = head</code>，<code>fast = head</code>。</li>
+<li>先将快指针向右移动 <code>n</code> 步。然后再同时向右移动快、慢指针。</li>
+<li>等到快指针移动到链表尾部（即 <code>fast == None</code>）时跳出循环体。</li>
+</ol>
+<h3 id="2-2-起点不一致的快慢指针伪代码模板"><a href="#2-2-起点不一致的快慢指针伪代码模板" class="headerlink" title="2.2 起点不一致的快慢指针伪代码模板"></a>2.2 起点不一致的快慢指针伪代码模板</h3><pre><code class="Python">slow = head
+fast = head
+
+while n:
+    fast = fast.next
+    n -= 1
+while fast:
+    fast = fast.next
+    slow = slow.next
+</code></pre>
+<h3 id="2-3-起点不一致的快慢指针适用范围"><a href="#2-3-起点不一致的快慢指针适用范围" class="headerlink" title="2.3 起点不一致的快慢指针适用范围"></a>2.3 起点不一致的快慢指针适用范围</h3><p>起点不一致的快慢指针主要用于找到链表中倒数第 k 个节点、删除链表倒数第 N 个节点等。</p>
+<h3 id="2-4-删除链表的倒数第-N-个结点"><a href="#2-4-删除链表的倒数第-N-个结点" class="headerlink" title="2.4 删除链表的倒数第 N 个结点"></a>2.4 删除链表的倒数第 N 个结点</h3><h4 id="2-4-1-题目链接"><a href="#2-4-1-题目链接" class="headerlink" title="2.4.1 题目链接"></a>2.4.1 题目链接</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9yZW1vdmUtbnRoLW5vZGUtZnJvbS1lbmQtb2YtbGlzdC8=">19. 删除链表的倒数第 N 个结点 - 力扣（LeetCode）</span></li>
+</ul>
+<h4 id="2-4-2-题目大意"><a href="#2-4-2-题目大意" class="headerlink" title="2.4.2 题目大意"></a>2.4.2 题目大意</h4><p><strong>描述</strong>：给定一个链表的头节点 <code>head</code>。</p>
+<p><strong>要求</strong>：删除链表的倒数第 <code>n</code> 个节点，并且返回链表的头节点。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>要求使用一次遍历实现。</li>
+<li>链表中结点的数目为 <code>sz</code>。</li>
+<li>$1 \le sz \le 30$。</li>
+<li>$0 \le Node.val \le 100$。</li>
+<li>$1 \le n \le sz$。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<p><img data-src="https://assets.leetcode.com/uploads/2020/10/03/remove_ex1.jpg"></p>
+<pre><code class="Python">输入：head = [1,2,3,4,5], n = 2
+输出：[1,2,3,5]
+
+
+输入：head = [1], n = 1
+输出：[]
+</code></pre>
+<h4 id="2-4-3-解题思路"><a href="#2-4-3-解题思路" class="headerlink" title="2.4.3 解题思路"></a>2.4.3 解题思路</h4><h5 id="思路-1：快慢指针"><a href="#思路-1：快慢指针" class="headerlink" title="思路 1：快慢指针"></a>思路 1：快慢指针</h5><p>常规思路是遍历一遍链表，求出链表长度，再遍历一遍到对应位置，删除该位置上的节点。</p>
+<p>如果用一次遍历实现的话，可以使用快慢指针。让快指针先走 <code>n</code> 步，然后快慢指针、慢指针再同时走，每次一步，这样等快指针遍历到链表尾部的时候，慢指针就刚好遍历到了倒数第 <code>n</code> 个节点位置。将该位置上的节点删除即可。</p>
+<p>需要注意的是要删除的节点可能包含了头节点。我们可以考虑在遍历之前，新建一个头节点，让其指向原来的头节点。这样，最终如果删除的是头节点，则删除原头节点即可。返回结果的时候，可以直接返回新建头节点的下一位节点。</p>
+<h5 id="思路-1：代码"><a href="#思路-1：代码" class="headerlink" title="思路 1：代码"></a>思路 1：代码</h5><pre><code class="Python">class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -&gt; ListNode:
+        newHead = ListNode(0, head)
+        fast = head
+        slow = newHead
+        while n:
+            fast = fast.next
+            n -= 1
+        while fast:
+            fast = fast.next
+            slow = slow.next
+        slow.next = slow.next.next
+        return newHead.next
+</code></pre>
+<h5 id="思路-1：复杂度分析"><a href="#思路-1：复杂度分析" class="headerlink" title="思路 1：复杂度分析"></a>思路 1：复杂度分析</h5><ul>
+<li><strong>时间复杂度</strong>：$O(n)$。</li>
+<li><strong>空间复杂度</strong>：$O(1)$。</li>
+</ul>
+<h2 id="3-步长不一致的快慢指针"><a href="#3-步长不一致的快慢指针" class="headerlink" title="3. 步长不一致的快慢指针"></a>3. 步长不一致的快慢指针</h2><blockquote>
+<p><strong>步长不一致的快慢指针</strong>：指的是两个指针从同一侧开始遍历链表，两个指针的起点一样，但是步长不一致。例如，慢指针 <code>slow</code> 每次走 <code>1</code> 步，快指针 <code>fast</code> 每次走两步。直到快指针移动到链表尾端时为止。</p>
+</blockquote>
+<h3 id="3-1-步长不一致的快慢指针求解步骤"><a href="#3-1-步长不一致的快慢指针求解步骤" class="headerlink" title="3.1 步长不一致的快慢指针求解步骤"></a>3.1 步长不一致的快慢指针求解步骤</h3><ol>
+<li>使用两个指针 <code>slow</code>、<code>fast</code>。<code>slow</code>、<code>fast</code> 都指向链表的头节点。</li>
+<li>在循环体中将快、慢指针同时向右移动，但是快、慢指针的移动步长不一致。比如将慢指针每次移动 <code>1</code> 步，即 <code>slow = slow.next</code>。快指针每次移动 <code>2</code> 步，即 <code>fast = fast.next.next</code>。</li>
+<li>等到快指针移动到链表尾部（即 <code>fast == None</code>）时跳出循环体。</li>
+</ol>
+<h3 id="3-2-步长不一致的快慢指针伪代码模板"><a href="#3-2-步长不一致的快慢指针伪代码模板" class="headerlink" title="3.2 步长不一致的快慢指针伪代码模板"></a>3.2 步长不一致的快慢指针伪代码模板</h3><pre><code class="Python">fast = head
+slow = head
+
+while fast and fast.next:
+    slow = slow.next
+    fast = fast.next.next
+</code></pre>
+<h3 id="3-3-步长不一致的快慢指针适用范围"><a href="#3-3-步长不一致的快慢指针适用范围" class="headerlink" title="3.3 步长不一致的快慢指针适用范围"></a>3.3 步长不一致的快慢指针适用范围</h3><p>步长不一致的快慢指针适合寻找链表的中点、判断和检测链表是否有环、找到两个链表的交点等问题。</p>
+<h3 id="3-4-链表的中间结点"><a href="#3-4-链表的中间结点" class="headerlink" title="3.4 链表的中间结点"></a>3.4 链表的中间结点</h3><h4 id="3-4-1-题目链接"><a href="#3-4-1-题目链接" class="headerlink" title="3.4.1 题目链接"></a>3.4.1 题目链接</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9taWRkbGUtb2YtdGhlLWxpbmtlZC1saXN0Lw==">876. 链表的中间结点 - 力扣（LeetCode）</span></li>
+</ul>
+<h4 id="3-4-2-题目大意"><a href="#3-4-2-题目大意" class="headerlink" title="3.4.2 题目大意"></a>3.4.2 题目大意</h4><p><strong>描述</strong>：给定一个单链表的头节点 <code>head</code>。</p>
+<p><strong>要求</strong>：返回链表的中间节点。如果有两个中间节点，则返回第二个中间节点。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>给定链表的结点数介于 <code>1</code> 和 <code>100</code> 之间。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<pre><code class="Python">输入：[1,2,3,4,5]
+输出：此列表中的结点 3 (序列化形式：[3,4,5])
+解释：返回的结点值为 3 。
+注意，我们返回了一个 ListNode 类型的对象 ans，这样：
+ans.val = 3, ans.next.val = 4, ans.next.next.val = 5, 以及 ans.next.next.next = NULL.
+
+
+输入：[1,2,3,4,5,6]
+输出：此列表中的结点 4 (序列化形式：[4,5,6])
+解释：由于该列表有两个中间结点，值分别为 3 和 4，我们返回第二个结点。
+</code></pre>
+<h4 id="3-4-3-解题思路"><a href="#3-4-3-解题思路" class="headerlink" title="3.4.3 解题思路"></a>3.4.3 解题思路</h4><h5 id="思路-1：单指针"><a href="#思路-1：单指针" class="headerlink" title="思路 1：单指针"></a>思路 1：单指针</h5><p>先遍历一遍链表，统计一下节点个数为 <code>n</code>，再遍历到 <code>n / 2</code> 的位置，返回中间节点。</p>
+<h5 id="思路-1：代码-1"><a href="#思路-1：代码-1" class="headerlink" title="思路 1：代码"></a>思路 1：代码</h5><pre><code class="Python">class Solution:
+    def middleNode(self, head: ListNode) -&gt; ListNode:
+        n = 0
+        curr = head
+        while curr:
+            n += 1
+            curr = curr.next
+        k = 0
+        curr = head
+        while k &lt; n // 2:
+            k += 1
+            curr = curr.next
+        return curr
+</code></pre>
+<h5 id="思路-1：复杂度分析-1"><a href="#思路-1：复杂度分析-1" class="headerlink" title="思路 1：复杂度分析"></a>思路 1：复杂度分析</h5><ul>
+<li><strong>时间复杂度</strong>：$O(n)$。</li>
+<li><strong>空间复杂度</strong>：$O(1)$。</li>
+</ul>
+<h5 id="思路-2：快慢指针"><a href="#思路-2：快慢指针" class="headerlink" title="思路 2：快慢指针"></a>思路 2：快慢指针</h5><p>使用步长不一致的快慢指针进行一次遍历找到链表的中间节点。具体做法如下：</p>
+<ol>
+<li>使用两个指针 <code>slow</code>、<code>fast</code>。<code>slow</code>、<code>fast</code> 都指向链表的头节点。</li>
+<li>在循环体中将快、慢指针同时向右移动。其中慢指针每次移动 <code>1</code> 步，即 <code>slow = slow.next</code>。快指针每次移动 <code>2</code> 步，即 <code>fast = fast.next.next</code>。</li>
+<li>等到快指针移动到链表尾部（即 <code>fast == Node</code>）时跳出循环体，此时 <code>slow</code> 指向链表中间位置。</li>
+<li>返回 <code>slow</code> 指针。</li>
+</ol>
+<h5 id="思路-2：代码"><a href="#思路-2：代码" class="headerlink" title="思路 2：代码"></a>思路 2：代码</h5><pre><code class="Python">class Solution:
+    def middleNode(self, head: ListNode) -&gt; ListNode:
+        fast = head
+        slow = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow
+</code></pre>
+<h5 id="思路-2：复杂度分析"><a href="#思路-2：复杂度分析" class="headerlink" title="思路 2：复杂度分析"></a>思路 2：复杂度分析</h5><ul>
+<li><strong>时间复杂度</strong>：$O(n)$。</li>
+<li><strong>空间复杂度</strong>：$O(1)$。</li>
+</ul>
+<h3 id="3-5-判断链表中是否含有环"><a href="#3-5-判断链表中是否含有环" class="headerlink" title="3.5 判断链表中是否含有环"></a>3.5 判断链表中是否含有环</h3><h4 id="3-5-1-题目链接"><a href="#3-5-1-题目链接" class="headerlink" title="3.5.1 题目链接"></a>3.5.1 题目链接</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9saW5rZWQtbGlzdC1jeWNsZS8=">141. 环形链表 - 力扣（LeetCode）</span></li>
+</ul>
+<h4 id="3-5-2-题目大意"><a href="#3-5-2-题目大意" class="headerlink" title="3.5.2 题目大意"></a>3.5.2 题目大意</h4><p><strong>描述</strong>：给定一个链表的头节点 <code>head</code>。</p>
+<p><strong>要求</strong>：判断链表中是否有环。如果有环则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>链表中节点的数目范围是 $[0, 10^4]$。</li>
+<li>$-10^5 \le Node.val \le 10^5$。</li>
+<li><code>pos</code> 为 <code>-1</code> 或者链表中的一个有效索引。</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<p><img data-src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/07/circularlinkedlist.png"></p>
+<pre><code class="Python">输入：head = [3,2,0,-4], pos = 1
+输出：True
+解释：链表中有一个环，其尾部连接到第二个节点。
+</code></pre>
+<p><img data-src="https://assets.leetcode-cn.com/aliyun-lc-upload/uploads/2018/12/07/circularlinkedlist_test2.png"></p>
+<pre><code class="Python">输入：head = [1,2], pos = 0
+输出：True
+解释：链表中有一个环，其尾部连接到第一个节点。
+</code></pre>
+<h4 id="3-5-3-解题思路"><a href="#3-5-3-解题思路" class="headerlink" title="3.5.3 解题思路"></a>3.5.3 解题思路</h4><h5 id="思路-1：哈希表"><a href="#思路-1：哈希表" class="headerlink" title="思路 1：哈希表"></a>思路 1：哈希表</h5><p>最简单的思路是遍历所有节点，每次遍历节点之前，使用哈希表判断该节点是否被访问过。如果访问过就说明存在环，如果没访问过则将该节点添加到哈希表中，继续遍历判断。</p>
+<h5 id="思路-1：代码-2"><a href="#思路-1：代码-2" class="headerlink" title="思路 1：代码"></a>思路 1：代码</h5><pre><code class="Python">class Solution:
+    def hasCycle(self, head: ListNode) -&gt; bool:
+        nodeset = set()
+
+        while head:
+            if head in nodeset:
+                return True
+            nodeset.add(head)
+            head = head.next
+        return False
+</code></pre>
+<h5 id="思路-1：复杂度分析-2"><a href="#思路-1：复杂度分析-2" class="headerlink" title="思路 1：复杂度分析"></a>思路 1：复杂度分析</h5><ul>
+<li><strong>时间复杂度</strong>：$O(n)$。</li>
+<li><strong>空间复杂度</strong>：$O(n)$。</li>
+</ul>
+<h5 id="思路-2：快慢指针（Floyd-判圈算法）"><a href="#思路-2：快慢指针（Floyd-判圈算法）" class="headerlink" title="思路 2：快慢指针（Floyd 判圈算法）"></a>思路 2：快慢指针（Floyd 判圈算法）</h5><p>这种方法类似于在操场跑道跑步。两个人从同一位置同时出发，如果跑道有环（环形跑道），那么快的一方总能追上慢的一方。</p>
+<p>基于上边的想法，Floyd 用两个指针，一个慢指针（龟）每次前进一步，快指针（兔）指针每次前进两步（两步或多步效果是等价的）。如果两个指针在链表头节点以外的某一节点相遇（即相等）了，那么说明链表有环，否则，如果（快指针）到达了某个没有后继指针的节点时，那么说明没环。</p>
+<h5 id="思路-2：代码-1"><a href="#思路-2：代码-1" class="headerlink" title="思路 2：代码"></a>思路 2：代码</h5><pre><code class="Python">class Solution:
+    def hasCycle(self, head: ListNode) -&gt; bool:
+        if head == None or head.next == None:
+            return False
+
+        slow = head
+        fast = head.next
+
+        while slow != fast:
+            if fast == None or fast.next == None:
+                return False
+            slow = slow.next
+            fast = fast.next.next
+
+        return True
+</code></pre>
+<h5 id="思路-2：复杂度分析-1"><a href="#思路-2：复杂度分析-1" class="headerlink" title="思路 2：复杂度分析"></a>思路 2：复杂度分析</h5><ul>
+<li><strong>时间复杂度</strong>：$O(n)$。</li>
+<li><strong>空间复杂度</strong>：$O(1)$。</li>
+</ul>
+<h2 id="4-分离双指针"><a href="#4-分离双指针" class="headerlink" title="4. 分离双指针"></a>4. 分离双指针</h2><blockquote>
+<p><strong>分离双指针</strong>：两个指针分别属于不同的链表，两个指针分别在两个链表中移动。</p>
+</blockquote>
+<h3 id="4-1-分离双指针求解步骤"><a href="#4-1-分离双指针求解步骤" class="headerlink" title="4.1 分离双指针求解步骤"></a>4.1 分离双指针求解步骤</h3><ol>
+<li>使用两个指针 <code>left_1</code>、<code>left_2</code>。<code>left_1</code> 指向第一个链表头节点，即：<code>left_1 = list1</code>，<code>left_2</code> 指向第二个链表头节点，即：<code>left_2 = list2</code>。</li>
+<li>当满足一定条件时，两个指针同时右移，即 <code>left_1 = left_1.next</code>、<code>left_2 = left_2.next</code>。</li>
+<li>当满足另外一定条件时，将 <code>left_1</code> 指针右移，即 <code>left_1 = left_1.next</code>。</li>
+<li>当满足其他一定条件时，将 <code>left_2</code> 指针右移，即 <code>left_2 = left_2.next</code>。</li>
+<li>当其中一个链表遍历完时或者满足其他特殊条件时跳出循环体。</li>
+</ol>
+<h3 id="4-2-分离双指针伪代码模板"><a href="#4-2-分离双指针伪代码模板" class="headerlink" title="4.2 分离双指针伪代码模板"></a>4.2 分离双指针伪代码模板</h3><pre><code class="Python">left_1 = list1
+left_2 = list2
+
+while left_1 and left_2:
+    if 一定条件 1:
+        left_1 = left_1.next
+        left_2 = left_2.next
+    elif 一定条件 2:
+        left_1 = left_1.next
+    elif 一定条件 3:
+        left_2 = left_2.next
+</code></pre>
+<h3 id="4-3-分离双指针适用范围"><a href="#4-3-分离双指针适用范围" class="headerlink" title="4.3 分离双指针适用范围"></a>4.3 分离双指针适用范围</h3><p>分离双指针一般用于有序链表合并等问题。</p>
+<h3 id="4-4-合并两个有序链表"><a href="#4-4-合并两个有序链表" class="headerlink" title="4.4 合并两个有序链表"></a>4.4 合并两个有序链表</h3><h4 id="4-4-1-题目链接"><a href="#4-4-1-题目链接" class="headerlink" title="4.4.1 题目链接"></a>4.4.1 题目链接</h4><ul>
+<li><span class="exturl" data-url="aHR0cHM6Ly9sZWV0Y29kZS5jbi9wcm9ibGVtcy9tZXJnZS10d28tc29ydGVkLWxpc3RzLw==">21. 合并两个有序链表 - 力扣（LeetCode）</span></li>
+</ul>
+<h4 id="4-4-2-题目大意"><a href="#4-4-2-题目大意" class="headerlink" title="4.4.2 题目大意"></a>4.4.2 题目大意</h4><p><strong>描述</strong>：给定两个升序链表的头节点 <code>list1</code> 和 <code>list2</code>。</p>
+<p><strong>要求</strong>：将其合并为一个升序链表。</p>
+<p><strong>说明</strong>：</p>
+<ul>
+<li>两个链表的节点数目范围是 $[0, 50]$。</li>
+<li>$-100 \le Node.val \le 100$。</li>
+<li><code>list1</code> 和 <code>list2</code> 均按 <strong>非递减顺序</strong> 排列</li>
+</ul>
+<p><strong>示例</strong>：</p>
+<p><img data-src="https://assets.leetcode.com/uploads/2020/10/03/merge_ex1.jpg"></p>
+<pre><code class="Python">输入：list1 = [1,2,4], list2 = [1,3,4]
+输出：[1,1,2,3,4,4]
+
+
+输入：list1 = [], list2 = []
+输出：[]
+</code></pre>
+<h4 id="4-4-3-解题思路"><a href="#4-4-3-解题思路" class="headerlink" title="4.4.3 解题思路"></a>4.4.3 解题思路</h4><h5 id="思路-1：归并排序"><a href="#思路-1：归并排序" class="headerlink" title="思路 1：归并排序"></a>思路 1：归并排序</h5><p>利用归并排序的思想，具体步骤如下：</p>
+<ol>
+<li>使用哑节点 <code>dummy_head</code> 构造一个头节点，并使用 <code>curr</code> 指向 <code>dummy_head</code> 用于遍历。</li>
+<li>然后判断 <code>list1</code> 和 <code>list2</code> 头节点的值，将较小的头节点加入到合并后的链表中。并向后移动该链表的头节点指针。</li>
+<li>然后重复上一步操作，直到两个链表中出现链表为空的情况。</li>
+<li>将剩余链表链接到合并后的链表中。</li>
+<li>将哑节点 <code>dummy_dead</code> 的下一个链节点 <code>dummy_head.next</code> 作为合并后有序链表的头节点返回。</li>
+</ol>
+<h5 id="思路-1：代码-3"><a href="#思路-1：代码-3" class="headerlink" title="思路 1：代码"></a>思路 1：代码</h5><pre><code class="Python">class Solution:
+    def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -&gt; Optional[ListNode]:
+        dummy_head = ListNode(-1)
+
+        curr = dummy_head
+        while list1 and list2:
+            if list1.val &lt;= list2.val:
+                curr.next = list1
+                list1 = list1.next
+            else:
+                curr.next = list2
+                list2 = list2.next
+            curr = curr.next
+
+        curr.next = list1 if list1 is not None else list2
+
+        return dummy_head.next
+</code></pre>
+<h5 id="思路-1：复杂度分析-3"><a href="#思路-1：复杂度分析-3" class="headerlink" title="思路 1：复杂度分析"></a>思路 1：复杂度分析</h5><ul>
+<li><strong>时间复杂度</strong>：$O(n)$。</li>
+<li><strong>空间复杂度</strong>：$O(1)$。</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E7%AE%97%E6%B3%95%E4%B8%8E%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag"><i class="ic i-tag"></i> 算法与数据结构</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-19 22:49:54" itemprop="dateModified" datetime="2023-02-19T22:49:54+08:00">2023-02-19</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" title="链表双指针知识">http://kaywu.cn/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis081o9j20zk0m8dmr.jpg" title="链表双指针题目">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>链表双指针题目</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis081o9j20zk0m8dmr.jpg" title="数组双指针题目">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 算法</span>
+  <h3>数组双指针题目</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E5%8F%8C%E6%8C%87%E9%92%88%E7%AE%80%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">1. 双指针简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E8%B5%B7%E7%82%B9%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88"><span class="toc-number">2.</span> <span class="toc-text">2. 起点不一致的快慢指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%B5%B7%E7%82%B9%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E6%B1%82%E8%A7%A3%E6%AD%A5%E9%AA%A4"><span class="toc-number">2.1.</span> <span class="toc-text">2.1 起点不一致的快慢指针求解步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E8%B5%B7%E7%82%B9%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="toc-number">2.2.</span> <span class="toc-text">2.2 起点不一致的快慢指针伪代码模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%B5%B7%E7%82%B9%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="toc-number">2.3.</span> <span class="toc-text">2.3 起点不一致的快慢指针适用范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E5%88%A0%E9%99%A4%E9%93%BE%E8%A1%A8%E7%9A%84%E5%80%92%E6%95%B0%E7%AC%AC-N-%E4%B8%AA%E7%BB%93%E7%82%B9"><span class="toc-number">2.4.</span> <span class="toc-text">2.4 删除链表的倒数第 N 个结点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-1-%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">2.4.1.</span> <span class="toc-text">2.4.1 题目链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-2-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="toc-number">2.4.2.</span> <span class="toc-text">2.4.2 题目大意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-4-3-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">2.4.3.</span> <span class="toc-text">2.4.3 解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88"><span class="toc-number">2.4.3.1.</span> <span class="toc-text">思路 1：快慢指针</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E4%BB%A3%E7%A0%81"><span class="toc-number">2.4.3.2.</span> <span class="toc-text">思路 1：代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-number">2.4.3.3.</span> <span class="toc-text">思路 1：复杂度分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E6%AD%A5%E9%95%BF%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88"><span class="toc-number">3.</span> <span class="toc-text">3. 步长不一致的快慢指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%AD%A5%E9%95%BF%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E6%B1%82%E8%A7%A3%E6%AD%A5%E9%AA%A4"><span class="toc-number">3.1.</span> <span class="toc-text">3.1 步长不一致的快慢指针求解步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%AD%A5%E9%95%BF%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="toc-number">3.2.</span> <span class="toc-text">3.2 步长不一致的快慢指针伪代码模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E6%AD%A5%E9%95%BF%E4%B8%8D%E4%B8%80%E8%87%B4%E7%9A%84%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="toc-number">3.3.</span> <span class="toc-text">3.3 步长不一致的快慢指针适用范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E9%93%BE%E8%A1%A8%E7%9A%84%E4%B8%AD%E9%97%B4%E7%BB%93%E7%82%B9"><span class="toc-number">3.4.</span> <span class="toc-text">3.4 链表的中间结点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">3.4.1.</span> <span class="toc-text">3.4.1 题目链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="toc-number">3.4.2.</span> <span class="toc-text">3.4.2 题目大意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-3-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">3.4.3.</span> <span class="toc-text">3.4.3 解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%8D%95%E6%8C%87%E9%92%88"><span class="toc-number">3.4.3.1.</span> <span class="toc-text">思路 1：单指针</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E4%BB%A3%E7%A0%81-1"><span class="toc-number">3.4.3.2.</span> <span class="toc-text">思路 1：代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90-1"><span class="toc-number">3.4.3.3.</span> <span class="toc-text">思路 1：复杂度分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2%EF%BC%9A%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88"><span class="toc-number">3.4.3.4.</span> <span class="toc-text">思路 2：快慢指针</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2%EF%BC%9A%E4%BB%A3%E7%A0%81"><span class="toc-number">3.4.3.5.</span> <span class="toc-text">思路 2：代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2%EF%BC%9A%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90"><span class="toc-number">3.4.3.6.</span> <span class="toc-text">思路 2：复杂度分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%88%A4%E6%96%AD%E9%93%BE%E8%A1%A8%E4%B8%AD%E6%98%AF%E5%90%A6%E5%90%AB%E6%9C%89%E7%8E%AF"><span class="toc-number">3.5.</span> <span class="toc-text">3.5 判断链表中是否含有环</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-1-%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">3.5.1.</span> <span class="toc-text">3.5.1 题目链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-2-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="toc-number">3.5.2.</span> <span class="toc-text">3.5.2 题目大意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-5-3-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">3.5.3.</span> <span class="toc-text">3.5.3 解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%93%88%E5%B8%8C%E8%A1%A8"><span class="toc-number">3.5.3.1.</span> <span class="toc-text">思路 1：哈希表</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E4%BB%A3%E7%A0%81-2"><span class="toc-number">3.5.3.2.</span> <span class="toc-text">思路 1：代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90-2"><span class="toc-number">3.5.3.3.</span> <span class="toc-text">思路 1：复杂度分析</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2%EF%BC%9A%E5%BF%AB%E6%85%A2%E6%8C%87%E9%92%88%EF%BC%88Floyd-%E5%88%A4%E5%9C%88%E7%AE%97%E6%B3%95%EF%BC%89"><span class="toc-number">3.5.3.4.</span> <span class="toc-text">思路 2：快慢指针（Floyd 判圈算法）</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2%EF%BC%9A%E4%BB%A3%E7%A0%81-1"><span class="toc-number">3.5.3.5.</span> <span class="toc-text">思路 2：代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-2%EF%BC%9A%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90-1"><span class="toc-number">3.5.3.6.</span> <span class="toc-text">思路 2：复杂度分析</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E5%88%86%E7%A6%BB%E5%8F%8C%E6%8C%87%E9%92%88"><span class="toc-number">4.</span> <span class="toc-text">4. 分离双指针</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E5%88%86%E7%A6%BB%E5%8F%8C%E6%8C%87%E9%92%88%E6%B1%82%E8%A7%A3%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.1.</span> <span class="toc-text">4.1 分离双指针求解步骤</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E5%88%86%E7%A6%BB%E5%8F%8C%E6%8C%87%E9%92%88%E4%BC%AA%E4%BB%A3%E7%A0%81%E6%A8%A1%E6%9D%BF"><span class="toc-number">4.2.</span> <span class="toc-text">4.2 分离双指针伪代码模板</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%88%86%E7%A6%BB%E5%8F%8C%E6%8C%87%E9%92%88%E9%80%82%E7%94%A8%E8%8C%83%E5%9B%B4"><span class="toc-number">4.3.</span> <span class="toc-text">4.3 分离双指针适用范围</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8"><span class="toc-number">4.4.</span> <span class="toc-text">4.4 合并两个有序链表</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-1-%E9%A2%98%E7%9B%AE%E9%93%BE%E6%8E%A5"><span class="toc-number">4.4.1.</span> <span class="toc-text">4.4.1 题目链接</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-2-%E9%A2%98%E7%9B%AE%E5%A4%A7%E6%84%8F"><span class="toc-number">4.4.2.</span> <span class="toc-text">4.4.2 题目大意</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4-3-%E8%A7%A3%E9%A2%98%E6%80%9D%E8%B7%AF"><span class="toc-number">4.4.3.</span> <span class="toc-text">4.4.3 解题思路</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F"><span class="toc-number">4.4.3.1.</span> <span class="toc-text">思路 1：归并排序</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E4%BB%A3%E7%A0%81-3"><span class="toc-number">4.4.3.2.</span> <span class="toc-text">思路 1：代码</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%9D%E8%B7%AF-1%EF%BC%9A%E5%A4%8D%E6%9D%82%E5%BA%A6%E5%88%86%E6%9E%90-3"><span class="toc-number">4.4.3.3.</span> <span class="toc-text">思路 1：复杂度分析</span></a></li></ol></li></ol></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/computer-science/1.1_algorithm/algorithm/" rel="bookmark" title="数据结构与算法">数据结构与算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/01.Data-Structures-Algorithms/" rel="bookmark" title="算法与数据结构">算法与数据结构</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/02.Algorithm-Complexity/" rel="bookmark" title="算法复杂度">算法复杂度</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" rel="bookmark" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/06.Interview-100-List/" rel="bookmark" title="LeetCode 面试最常考 100 题（按分类排序）">LeetCode 面试最常考 100 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/05.Categories-List/" rel="bookmark" title="LeetCode 题解（按分类排序，推荐刷题列表 ★★★）">LeetCode 题解（按分类排序，推荐刷题列表 ★★★）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/08.Algorithms-Overview/" rel="bookmark" title="算法">算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/07.Interview-200-List/" rel="bookmark" title="LeetCode 面试最常考 200 题（按分类排序）">LeetCode 面试最常考 200 题（按分类排序）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/01.Hash-Table/" rel="bookmark" title="哈希表知识">哈希表知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/04.Solutions-List/" rel="bookmark" title="LeetCode 题解（字典序排序，700+ 道题解）">LeetCode 题解（字典序排序，700+ 道题解）</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/05.Hash-Table/02.Hash-Table-List/" rel="bookmark" title="哈希表题目">哈希表题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/01.Array-Basic/" rel="bookmark" title="数组基础知识">数组基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/01.Array-Basic/02.Array-Basic-List/" rel="bookmark" title="数组基础题目">数组基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/01.Array-Bubble-Sort/" rel="bookmark" title="冒泡排序">冒泡排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/02.Array-Selection-Sort/" rel="bookmark" title="选择排序">选择排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/03.Array-Insertion-Sort/" rel="bookmark" title="插入排序">插入排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/04.Array-Shell-Sort/" rel="bookmark" title="希尔排序">希尔排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/05.Array-Merge-Sort/" rel="bookmark" title="归并排序">归并排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/06.Array-Quick-Sort/" rel="bookmark" title="快速排序">快速排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/07.Array-Heap-Sort/" rel="bookmark" title="堆排序">堆排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" rel="bookmark" title="计数排序">计数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" rel="bookmark" title="桶排序">桶排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/10.Array-Radix-Sort/" rel="bookmark" title="基数排序">基数排序</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/11.Array-Sort-List/" rel="bookmark" title="数组排序题目">数组排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/01.Array-Binary-Search/" rel="bookmark" title="二分查找知识">二分查找知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" rel="bookmark" title="二分查找题目">二分查找题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/01.Array-Two-Pointers/" rel="bookmark" title="数组双指针知识">数组双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="bookmark" title="数组双指针题目">数组双指针题目</a></li><li class="active"><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/" rel="bookmark" title="链表双指针知识">链表双指针知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="bookmark" title="链表双指针题目">链表双指针题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/01.Linked-List-Sort/" rel="bookmark" title="链表排序知识">链表排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/02.Linked-List-Sort/02.Linked-List-Sort-List/" rel="bookmark" title="链表排序题目">链表排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" rel="bookmark" title="单调栈知识">单调栈知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/02.Monotone-Stack-List/" rel="bookmark" title="单调栈题目">单调栈题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/01.Stack-Basic/" rel="bookmark" title="堆栈基础知识">堆栈基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/01.Stack-Basic/02.Stack-Basic-List/" rel="bookmark" title="堆栈基础题目">堆栈基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/01.Queue-Basic/" rel="bookmark" title="队列基础知识">队列基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/01.Queue-Basic/02.Queue-Basic-List/" rel="bookmark" title="队列基础题目">队列基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/01.Priority-Queue/" rel="bookmark" title="优先队列知识">优先队列知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/04.Queue/02.Priority-Queue/02.Priority-Queue-List/" rel="bookmark" title="优先队列题目">优先队列题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/01.Binary-Tree-Basic/" rel="bookmark" title="树与二叉树基础知识">树与二叉树基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/02.Binary-Tree-Traverse/" rel="bookmark" title="二叉树的遍历知识">二叉树的遍历知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/04.Binary-Tree-Reduction/" rel="bookmark" title="二叉树的还原知识">二叉树的还原知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/05.Binary-Tree-Reduction-List/" rel="bookmark" title="二叉树的还原题目">二叉树的还原题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/01.Binary-Tree/03.Binary-Tree-Traverse-List/" rel="bookmark" title="二叉树的遍历题目">二叉树的遍历题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/01.Binary-Search-Tree/" rel="bookmark" title="二叉搜索树知识">二叉搜索树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/02.Binary-Search-Tree/02.Binary-Search-Tree-List/" rel="bookmark" title="二叉搜索树题目">二叉搜索树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/01.Array-Sliding-Window/" rel="bookmark" title="数组滑动窗口知识">数组滑动窗口知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/05.Array-Sliding-Window/02.Array-Sliding-Window-List/" rel="bookmark" title="数组滑动窗口题目">数组滑动窗口题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/01.Segment-Tree/" rel="bookmark" title="线段树知识">线段树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/03.Segment-Tree/02.Segment-Tree-List/" rel="bookmark" title="线段树题目">线段树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" rel="bookmark" title="链表基础知识">链表基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/02.Linked-List-Basic-List/" rel="bookmark" title="链表经典题目">链表经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/01.Binary-Indexed-Tree/" rel="bookmark" title="树状数组知识">树状数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/04.Binary-Indexed-Tree/02.Binary-Indexed-Tree-List/" rel="bookmark" title="树状数组题目">树状数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/01.String-Basic/" rel="bookmark" title="字符串基础知识">字符串基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/01.String-Basic/02.String-Basic-List/" rel="bookmark" title="字符串经典题目">字符串经典题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" rel="bookmark" title="字典树知识">字典树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/02.Trie-List/" rel="bookmark" title="字典树题目">字典树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/03.AC-Automaton/" rel="bookmark" title="AC 自动机知识">AC 自动机知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/04.AC-Automaton-List/" rel="bookmark" title="AC 自动机题目">AC 自动机题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" rel="bookmark" title="后缀数组知识">后缀数组知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/06.Suffix-Array-List/" rel="bookmark" title="后缀数组题目">后缀数组题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/01.Graph-Basic/" rel="bookmark" title="图的定义和分类">图的定义和分类</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/01.Graph-Basic/02.Graph-Structure/" rel="bookmark" title="图的存储结构和问题应用">图的存储结构和问题应用</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/01.Union-Find/" rel="bookmark" title="并查集知识">并查集知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/07.Tree/05.Union-Find/02.Union-Find-List/" rel="bookmark" title="并查集题目">并查集题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/01.Graph-DFS/" rel="bookmark" title="图的深度优先搜索知识">图的深度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/02.Graph-DFS-List/" rel="bookmark" title="图的深度优先搜索题目">图的深度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/03.Graph-BFS/" rel="bookmark" title="图的广度优先搜索知识">图的广度优先搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/04.Graph-BFS-List/" rel="bookmark" title="图的广度优先搜索题目">图的广度优先搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/05.Graph-Topological-Sorting/" rel="bookmark" title="图的拓扑排序知识">图的拓扑排序知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/02.Graph-Traversal/06.Graph-Topological-Sorting-List/" rel="bookmark" title="图的拓扑排序题目">图的拓扑排序题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" rel="bookmark" title="图的生成树知识">图的生成树知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/02.Graph-Prim/" rel="bookmark" title="Prim 算法">Prim 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/03.Graph-Kruskal/" rel="bookmark" title="Kruskal 算法">Kruskal 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/04.Gaph-Spanning-Tree-List/" rel="bookmark" title="图的生成树题目">图的生成树题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/01.String-Brute-Force/" rel="bookmark" title="Brute Force 算法">Brute Force 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/02.String-Rabin-Karp/" rel="bookmark" title="Rabin Karp 算法">Rabin Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/03.String-KMP/" rel="bookmark" title="KMP 算法">KMP 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" rel="bookmark" title="Boyer Moore 算法">Boyer Moore 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/05.String-Horspool/" rel="bookmark" title="Horspool 算法">Horspool 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/06.String-Sunday/" rel="bookmark" title="Sunday 算法">Sunday 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/07.String-Single-Pattern-Matching-List/" rel="bookmark" title="单模式串匹配题目">单模式串匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/01.Enumeration-Algorithm/" rel="bookmark" title="枚举算法知识">枚举算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/01.Enumeration-Algorithm/02.Enumeration-Algorithm-List/" rel="bookmark" title="枚举算法题目">枚举算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/01.Graph-Bipartite-Basic/" rel="bookmark" title="二分图基础知识">二分图基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/02.Graph-Bipartite-Basic-List/" rel="bookmark" title="二分图基础题目">二分图基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/03.Graph-Bipartite-Matching/" rel="bookmark" title="二分图最大匹配知识">二分图最大匹配知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/04.Graph-Hungarian-Algorithm/" rel="bookmark" title="匈牙利算法">匈牙利算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/05.Graph-Hopcroft-Karp/" rel="bookmark" title="Hopcroft-Karp 算法">Hopcroft-Karp 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/05.Graph-Bipartite/06.Graph-Bipartite-Matching-List/" rel="bookmark" title="二分图最大匹配题目">二分图最大匹配题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/01.Backtracking-Algorithm/" rel="bookmark" title="回溯算法知识">回溯算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/04.Backtracking-Algorithm/02.Backtracking-Algorithm-List/" rel="bookmark" title="回溯算法题目">回溯算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/01.Greedy-Algorithm/" rel="bookmark" title="贪心算法知识">贪心算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/05.Greedy-Algorithm/02.Greedy-Algorithm-List/" rel="bookmark" title="贪心算法题目">贪心算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" rel="bookmark" title="分治算法知识">分治算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/02.Divide-And-Conquer-Algorithm-List/" rel="bookmark" title="分治算法题目">分治算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/01.Recursive-Algorithm/" rel="bookmark" title="递归算法知识">递归算法知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/02.Recursive-Algorithm/02.Recursive-Algorithm-List/" rel="bookmark" title="递归算法题目">递归算法题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/01.Bit-Operation/" rel="bookmark" title="位运算知识">位运算知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/06.Bit-Operation/02.Bit-Operation-List/" rel="bookmark" title="位运算题目">位运算题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/01.Graph-Single-Source-Shortest-Path/" rel="bookmark" title="单源最短路径知识">单源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/02.Graph-Dijkstra/" rel="bookmark" title="Dijkstra 算法">Dijkstra 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/03.Graph-Bellman-Ford/" rel="bookmark" title="Bellman-Ford 算法">Bellman-Ford 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/04.Graph-SPFA/" rel="bookmark" title="SPFA 算法">SPFA 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/05.Graph-Single-Source-Shortest-Path-List/" rel="bookmark" title="单源最短路径题目">单源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/06.Graph-Multi-Source-Shortest-Path/" rel="bookmark" title="多源最短路径知识">多源最短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/07.Graph-Floyed/" rel="bookmark" title="Floyed 算法">Floyed 算法</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/08.Graph-Multi-Source-Shortest-Path-List/" rel="bookmark" title="多源最短路径题目">多源最短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/09.Graph-The-Second-Shortest-Path/" rel="bookmark" title="次短路径知识">次短路径知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/10.Graph-The-Second-Shortest-Path-List/" rel="bookmark" title="次短路径题目">次短路径题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/11.Graph-System-Of-Difference-Constraints/" rel="bookmark" title="差分约束系统知识">差分约束系统知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/04.Graph-Shortest-Path/12.Graph-System-Of-Difference-Constraints-List/" rel="bookmark" title="差分约束系统题目">差分约束系统题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/01.Dynamic-Programming-Basic/" rel="bookmark" title="动态规划基础知识">动态规划基础知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/01.Dynamic-Programming-Basic/02.Dynamic-Programming-Basic-List/" rel="bookmark" title="动态规划基础题目">动态规划基础题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/01.Knapsack-Problem/" rel="bookmark" title="背包问题知识">背包问题知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/04.Knapsack-Problem/02.Knapsack-Problem-List/" rel="bookmark" title="背包问题题目">背包问题题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/01.Tree-DP/" rel="bookmark" title="树形 DP 知识">树形 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/06.Tree-DP/02.Tree-DP-List/" rel="bookmark" title="树形 DP 题目">树形 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/01.Linear-DP/" rel="bookmark" title="线性 DP 知识">线性 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/03.Linear-DP/02.Linear-DP-List/" rel="bookmark" title="线性 DP 题目">线性 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/01.Memoization/" rel="bookmark" title="记忆化搜索知识">记忆化搜索知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/02.Memoization/02.Memoization-List/" rel="bookmark" title="记忆化搜索题目">记忆化搜索题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/01.State-DP/" rel="bookmark" title="状态压缩 DP 知识">状态压缩 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/07.State-DP/02.State-DP-List/" rel="bookmark" title="状态压缩 DP 题目">状态压缩 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/01.Interval-DP/" rel="bookmark" title="区间 DP 知识">区间 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/05.Interval-DP/02.Interval-DP-List/" rel="bookmark" title="区间 DP 题目">区间 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/01.Count-DP/" rel="bookmark" title="计数 DP 知识">计数 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/08.Count-DP/02.Count-DP-List/" rel="bookmark" title="计数 DP 题目">计数 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/01.Probability-DP/" rel="bookmark" title="概率 DP 知识">概率 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/10.Probability-DP/02.Probability-DP-List/" rel="bookmark" title="概率 DP 题目">概率 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/01.Number-DP/" rel="bookmark" title="数位 DP 知识">数位 DP 知识</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" rel="bookmark" title="数位 DP 题目">数位 DP 题目</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" rel="bookmark" title="单调栈 / 优先队列优化">单调栈 / 优先队列优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/02.Slope-Optimization/" rel="bookmark" title="斜率优化">斜率优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/03.Quadrangle-Optimization/" rel="bookmark" title="四边形不等式优化">四边形不等式优化</a></li><li><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/04.DP-Optimization-List/" rel="bookmark" title="动态规划优化题目">动态规划优化题目</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/02.Linked-List-Two-Pointers-List/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/04.Array-Two-Pointers/02.Array-Two-Pointers-List/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/08.Graph/03.Gaph-Spanning-Tree/01.Gaph-Spanning-Tree/" title="图的生成树知识">图的生成树知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/02/README/" title="02丨演进篇-数据库">02丨演进篇-数据库</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/09.Array-Bucket-Sort/" title="桶排序">桶排序</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E6%8A%80%E6%9C%AF%E7%A7%AF%E7%B4%AF/" title="分类于 技术积累">技术积累</a>
+</div>
+
+    <span><a href="/2019/07/01/other/2.1_technology/technology117/" title="ParallelStream 介绍">ParallelStream 介绍</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/09.Algorithm-Base/03.Divide-And-Conquer-Algorithm/01.Divide-And-Conquer-Algorithm/" title="分治算法知识">分治算法知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch17/" title="第 17 章 一致性">第 17 章 一致性</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/01.Trie/" title="字典树知识">字典树知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/02.Array-Sort/08.Array-Counting-Sort/" title="计数排序">计数排序</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/02.Linked-List/01.Linked-List-Basic/01.Linked-List-Basic/" title="链表基础知识">链表基础知识</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/computer-science/1.1_algorithm/02.Linked-List/03.Linked-List-Two-Pointers/01.Linked-List-Two-Pointers/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>

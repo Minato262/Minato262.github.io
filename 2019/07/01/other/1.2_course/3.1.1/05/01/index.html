@@ -1,0 +1,540 @@
+
+
+
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#FFF">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+
+<link rel="icon" type="image/ico" sizes="32x32" href="/images/favicon.ico">
+  <meta http-equiv="Cache-Control" content="no-transform">
+  <meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+<link rel="alternate" type="application/rss+xml" title="水门的博客" href="http://kaywu.cn/rss.xml" />
+<link rel="alternate" type="application/atom+xml" title="水门的博客" href="http://kaywu.cn/atom.xml" />
+<link rel="alternate" type="application/json" title="水门的博客" href="http://kaywu.cn/feed.json" />
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Mulish:300,300italic,400,400italic,700,700italic%7CFredericka%20the%20Great:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20JP:300,300italic,400,400italic,700,700italic%7CNoto%20Serif%20SC:300,300italic,400,400italic,700,700italic%7CInconsolata:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="/css/app.css?v=0.2.5">
+
+  
+  <meta name="keywords" content="高并发系统设计 40 问" />
+
+
+<link rel="canonical" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/01/">
+
+
+
+  <title>
+21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？ - 课程 |
+水门的博客</title>
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div id="loading">
+    <div class="cat">
+      <div class="body"></div>
+      <div class="head">
+        <div class="face"></div>
+      </div>
+      <div class="foot">
+        <div class="tummy-end"></div>
+        <div class="bottom"></div>
+        <div class="legs left"></div>
+        <div class="legs right"></div>
+      </div>
+      <div class="paw">
+        <div class="hands left"></div>
+        <div class="hands right"></div>
+      </div>
+    </div>
+  </div>
+  <div id="container">
+    <header id="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="inner">
+        <div id="brand">
+          <div class="pjax">
+          
+  <h1 itemprop="name headline">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？
+  </h1>
+  
+<div class="meta">
+  <span class="item" title="创建时间：2019-07-01 00:00:02">
+    <span class="icon">
+      <i class="ic i-calendar"></i>
+    </span>
+    <span class="text">发表于</span>
+    <time itemprop="dateCreated datePublished" datetime="2019-07-01T00:00:02+08:00">2019-07-01</time>
+  </span>
+</div>
+
+
+          </div>
+        </div>
+        <nav id="nav">
+  <div class="inner">
+    <div class="toggle">
+      <div class="lines" aria-label="切换导航栏">
+        <span class="line"></span>
+        <span class="line"></span>
+        <span class="line"></span>
+      </div>
+    </div>
+    <ul class="menu">
+      <li class="item title"><a href="/" rel="start">水门的博客</a></li>
+    </ul>
+    <ul class="right">
+      <li class="item theme">
+        <i class="ic i-sun"></i>
+      </li>
+      <li class="item search">
+        <i class="ic i-search"></i>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+      </div>
+      <div id="imgs" class="pjax">
+        <ul>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis081o9j20zk0m8dmr.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit31ffoj20zk0m8naf.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciszlczyj20zk0m816d.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicis3attqj20zk0m8k7l.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1giciryrr3rj20zk0m8nhk.jpg"></li>
+          <li class="item" data-background-image="https://tva3.sinaimg.cn/large/6833939bly1gicit4jrvuj20zk0m8785.jpg"></li>
+        </ul>
+      </div>
+    </header>
+    <div id="waves">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="parallax">
+          <use xlink:href="#gentle-wave" x="48" y="0" />
+          <use xlink:href="#gentle-wave" x="48" y="3" />
+          <use xlink:href="#gentle-wave" x="48" y="5" />
+          <use xlink:href="#gentle-wave" x="48" y="7" />
+        </g>
+      </svg>
+    </div>
+    <main>
+      <div class="inner">
+        <div id="main" class="pjax">
+          
+  <div class="article wrap">
+    
+<div class="breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+<i class="ic i-home"></i>
+<span><a href="/">首页</a></span><i class="ic i-angle-right"></i>
+<span  class="current" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem"><a href="/categories/%E8%AF%BE%E7%A8%8B/" itemprop="item" rel="index" title="分类于 课程"><span itemprop="name">课程</span></a>
+<meta itemprop="position" content="1" /></span>
+</div>
+
+    <article itemscope itemtype="http://schema.org/Article" class="post block" lang="zh-CN">
+  <link itemprop="mainEntityOfPage" href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/01/">
+
+  <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <meta itemprop="image" content="/images/avatar.jpg">
+    <meta itemprop="name" content="Kay Wu">
+    <meta itemprop="description" content=", 给时间以生命,而不是给生命以时间">
+  </span>
+
+  <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+    <meta itemprop="name" content="水门的博客">
+  </span>
+
+  <div class="body md" itemprop="articleBody">
+    
+
+    <h1 id="21丨系统架构：每秒-1-万次请求的系统要做服务化拆分吗？"><a href="#21丨系统架构：每秒-1-万次请求的系统要做服务化拆分吗？" class="headerlink" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？"></a>21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</h1><p>通过前面几个篇章的内容，你已经从数据库、缓存和消息队列的角度对自己的垂直电商系统在性能、可用性和扩展性上做了优化。</p>
+<p>现在，你的系统运行稳定，好评不断，每天高峰期的流量，已经达到了 10000&#x2F;s 请求，DAU（（Daily Active User）日活跃用户数量） 也涨到了几十万。CEO 非常高兴，打算继续完善产品功能，以便进行新一轮的运营推广，争取在下个双十一可以将 DAU 冲击过百万。这时，你开始考虑，怎么通过技术上的优化改造，来支撑更高的并发流量，比如支撑过百万的 DAU。</p>
+<p>于是，你重新审视了自己的系统架构，分析系统中有哪些可以优化的点。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/612173bc83b332bef201e4ad7056f5e7.jpg" alt="img"></p>
+<p>目前来看，工程的部署方式还是采用一体化架构，也就是说所有的功能模块，比方说电商系统中的订单模块、用户模块、支付模块、物流模块等等，都被打包到一个大的 Web 工程中，然后部署在应用服务器上。</p>
+<p>你隐约觉得这样的部署方式可能存在问题，于是，你 Google 了一下，发现当系统发展到一定阶段，都要做微服务化的拆分，你也看到淘宝的「五彩石」项目，对于淘宝整体架构的扩展性，带来的巨大影响。这一切让你心驰神往。</p>
+<p>但是有一个问题一直萦绕在你的心里：<strong>究竟是什么促使我们将一体化架构，拆分成微服务化架构？是不是说系统的整体 QPS 到了 1 万，或者到了 2 万，就一定要做微服务化拆分呢？</strong></p>
+<h2 id="一体化架构的痛点"><a href="#一体化架构的痛点" class="headerlink" title="一体化架构的痛点"></a>一体化架构的痛点</h2><p>先来回想一下，你当初为什么选用了一体化架构。</p>
+<p>在电商项目刚刚启动的时候，你只是希望能够尽量快地将项目搭建起来，方便将产品更早地投放市场，快速完成验证。</p>
+<p>在系统开发的初期，这种架构确实给你的开发运维，带来了很大的便捷，主要体现在：</p>
+<ul>
+<li><p>开发简单直接，代码和项目集中式管理；</p>
+</li>
+<li><p>只需要维护一个工程，节省维护系统运行的人力成本；</p>
+</li>
+<li><p>排查问题的时候，只需要排查这个应用进程就可以了，目标性强。</p>
+</li>
+</ul>
+<p>但随着功能越来越复杂，开发团队规模越来越大，你慢慢感受到了一体化架构的一些缺陷，这主要体现在以下几个方面。</p>
+<p><strong>首先，</strong> 在技术层面上，数据库连接数可能成为系统的瓶颈。</p>
+<p>在第 7 讲中我提到，数据库的连接是比较重的一类资源，不仅连接过程比较耗时，而且连接 MySQL 的客户端数量有限制， <strong>最多可以设置为 16384</strong> （在实际的项目中，可以依据实际业务来调整）。</p>
+<p>这个数字看着很大，但是因为你的系统是按照一体化架构部署的，在部署结构上没有分层，应用服务器直接连接数据库，那么当前端请求量增加，部署的应用服务器扩容，数据库的连接数也会大增，给你举个例子。</p>
+<p><strong>我之前维护的一个系统中，</strong> 数据库的最大连接数设置为 8000，应用服务器部署在虚拟机上，数量大概是 50 个，每个服务器会和数据库建立 30 个连接，但是数据库的连接数，却远远大于 30 * 50 &#x3D; 1500。</p>
+<p>因为你不仅要支撑来自客户端的外网流量，还要部署单独的应用服务，支撑来自其它部门的内网调用，也要部署队列处理机，处理来自消息队列的消息，这些服务也都是与数据库直接连接的，林林总总加起来，在高峰期的时候，数据库的连接数要接近 3400。</p>
+<p>所以，一旦遇到一些大的运营推广活动，服务器就要扩容，数据库连接数也随之增加，基本上就会处在最大连接数的边缘。这就像一颗定时炸弹，随时都会影响服务的稳定。</p>
+<p><strong>第二点，</strong> 一体化架构增加了研发的成本，抑制了研发效率的提升。</p>
+<blockquote>
+<p>《人月神话》中曾经提到：一个团队内部沟通成本，和人员数量 n 有关，约等于 n(n-1)&#x2F;2，也就是说随着团队人员的增加，沟通的成本呈指数级增长，一个 100 人的团队，需要沟通的渠道大概是 100（100-1）&#x2F;2 &#x3D; 4950。那么为了减少沟通成本，我们一般会把团队拆分成若干个小团队，每个小团队 5～7 人，负责一部分功能模块的开发和维护。</p>
+</blockquote>
+<p>比方说，你的垂直电商系统团队就会被拆分为用户组、订单组、支付组、商品组等等。当如此多的小团队共同维护一套代码，和一个系统时，在配合时就会出现问题。</p>
+<p>不同的团队之间沟通少，假如一个团队需要一个发送短信的功能，那么有的研发同学会认为最快的方式，不是询问其他团队是否有现成的，而是自己写一套，但是这种想法是不合适的，这样一来就会造成功能服务的重复开发。</p>
+<p>由于代码部署在一起，每个人都向同一个代码库提交代码，代码冲突无法避免；同时，功能之间耦合严重，可能你只是更改了很小的逻辑，却导致其它功能不可用，从而在测试时需要对整体功能回归，延长了交付时间。</p>
+<p>模块之间互相依赖，一个小团队中的成员犯了一个错误，就可能会影响到，其它团队维护的服务，对于整体系统稳定性影响很大。</p>
+<p>**第三点， ** 一体化架构对于系统的运维也会有很大的影响。</p>
+<p>想象一下，在项目初期，你的代码可能只有几千行，构建一次只需要一分钟，那么你可以很敏捷灵活地频繁上线变更修复问题。但是当你的系统扩充到几十万行，甚至上百万行代码的时候，一次构建的过程，包括编译、单元测试、打包和上传到正式环境，花费的时间可能达到十几分钟，并且，任何小的修改，都需要构建整个项目，上线变更的过程非常不灵活。</p>
+<p>而我说的这些问题，都可以通过微服务化拆分来解决。</p>
+<h2 id="如何使用微服务化解决这些痛点"><a href="#如何使用微服务化解决这些痛点" class="headerlink" title="如何使用微服务化解决这些痛点"></a>如何使用微服务化解决这些痛点</h2><p>之前，我在做一个社区业务的时候，开始采用的架构也是一体化的架构，数据库已经做了垂直分库，分出了用户库、内容库和互动库，并且已经将工程拆分了业务池，拆分成了用户池、内容池和互动池。</p>
+<p>当前端的请求量越来越大时，我们发现，无论哪个业务池子，用户模块都是请求量最大的模块儿，用户库也是请求量最大的数据库。这很好理解，无论是内容还是互动，都会查询用户库获取用户数据，所以，即使我们做了业务池的拆分，但实际上，每一个业务池子都需要连接用户库，并且请求量都很大，这就造成了用户库的连接数比其它都要多一些，容易成为系统的瓶颈。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/9417a969ce19be3e70841b8d51cf8011.jpg" alt="img"></p>
+<p><strong>那么我们怎么解决这个问题呢？</strong></p>
+<p>其实，可以把与用户相关的逻辑，部署成一个单独的服务，其它无论是用户池、内容池还是互动池，都连接这个服务来获取和更改用户信息，那么也就是说，只有这个服务可以连接用户库，其它的业务池都不直连用户库获取数据。</p>
+<p>由于这个服务只处理和用户相关的逻辑，所以，不需要部署太多的实例就可以承担流量，这样就可以有效地控制用户库的连接数，提升了系统的可扩展性。那么如此一来，我们也可以将内容和互动相关的逻辑，都独立出来，形成内容服务和互动服务，这样，我们就通过 <strong>按照业务做横向拆分</strong> 的方式，解决了数据库层面的扩展性问题。</p>
+<p><img data-src="http://kaywu-images.oss-cn-beijing.aliyuncs.com/image/3.1.1.hc/897bcb5e27c6492484b625fc06599ff9.jpg" alt="img"></p>
+<p>再比如，我们在做社区业务的时候，会有多个模块需要使用地理位置服务，将 IP 信息或者经纬度信息，转换为城市信息。比如，推荐内容的时候，可以结合用户的城市信息，做附近内容的推荐；展示内容信息的时候，也需要展示城市信息等等。</p>
+<p>那么，如果每一个模块都实现这么一套逻辑就会导致代码不够重用。因此，我们可以把将 IP 信息或者经纬度信息，转换为城市信息，包装成单独的服务供其它模块调用，也就是， <strong>我们可以将与业务无关的公用服务抽取出来，下沉成单独的服务。</strong> </p>
+<p>按照以上两种拆分方式将系统拆分之后，每一个服务的功能内聚，维护人员职责明确，增加了新的功能只需要测试自己的服务就可以了，而一旦服务出了问题，也可以通过服务熔断、降级的方式减少对于其他服务的影响（我会在第 34 讲中系统地讲解）。</p>
+<p>另外，由于每个服务都只是原有系统的子集，代码行数相比原有系统要小很多，构建速度上也会有比较大的提升。</p>
+<p>当然，微服务化之后，原有单一系统被拆分成多个子服务，无论在开发，还是运维上都会引入额外的问题，那么这些问题是什么? 我们将如何解决呢？下一节课，我会带你来了解。</p>
+<h2 id="课程小结"><a href="#课程小结" class="headerlink" title="课程小结"></a>课程小结</h2><p>本节课，我主要带你了解了，实际业务中会基于什么样的考虑，对系统做微服务化拆分，其实，系统的 QPS 并不是决定性的因素。影响的因素，我归纳为以下几点：</p>
+<ul>
+<li><p>系统中，使用的资源出现扩展性问题，尤其是数据库的连接数出现瓶颈；</p>
+</li>
+<li><p>大团队共同维护一套代码，带来研发效率的降低，和研发成本的提升；</p>
+</li>
+<li><p>系统部署成本越来越高。</p>
+</li>
+</ul>
+
+      <div class="tags">
+          <a href="/tags/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-40-%E9%97%AE/" rel="tag"><i class="ic i-tag"></i> 高并发系统设计 40 问</a>
+      </div>
+  </div>
+
+   <footer>
+
+    <div class="meta">
+  <span class="item">
+    <span class="icon">
+      <i class="ic i-calendar-check"></i>
+    </span>
+    <span class="text">更新于</span>
+    <time title="修改时间：2023-02-20 00:33:07" itemprop="dateModified" datetime="2023-02-20T00:33:07+08:00">2023-02-20</time>
+  </span>
+</div>
+
+      
+<div class="reward">
+  <button><i class="ic i-heartbeat"></i> 赞赏</button>
+  <p>请我喝[茶]~(￣▽￣)~*</p>
+  <div id="qr">
+  </div>
+</div>
+
+      
+
+<div id="copyright">
+<ul>
+  <li class="author">
+    <strong>本文作者： </strong>Kay Wu <i class="ic i-at"><em>@</em></i>水门的博客
+  </li>
+  <li class="link">
+    <strong>本文链接：</strong>
+    <a href="http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/01/" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">http://kaywu.cn/2019/07/01/other/1.2_course/3.1.1/05/01/</a>
+  </li>
+  <li class="license">
+    <strong>版权声明： </strong>本站所有文章除特别声明外，均采用 <span class="exturl" data-url="aHR0cHM6Ly9jcmVhdGl2ZWNvbW1vbnMub3JnL2xpY2Vuc2VzL2J5LW5jLXNhLzQuMC9kZWVkLnpo"><i class="ic i-creative-commons"><em>(CC)</em></i>BY-NC-SA</span> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+  </footer>
+
+</article>
+
+  </div>
+  
+
+<div class="post-nav">
+    <div class="item left">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" itemprop="url" rel="prev" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicis3attqj20zk0m8k7l.jpg" title="22丨微服务架构：微服务化后，系统架构要如何改造？">
+  <span class="type">上一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>22丨微服务架构：微服务化后，系统架构要如何改造？</h3>
+  </a>
+
+    </div>
+    <div class="item right">
+      
+
+  <a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" itemprop="url" rel="next" data-background-image="https:&#x2F;&#x2F;tva3.sinaimg.cn&#x2F;mw690&#x2F;6833939bly1gicit31ffoj20zk0m8naf.jpg" title="04丨演进篇-消息队列">
+  <span class="type">下一篇</span>
+  <span class="category"><i class="ic i-flag"></i> 课程</span>
+  <h3>04丨演进篇-消息队列</h3>
+  </a>
+
+    </div>
+</div>
+
+  
+  <div class="wrap" id="comments"></div>
+
+
+        </div>
+        <div id="sidebar">
+          
+
+<div class="inner">
+
+  <div class="panels">
+    <div class="inner">
+      <div class="contents panel pjax" data-title="文章目录">
+          <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#21%E4%B8%A8%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%EF%BC%9A%E6%AF%8F%E7%A7%92-1-%E4%B8%87%E6%AC%A1%E8%AF%B7%E6%B1%82%E7%9A%84%E7%B3%BB%E7%BB%9F%E8%A6%81%E5%81%9A%E6%9C%8D%E5%8A%A1%E5%8C%96%E6%8B%86%E5%88%86%E5%90%97%EF%BC%9F"><span class="toc-number">1.</span> <span class="toc-text">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E4%BD%93%E5%8C%96%E6%9E%B6%E6%9E%84%E7%9A%84%E7%97%9B%E7%82%B9"><span class="toc-number">1.1.</span> <span class="toc-text">一体化架构的痛点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%8C%96%E8%A7%A3%E5%86%B3%E8%BF%99%E4%BA%9B%E7%97%9B%E7%82%B9"><span class="toc-number">1.2.</span> <span class="toc-text">如何使用微服务化解决这些痛点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%BE%E7%A8%8B%E5%B0%8F%E7%BB%93"><span class="toc-number">1.3.</span> <span class="toc-text">课程小结</span></a></li></ol></li></ol>
+      </div>
+      <div class="related panel pjax" data-title="系列文章">
+        <ul>
+          <li><a href="/2019/07/01/other/1.2_course/course/" rel="bookmark" title="课程">课程</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.1/README/" rel="bookmark" title="操作系统">操作系统</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.2/README/" rel="bookmark" title="领域驱动设计">领域驱动设计</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.4/README/" rel="bookmark" title="ElasticSearch知识体系详解">ElasticSearch知识体系详解</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.3/README/" rel="bookmark" title="分布式数据库详解">分布式数据库详解</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.1/README/" rel="bookmark" title="计算机基础实战课">计算机基础实战课</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/README/" rel="bookmark" title="高并发系统设计 40 问">高并发系统设计 40 问</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.2/README/" rel="bookmark" title="Java业务开发常见错误">Java业务开发常见错误</a></li><li><a href="/2019/07/01/other/1.2_course/2.1.2/README/" rel="bookmark" title="消息队列理论课">消息队列理论课</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.1/README/" rel="bookmark" title="Java 并发编程">Java 并发编程</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.2/README/" rel="bookmark" title="Netty 核心原理剖析与 RPC 实践">Netty 核心原理剖析与 RPC 实践</a></li><li><a href="/2019/07/01/other/1.2_course/3.3.1/README/" rel="bookmark" title="性能测试">性能测试</a></li><li><a href="/2019/07/01/other/1.2_course/1.1.5/README/" rel="bookmark" title="Redis 核心原理与实战">Redis 核心原理与实战</a></li><li><a href="/2019/07/01/other/1.2_course/3.2.3/README/" rel="bookmark" title="深入理解 Sentinel">深入理解 Sentinel</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/00/README/" rel="bookmark" title="开篇-为什么你要学习高并发系统设计">开篇-为什么你要学习高并发系统设计</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/01/" rel="bookmark" title="01丨高并发系统：它的通用设计方法是什么?">01丨高并发系统：它的通用设计方法是什么?</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/02/" rel="bookmark" title="02丨架构分层：我们为什么一定要这么做？">02丨架构分层：我们为什么一定要这么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/03/" rel="bookmark" title="03丨系统设计目标 1：如何提升系统性能？">03丨系统设计目标 1：如何提升系统性能？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/04/" rel="bookmark" title="04丨系统设计目标 2：系统怎样做到高可用？">04丨系统设计目标 2：系统怎样做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/05/" rel="bookmark" title="05丨系统设计目标 3：如何让系统易于扩展？">05丨系统设计目标 3：如何让系统易于扩展？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/06/" rel="bookmark" title="06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？">06丨面试现场第 1 期：当问到组件实现原理时，面试官是在刁难你吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/01/README/" rel="bookmark" title="01丨基础篇">01丨基础篇</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/01/" rel="bookmark" title="17丨消息队列：秒杀时如何处理每秒上万次的下单请求？">17丨消息队列：秒杀时如何处理每秒上万次的下单请求？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/02/" rel="bookmark" title="18丨消息投递：如何保证消息仅仅被消费一次？">18丨消息投递：如何保证消息仅仅被消费一次？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/03/" rel="bookmark" title="19丨消息队列：如何降低消息队列系统中消息的延迟？">19丨消息队列：如何降低消息队列系统中消息的延迟？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/04/" rel="bookmark" title="20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？">20丨面试现场第 2 期：当问到项目经历时，面试官究竟想要了解什么？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/05/" rel="bookmark" title="期中测试丨10 道高并发系统设计题目自测">期中测试丨10 道高并发系统设计题目自测</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" rel="bookmark" title="04丨演进篇-消息队列">04丨演进篇-消息队列</a></li><li class="active"><a href="/2019/07/01/other/1.2_course/3.1.1/05/01/" rel="bookmark" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" rel="bookmark" title="22丨微服务架构：微服务化后，系统架构要如何改造？">22丨微服务架构：微服务化后，系统架构要如何改造？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/03/" rel="bookmark" title="23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？">23丨RPC框架：10 万 QPS 下如何实现毫秒级的服务调用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/04/" rel="bookmark" title="24丨注册中心：分布式系统如何寻址？">24丨注册中心：分布式系统如何寻址？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/05/" rel="bookmark" title="25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？">25丨分布式 Trace：横跨几十个分布式组件的慢请求要如何排查？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/06/" rel="bookmark" title="26丨负载均衡：怎样提升系统的横向扩展能力？">26丨负载均衡：怎样提升系统的横向扩展能力？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/07/" rel="bookmark" title="27丨API 网关：系统的门面要如何做呢？">27丨API 网关：系统的门面要如何做呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/08/" rel="bookmark" title="28丨多机房部署：跨地域的分布式系统如何做？">28丨多机房部署：跨地域的分布式系统如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/09/" rel="bookmark" title="29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？">29丨ServiceMesh：如何屏蔽服务化系统的服务治理细节？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/05/README/" rel="bookmark" title="05丨演进篇-分布式服务">05丨演进篇-分布式服务</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/01/" rel="bookmark" title="12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？">12丨缓存：数据库成为瓶颈后，动态数据的查询要如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/02/" rel="bookmark" title="13丨缓存的使用姿势 1：如何选择缓存的读写策略？">13丨缓存的使用姿势 1：如何选择缓存的读写策略？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/03/" rel="bookmark" title="14丨缓存的使用姿势 2：缓存如何做到高可用？">14丨缓存的使用姿势 2：缓存如何做到高可用？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/04/" rel="bookmark" title="15丨缓存的使用姿势 3：缓存穿透了怎么办？">15丨缓存的使用姿势 3：缓存穿透了怎么办？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/05/" rel="bookmark" title="16丨CDN：静态资源如何加速？">16丨CDN：静态资源如何加速？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/06/" rel="bookmark" title="加餐丨数据的迁移应该如何做？">加餐丨数据的迁移应该如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/03/README/" rel="bookmark" title="03丨演进篇-缓存">03丨演进篇-缓存</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/01/" rel="bookmark" title="30丨给系统加上眼睛：服务端监控要怎么做？">30丨给系统加上眼睛：服务端监控要怎么做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/02/" rel="bookmark" title="31丨应用性能管理：用户的使用体验应该如何监控？">31丨应用性能管理：用户的使用体验应该如何监控？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/03/" rel="bookmark" title="32丨压力测试：怎样设计全链路压力测试平台？">32丨压力测试：怎样设计全链路压力测试平台？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/04/" rel="bookmark" title="33丨配置管理：成千上万的配置项要如何管理？">33丨配置管理：成千上万的配置项要如何管理？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/05/" rel="bookmark" title="34丨降级熔断：如何屏蔽非核心系统故障的影响？">34丨降级熔断：如何屏蔽非核心系统故障的影响？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/06/" rel="bookmark" title="35丨流量控制：高并发系统中我们如何操纵流量？">35丨流量控制：高并发系统中我们如何操纵流量？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/07/" rel="bookmark" title="36丨面试现场第 3 期：你要如何准备一场技术面试呢？">36丨面试现场第 3 期：你要如何准备一场技术面试呢？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/06/README/" rel="bookmark" title="06丨演进篇-维护">06丨演进篇-维护</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/01/" rel="bookmark" title="07丨池化技术：如何减少频繁创建数据库连接的性能损耗？">07丨池化技术：如何减少频繁创建数据库连接的性能损耗？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/03/" rel="bookmark" title="09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？">09丨数据库优化方案 2：写入数据量增加时，如何实现分库分表？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/02/" rel="bookmark" title="08丨数据库优化方案 1：查询请求增加时，如何做主从分离？">08丨数据库优化方案 1：查询请求增加时，如何做主从分离？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/04/" rel="bookmark" title="10丨发号器：如何保证分库分表后 ID 的全局唯一性？">10丨发号器：如何保证分库分表后 ID 的全局唯一性？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/05/" rel="bookmark" title="11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？">11丨NoSQL：在高并发场景下，数据库和NoSQL如何做到互补？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/02/README/" rel="bookmark" title="02丨演进篇-数据库">02丨演进篇-数据库</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/01/" rel="bookmark" title="37丨计数系统设计 1：面对海量数据的计数器要如何做？">37丨计数系统设计 1：面对海量数据的计数器要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/02/" rel="bookmark" title="38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？">38丨计数系统设计 2：50 万 QPS 下如何设计未读数系统？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/03/" rel="bookmark" title="39丨信息流设计 1：通用信息流系统的推模式要如何做？">39丨信息流设计 1：通用信息流系统的推模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/04/" rel="bookmark" title="40丨信息流设计 2：通用信息流系统的拉模式要如何做？">40丨信息流设计 2：通用信息流系统的拉模式要如何做？</a></li><li><a href="/2019/07/01/other/1.2_course/3.1.1/07/README/" rel="bookmark" title="07丨实战篇">07丨实战篇</a></li>
+        </ul>
+      </div>
+      <div class="overview panel" data-title="站点概览">
+        <div class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="image" itemprop="image" alt="Kay Wu"
+      data-src="/images/avatar.jpg">
+  <p class="name" itemprop="name">Kay Wu</p>
+  <div class="description" itemprop="description">给时间以生命,而不是给生命以时间</div>
+</div>
+
+<nav class="state">
+    <div class="item posts">
+      <a href="/archives/">
+        <span class="count">258</span>
+        <span class="name">文章</span>
+      </a>
+    </div>
+    <div class="item categories">
+      <a href="/categories/">
+        <span class="count">11</span>
+        <span class="name">分类</span>
+      </a>
+    </div>
+    <div class="item tags">
+      <a href="/tags/">
+        <span class="count">23</span>
+        <span class="name">标签</span>
+      </a>
+    </div>
+</nav>
+
+<div class="social">
+      <span class="exturl item github" data-url="aHR0cHM6Ly9naXRodWIuY29tL01pbmF0bzI2Mg==" title="https:&#x2F;&#x2F;github.com&#x2F;Minato262"><i class="ic i-github"></i></span>
+      <a href="/1132892414@qq.com" title="1132892414@qq.com" class="item email"><i class="ic i-envelope"></i></a>
+</div>
+
+<ul class="menu">
+  
+    
+  <li class="item">
+    <a href="/" rel="section"><i class="ic i-home"></i>首页</a>
+  </li>
+
+
+</ul>
+
+      </div>
+    </div>
+  </div>
+
+  <ul id="quick">
+    <li class="prev pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/05/02/" rel="prev" title="上一篇"><i class="ic i-chevron-left"></i></a>
+    </li>
+    <li class="up"><i class="ic i-arrow-up"></i></li>
+    <li class="down"><i class="ic i-arrow-down"></i></li>
+    <li class="next pjax">
+        <a href="/2019/07/01/other/1.2_course/3.1.1/04/README/" rel="next" title="下一篇"><i class="ic i-chevron-right"></i></a>
+    </li>
+    <li class="percent"></li>
+  </ul>
+</div>
+
+
+        </div>
+        <div class="dimmer"></div>
+      </div>
+    </main>
+    <footer id="footer">
+      <div class="inner">
+        <div class="widgets">
+          
+<div class="rpost pjax">
+  <h2>随机文章</h2>
+  <ul>
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/00.Introduction/03.LeetCode-Guide/" title="LeetCode 入门与攻略">LeetCode 入门与攻略</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/03.String-Multi-Pattern-Matching/05.Suffix-Array/" title="后缀数组知识">后缀数组知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/03.Stack/02.Monotone-Stack/01.Monotone-Stack/" title="单调栈知识">单调栈知识</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/11.DP-Optimization/01.Monotone-Stack-Queue-Optimization/" title="单调栈 &#x2F; 优先队列优化">单调栈 / 优先队列优化</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/06.String/02.String-Single-Pattern-Matching/04.String-Boyer-Moore/" title="Boyer Moore 算法">Boyer Moore 算法</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/10.Dynamic-Programming/09.Number-DP/02.Number-DP-List/" title="数位 DP 题目">数位 DP 题目</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E4%B9%A6/" title="分类于 书">书</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.1_book/APhilosophyOfSoftwareDesign/docs/ch07/" title="第 7 章 不同的层，不同的抽象">第 7 章 不同的层，不同的抽象</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%9C%BA%E5%B7%A5%E7%A8%8B/" title="分类于 计算机体系结构与计算机工程">计算机体系结构与计算机工程</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/2.1_architecture-system/architecture-system/" title="计算机体系结构与计算机工程">计算机体系结构与计算机工程</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E8%AF%BE%E7%A8%8B/" title="分类于 课程">课程</a>
+</div>
+
+    <span><a href="/2019/07/01/other/1.2_course/3.1.1/05/01/" title="21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？">21丨系统架构：每秒 1 万次请求的系统要做服务化拆分吗？</a></span>
+  </li>
+
+      
+  <li class="item">
+    
+<div class="breadcrumb">
+<a href="/categories/%E7%AE%97%E6%B3%95/" title="分类于 算法">算法</a>
+</div>
+
+    <span><a href="/2019/07/01/computer-science/1.1_algorithm/01.Array/03.Array-Binary-Search/02.Array-Binary-Search-List/" title="二分查找题目">二分查找题目</a></span>
+  </li>
+
+  </ul>
+</div>
+<div>
+  <h2>最新评论</h2>
+  <ul class="leancloud-recent-comment"></ul>
+</div>
+
+        </div>
+        <div class="status">
+  <div class="copyright">
+    
+    &copy; 2010 – 
+    <span itemprop="copyrightYear">2023</span>
+    <span class="with-love">
+      <i class="ic i-sakura rotate"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Kay Wu @ 水门的博客</span>
+  </div>
+  <div class="powered-by">
+    基于 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & Theme.<span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL2FtZWhpbWUvaGV4by10aGVtZS1zaG9rYQ==">Shoka</span>
+  </div>
+</div>
+
+      </div>
+    </footer>
+  </div>
+<script data-config type="text/javascript">
+  var LOCAL = {
+    path: '2019/07/01/other/1.2_course/3.1.1/05/01/',
+    favicon: {
+      show: "水门的博客",
+      hide: "水门的博客"
+    },
+    search : {
+      placeholder: "文章搜索",
+      empty: "关于 「 ${query} 」，什么也没搜到",
+      stats: "${time} ms 内找到 ${hits} 条结果"
+    },
+    valine: true,fancybox: true,
+    copyright: '复制成功，转载请遵守 <i class="ic i-creative-commons"></i>BY-NC-SA 协议。',
+    ignores : [
+      function(uri) {
+        return uri.includes('#');
+      },
+      function(uri) {
+        return new RegExp(LOCAL.path+"$").test(uri);
+      }
+    ]
+  };
+</script>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.js"></script>
+
+<script src="//cdn.jsdelivr.net/combine/npm/pace-js@1.0.2/pace.min.js,npm/pjax@0.2.8/pjax.min.js,npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js,npm/animejs@3.2.0/lib/anime.min.js,npm/algoliasearch@4/dist/algoliasearch-lite.umd.js,npm/instantsearch.js@4/dist/instantsearch.production.min.js,npm/lozad@1/dist/lozad.min.js,npm/quicklink@2/dist/quicklink.umd.js"></script>
+
+<script src="/js/app.js?v=0.2.5"></script>
+
+
+
+
+</body>
+</html>
