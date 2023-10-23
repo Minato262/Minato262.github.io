@@ -1,0 +1,5 @@
+/.idea
+
+/hexo_code/.deploy_git
+/hexo_code/public
+/hexo_code/node_modules
